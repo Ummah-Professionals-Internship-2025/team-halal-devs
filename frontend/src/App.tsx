@@ -5,6 +5,7 @@ import SearchBar from "./components/SearchBar";
 
 // Code for List Group component
 import ListGroup from "./components/ListGroup";
+import CreateMeetingForm from "./components/CreateMeetingForm";
 
 function App() {
   const allItems = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <div>
+      {/* 
       <div>
         <SearchBar onSearch={handleSearch} />
       </div>
@@ -47,7 +49,6 @@ function App() {
 
       <br />
       <br />
-
       <div>
         {alertVisible && (
           <Alert onClose={() => setAlertVisibility(false)}>
@@ -58,10 +59,14 @@ function App() {
           Click me!
         </Button>
       </div>
+      */}
       {/* Show API response */}
-      <div style={{ marginTop: "2rem" }}>
+      <div style={{ marginBottom: "2rem" }}>
         <h3>Backend API Test</h3>
         <pre>{apiMessage ? apiMessage : "Loading..."}</pre>
+      </div>
+      <div>
+        <CreateMeetingForm />
       </div>
     </div>
   );
