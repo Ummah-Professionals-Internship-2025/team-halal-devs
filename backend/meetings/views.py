@@ -13,7 +13,9 @@ def api_root(request):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CreateMeeting(APIView):
+    #this explicitly sets API view to disable authentication checks
     authentication_classes = [] 
+    #optional to disable permission checks (can be removed if not needed)
     permission_classes = []   
     def post(self, request):
         serializer = MeetingSerializer(data=request.data)
