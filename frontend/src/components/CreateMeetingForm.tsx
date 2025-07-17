@@ -10,6 +10,8 @@ const CreateMeetingForm = () => {
   const [description, setDescription] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
   const [status, setStatus] = useState<string | null>(null);
+  const [shareableLink, setShareableLink] = useState<string | null>(null);
+
   const [timeOptions, setTimeOptions] = useState<TimeOption[]>([
     { start: "", end: "" },
   ]);
@@ -35,16 +37,21 @@ const CreateMeetingForm = () => {
       const res = await fetch(`${import.meta.env.VITE_API_URL}meetings/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           name,
           description,
           meetingDate,
-          timeOptions,
+          time_options: timeOptions.map((option) => ({
+            start_time: `${meetingDate}T${option.start}:00Z`,
+            end_time: `${meetingDate}T${option.end}:00Z`,
+          })),
         }),
-        credentials: "include",
       });
       if (res.ok) {
+        const data = await res.json();
         setStatus("Meeting created!");
+        setShareableLink(data.shareable_link); // ✅ Store the link
         setName("");
         setDescription("");
         setMeetingDate("");
@@ -121,6 +128,15 @@ const CreateMeetingForm = () => {
       <button type="button" onClick={handleAddTimeOption}>
         + Add Time Option
       </button>
+
+      {shareableLink && (
+        <div>
+          <p>Shareable Link:</p>
+          <a href={shareableLink} target="_blank" rel="noopener noreferrer">
+            {shareableLink}
+          </a>
+        </div>
+      )}
 
       <br />
       <button type="submit">Create</button>
