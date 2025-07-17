@@ -13,6 +13,8 @@ def api_root(request):
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CreateMeeting(APIView):
+    authentication_classes = [] 
+    permission_classes = []   
     def post(self, request):
         serializer = MeetingSerializer(data=request.data)
         if serializer.is_valid():
