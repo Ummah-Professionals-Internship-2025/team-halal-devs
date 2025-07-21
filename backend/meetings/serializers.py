@@ -1,5 +1,4 @@
 from rest_framework import serializers
-<<<<<<< HEAD
 from .models import Meeting, TimeOption
 
 class TimeOptionSerializer(serializers.ModelSerializer):
@@ -25,12 +24,4 @@ class MeetingSerializer(serializers.ModelSerializer):
             )
         return meeting
 
-=======
-from .models import Meeting
-
-class MeetingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Meeting
-        fields = ['id', 'name', 'description', 'created_at']
->>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
         
