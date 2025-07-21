@@ -21,6 +21,10 @@ const CreateMeetingForm = () => {
     setTimeOptions([...timeOptions, { start: "", end: "" }]);
   };
 
+  const handleDeleteTimeOption = (index: number) => {
+    setTimeOptions((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleTimeChange = (
     index: number,
     field: "start" | "end",
@@ -92,80 +96,110 @@ const CreateMeetingForm = () => {
   };
 
   return (
+<<<<<<< HEAD
     <form onSubmit={handleSubmit}>
       <h3>Create Meeting</h3>
 <<<<<<< HEAD
+=======
+    <div>
+      <form onSubmit={handleSubmit}>
+        <h3>Create Meeting</h3>
+>>>>>>> 234a899 (added remove button, fixed css)
 
-      <label>
-        Title:
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-      </label>
+        <label>
+          Title:
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </label>
 
-      <br />
+        <br />
 
-      <label>
-        Date:
-        <input
-          type="date"
-          value={meetingDate}
-          onChange={(e) => setMeetingDate(e.target.value)}
-          required
-        />
-      </label>
+        <label>
+          Date:
+          <input
+            type="date"
+            value={meetingDate}
+            onChange={(e) => setMeetingDate(e.target.value)}
+            required
+          />
+        </label>
 
-      <br />
+        <br />
 
-      <label>
-        Description:
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-      </label>
+        <label>
+          Description:
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </label>
 
-      <br />
-      <h4>Time Options:</h4>
-      {timeOptions.map((option, index) => (
-        <div key={index}>
-          <label>
-            Start Time:
-            <input
-              type="time"
-              value={option.start}
-              onChange={(e) => handleTimeChange(index, "start", e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            End Time:
-            <input
-              type="time"
-              value={option.end}
-              onChange={(e) => handleTimeChange(index, "end", e.target.value)}
-              required
-            />
-          </label>
-        </div>
-      ))}
-      <button type="button" onClick={handleAddTimeOption}>
-        + Add Time Option
-      </button>
+        <br />
+        <h4>Time Options:</h4>
+        {timeOptions.map((option, index) => (
+          <div key={index}>
+            <label>
+              Start Time:
+              <input
+                type="time"
+                value={option.start}
+                onChange={(e) =>
+                  handleTimeChange(index, "start", e.target.value)
+                }
+                required
+              />
+            </label>
+            <label>
+              End Time:
+              <input
+                type="time"
+                value={option.end}
+                onChange={(e) => handleTimeChange(index, "end", e.target.value)}
+                required
+              />
+            </label>
+            {timeOptions.length > 1 && (
+              <button
+                type="button"
+                className="btn btn-outline-danger btn-sm"
+                onClick={() => handleDeleteTimeOption(index)}
+                style={{
+                  marginLeft: "0.2rem",
+                  width: "20px",
+                  height: "20px",
+                  borderRadius: "50%",
+                  padding: 0,
+                  lineHeight: "1px",
+                }}
+              >
+                x
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          className="btn btn-outline-info"
+          onClick={handleAddTimeOption}
+        >
+          + Add Time Option
+        </button>
 
-      {shareableLink && (
-        <div>
-          <p>Shareable Link:</p>
-          <a href={shareableLink} target="_blank" rel="noopener noreferrer">
-            {shareableLink}
-          </a>
-        </div>
-      )}
+        {shareableLink && (
+          <div>
+            <p>Shareable Link:</p>
+            <a href={shareableLink} target="_blank" rel="noopener noreferrer">
+              {shareableLink}
+            </a>
+          </div>
+        )}
 
+<<<<<<< HEAD
 =======
       <input
         type="text"
@@ -186,6 +220,15 @@ const CreateMeetingForm = () => {
       <button type="submit">Create</button>
       {status && <div>{status}</div>}
     </form>
+=======
+        <br />
+        <button type="submit" className="btn btn-success">
+          Create Meeting
+        </button>
+        {status && <div>{status}</div>}
+      </form>
+    </div>
+>>>>>>> 234a899 (added remove button, fixed css)
   );
 };
 
