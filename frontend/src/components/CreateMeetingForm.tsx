@@ -33,6 +33,13 @@ const CreateMeetingForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(null);
+    // Validate time options
+    for (const option of timeOptions) {
+      if (option.end <= option.start) {
+        setStatus("End time must be after start time for all time options.");
+        return;
+      }
+    }
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}meetings/`, {
         method: "POST",
