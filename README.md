@@ -51,7 +51,7 @@ This is a fullstack web application with:
 - If no changes have been made:
 
   ```bash
-  python manage.py runserver
+  python3 manage.py runserver
   ```
 
 - If changes have been made to models or the database:

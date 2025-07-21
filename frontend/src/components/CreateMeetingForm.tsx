@@ -33,6 +33,19 @@ const CreateMeetingForm = () => {
     updatedOptions[index][field] = value;
     setTimeOptions(updatedOptions);
   };
+  const handleCopyLink = () => {
+    if (shareableLink) {
+      navigator.clipboard
+        .writeText(shareableLink)
+        .then(() => {
+          setStatus("Link copied to clipboard!");
+          setTimeout(() => setStatus(null), 2000); // Clear status after 2 seconds
+        })
+        .catch(() => {
+          setStatus("Failed to copy link.");
+        });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,13 +176,15 @@ const CreateMeetingForm = () => {
         >
           + Add Time Option
         </button>
-
         {shareableLink && (
-          <div>
+          <div className="shareable-link">
             <p>Shareable Link:</p>
             <a href={shareableLink} target="_blank" rel="noopener noreferrer">
               {shareableLink}
             </a>
+            <button type="button" className="btn-copy" onClick={handleCopyLink}>
+              Copy to Clipboard
+            </button>
           </div>
         )}
 
