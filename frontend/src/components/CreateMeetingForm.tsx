@@ -97,6 +97,9 @@ const CreateMeetingForm = () => {
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 234a899 (added remove button, fixed css)
     <div>
       <form onSubmit={handleSubmit}>
         <h3>Create Meeting</h3>
@@ -195,6 +198,7 @@ const CreateMeetingForm = () => {
         )}
 
         <br />
+<<<<<<< HEAD
         <button type="submit">Create</button>
         {status && <div>{status}</div>}
       </form>
@@ -221,6 +225,14 @@ const CreateMeetingForm = () => {
       {status && <div>{status}</div>}
     </form>
 >>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
+=======
+        <button type="submit" className="btn btn-success">
+          Create Meeting
+        </button>
+        {status && <div>{status}</div>}
+      </form>
+    </div>
+>>>>>>> 234a899 (added remove button, fixed css)
   );
 };
 
