@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-<<<<<<< HEAD
 type TimeOption = {
   start: string;
   end: string;
@@ -34,17 +33,10 @@ const CreateMeetingForm = () => {
     updatedOptions[index][field] = value;
     setTimeOptions(updatedOptions);
   };
-=======
-const CreateMeetingForm = () => {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
->>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(null);
-<<<<<<< HEAD
     // Validate time options
     for (const option of timeOptions) {
       if (option.end <= option.start) {
@@ -52,13 +44,10 @@ const CreateMeetingForm = () => {
         return;
       }
     }
-=======
->>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}meetings/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-<<<<<<< HEAD
         credentials: "include",
         body: JSON.stringify({
           name,
@@ -73,20 +62,11 @@ const CreateMeetingForm = () => {
       if (res.ok) {
         const data = await res.json();
         setStatus("Meeting created!");
-        setShareableLink(data.shareable_link); // ✅ Store the link
+        setShareableLink(data.shareable_link);
         setName("");
         setDescription("");
         setMeetingDate("");
         setTimeOptions([{ start: "", end: "" }]);
-=======
-        body: JSON.stringify({ name, description }),
-        credentials: "include",
-      });
-      if (res.ok) {
-        setStatus("Meeting created!");
-        setName("");
-        setDescription("");
->>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
       } else {
         setStatus("Error creating meeting.");
       }
@@ -96,15 +76,9 @@ const CreateMeetingForm = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <form onSubmit={handleSubmit}>
-      <h3>Create Meeting</h3>
-<<<<<<< HEAD
-=======
     <div>
       <form onSubmit={handleSubmit}>
         <h3>Create Meeting</h3>
->>>>>>> 234a899 (added remove button, fixed css)
 
         <label>
           Title:
@@ -199,36 +173,11 @@ const CreateMeetingForm = () => {
           </div>
         )}
 
-<<<<<<< HEAD
-=======
-      <input
-        type="text"
-        placeholder="Meeting Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-      />
-      <br />
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        required
-      />
->>>>>>> 788f58f (Creating a form in front-end that takes input for meeting requests and connects to backend api)
-      <br />
-      <button type="submit">Create</button>
-      {status && <div>{status}</div>}
-    </form>
-=======
         <br />
-        <button type="submit" className="btn btn-success">
-          Create Meeting
-        </button>
+        <button type="submit">Create</button>
         {status && <div>{status}</div>}
       </form>
     </div>
->>>>>>> 234a899 (added remove button, fixed css)
   );
 };
 
