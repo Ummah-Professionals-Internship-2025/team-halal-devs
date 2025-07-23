@@ -7,6 +7,7 @@ class TimeOptionSerializer(serializers.ModelSerializer):
         fields = ['id', 'start_time', 'end_time']
 
 class MeetingSerializer(serializers.ModelSerializer):
+    # For creation: time_options are write_only (sent by client on POST)
     time_options = TimeOptionSerializer(many=True, write_only=True)
 
     class Meta:
@@ -23,5 +24,15 @@ class MeetingSerializer(serializers.ModelSerializer):
                 end_time=option['end_time']
             )
         return meeting
+
+
+class MeetingDetailSerializer(serializers.ModelSerializer):
+    # For reading: time_options included (no write_only)
+    time_options = TimeOptionSerializer(many=True)
+
+    class Meta:
+        model = Meeting
+        fields = ['name', 'description', 'time_options']
+
 
         
