@@ -6,10 +6,24 @@ import SearchBar from "./components/SearchBar";
 // Code for List Group component
 import ListGroup from "./components/ListGroup";
 import CreateMeetingForm from "./components/CreateMeetingForm";
+import MeetingAvailability from "./components/MeetingAvailability"; // Import your new component
 
 function App() {
   const allItems = ["New York", "San Francisco", "Tokyo", "London", "Paris"];
   const [filteredItems, setFilteredItems] = useState(allItems);
+
+  // Handle the case when no meetingId is found
+  const [meetingId, setMeetingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Parse the meetingId from the URL (e.g. /meetings/123)
+    const currentPath = window.location.pathname;
+    const parsedMeetingId = currentPath.split("/").pop(); // Get last part of the URL as meeting ID
+
+    if (parsedMeetingId) {
+      setMeetingId(parsedMeetingId); // Set the meetingId from the URL
+    }
+  }, []);
 
   // Function for checking if the item is in the list from the navbar
 
@@ -65,8 +79,14 @@ function App() {
         <h3>Backend API Test</h3>
         <pre>{apiMessage ? apiMessage : "Loading..."}</pre>
       </div>
+
+      {/* Conditionally render CreateMeetingForm or MeetingAvailability based on URL */}
       <div>
-        <CreateMeetingForm />
+        {meetingId ? (
+          <MeetingAvailability meetingId={meetingId} /> // Pass the meetingId if present
+        ) : (
+          <CreateMeetingForm />
+        )}
       </div>
     </div>
   );
