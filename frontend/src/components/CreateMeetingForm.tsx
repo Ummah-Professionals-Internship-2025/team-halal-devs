@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import React from "react";
+import MeetingDetails from "../MeetingDetails";
+
 type TimeOption = {
   start: string;
   end: string;
@@ -11,6 +14,7 @@ const CreateMeetingForm = () => {
   const [meetingDate, setMeetingDate] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [shareableLink, setShareableLink] = useState<string | null>(null);
+  const meetingIdFromLink = shareableLink?.split("/").pop() || "";
 
   const [timeOptions, setTimeOptions] = useState<TimeOption[]>([
     { start: "", end: "" },
@@ -177,6 +181,7 @@ const CreateMeetingForm = () => {
         <button type="submit">Create</button>
         {status && <div>{status}</div>}
       </form>
+      {meetingIdFromLink && <MeetingDetails meetingId={meetingIdFromLink} />}
     </div>
   );
 };
