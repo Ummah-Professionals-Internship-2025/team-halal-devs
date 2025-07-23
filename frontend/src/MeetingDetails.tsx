@@ -49,10 +49,20 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({ meetingId }) => {
 
   return (
     <div>
-      <h2>{meeting.name}</h2>
-      <p>{meeting.description}</p>
+      <p>
+        <strong>Meeting Details</strong>
+      </p>
+      <p>
+        <strong>Title:</strong> {meeting.name}
+      </p>
 
-      <h3>Time Options:</h3>
+      <p>
+        <strong>Meeting Description:</strong> {meeting.description}
+      </p>
+
+      <p>
+        <strong>Selected Time Options:</strong>
+      </p>
       <ul>
         {meeting.time_options.map((option) => (
           <li key={option.id}>
