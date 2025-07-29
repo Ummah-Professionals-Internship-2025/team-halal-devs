@@ -39,3 +39,6 @@ coverage-final.json
 *.sln
 *.sw?
 
+# Python cache files
+__pycache__/
+*.pyc
