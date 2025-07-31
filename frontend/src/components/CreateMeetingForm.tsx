@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import React from "react";
 import MeetingDetails from "../MeetingDetails";
 
@@ -41,13 +40,14 @@ const CreateMeetingForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(null);
-    // Validate time options
+
     for (const option of timeOptions) {
       if (option.end <= option.start) {
         setStatus("End time must be after start time for all time options.");
         return;
       }
     }
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}meetings/`, {
         method: "POST",
@@ -63,6 +63,7 @@ const CreateMeetingForm = () => {
           })),
         }),
       });
+
       if (res.ok) {
         const data = await res.json();
         setStatus("Meeting created!");
@@ -81,107 +82,117 @@ const CreateMeetingForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <h3>Create Meeting</h3>
+      {status === "Meeting created!" ? (
+        <div>
+          <h3>Thank you!</h3>
+          <p>Your meeting has been created.</p>
+          {shareableLink && (
+            <div>
+              <p>Shareable Link:</p>
+              <a href={shareableLink} target="_blank" rel="noopener noreferrer">
+                {shareableLink}
+              </a>
+            </div>
+          )}
+          {meetingIdFromLink && <MeetingDetails meetingId={meetingIdFromLink} />}
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <h3>Create Meeting</h3>
 
-        <label>
-          Title:
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </label>
+          <label>
+            Title:
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </label>
 
-        <br />
+          <br />
 
-        <label>
-          Date:
-          <input
-            type="date"
-            value={meetingDate}
-            onChange={(e) => setMeetingDate(e.target.value)}
-            required
-          />
-        </label>
+          <label>
+            Date:
+            <input
+              type="date"
+              value={meetingDate}
+              onChange={(e) => setMeetingDate(e.target.value)}
+              required
+            />
+          </label>
 
-        <br />
+          <br />
 
-        <label>
-          Description:
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </label>
+          <label>
+            Description:
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
+          </label>
 
-        <br />
-        <h4>Time Options:</h4>
-        {timeOptions.map((option, index) => (
-          <div key={index}>
-            <label>
-              Start Time:
-              <input
-                type="time"
-                value={option.start}
-                onChange={(e) =>
-                  handleTimeChange(index, "start", e.target.value)
-                }
-                required
-              />
-            </label>
-            <label>
-              End Time:
-              <input
-                type="time"
-                value={option.end}
-                onChange={(e) => handleTimeChange(index, "end", e.target.value)}
-                required
-              />
-            </label>
-            {timeOptions.length > 1 && (
-              <button
-                type="button"
-                className="btn btn-outline-danger btn-sm"
-                onClick={() => handleDeleteTimeOption(index)}
-                style={{
-                  marginLeft: "0.2rem",
-                  width: "20px",
-                  height: "20px",
-                  borderRadius: "50%",
-                  padding: 0,
-                  lineHeight: "1px",
-                }}
-              >
-                x
-              </button>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          className="btn btn-outline-info"
-          onClick={handleAddTimeOption}
-        >
-          + Add Time Option
-        </button>
+          <br />
 
-        {shareableLink && (
-          <div>
-            <p>Shareable Link:</p>
-            <a href={shareableLink} target="_blank" rel="noopener noreferrer">
-              {shareableLink}
-            </a>
-          </div>
-        )}
+          <h4>Time Options:</h4>
+          {timeOptions.map((option, index) => (
+            <div key={index}>
+              <label>
+                Start Time:
+                <input
+                  type="time"
+                  value={option.start}
+                  onChange={(e) =>
+                    handleTimeChange(index, "start", e.target.value)
+                  }
+                  required
+                />
+              </label>
+              <label>
+                End Time:
+                <input
+                  type="time"
+                  value={option.end}
+                  onChange={(e) =>
+                    handleTimeChange(index, "end", e.target.value)
+                  }
+                  required
+                />
+              </label>
+              {timeOptions.length > 1 && (
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => handleDeleteTimeOption(index)}
+                  style={{
+                    marginLeft: "0.2rem",
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "50%",
+                    padding: 0,
+                    lineHeight: "1px",
+                  }}
+                >
+                  x
+                </button>
+              )}
+            </div>
+          ))}
 
-        <br />
-        <button type="submit">Create</button>
-        {status && <div>{status}</div>}
-      </form>
-      {meetingIdFromLink && <MeetingDetails meetingId={meetingIdFromLink} />}
+          <button
+            type="button"
+            className="btn btn-outline-info"
+            onClick={handleAddTimeOption}
+          >
+            + Add Time Option
+          </button>
+
+          <br />
+          <button type="submit">Create</button>
+          {status && <div>{status}</div>}
+        </form>
+      )}
     </div>
   );
 };

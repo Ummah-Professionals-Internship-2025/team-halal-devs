@@ -38,3 +38,8 @@ coverage-final.json
 *.njsproj
 *.sln
 *.sw?
+
+pycache/
+*.py[cod]
+*.pyo
+*.pyd
