@@ -38,3 +38,7 @@ coverage-final.json
 *.njsproj
 *.sln
 *.sw?
+__pycache__/
+*.pyc
+__pycache__/
+*.pyc
