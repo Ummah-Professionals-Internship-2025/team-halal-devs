@@ -1,40 +1,64 @@
+import datetime
+from django.utils import timezone
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
-from .models import Meeting, TimeOption
+from rest_framework.test import APITestCase
+from .models import Meeting, TimeOption, AvailabilityResponse, AvailabilityEntry
 
-class SubmitAvailabilityViewTests(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.meeting = Meeting.objects.create(name="Test", description="Test desc")
-        self.time_option1 = TimeOption.objects.create(meeting=self.meeting, start_time="2025-07-23T10:00:00Z", end_time="2025-07-23T11:00:00Z")
-        self.time_option2 = TimeOption.objects.create(meeting=self.meeting, start_time="2025-07-23T12:00:00Z", end_time="2025-07-23T13:00:00Z")
-        self.url = reverse('submit-availability', args=[self.meeting.id])
 
-    def test_successful_submission(self):
-        payload = {
-            "name": "Jane Doe",
-            "email": "jane@example.com",
-            "available_time_option_ids": [self.time_option1.id, self.time_option2.id]
-        }
-        response = self.client.post(self.url, payload, format='json')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("Availability submitted successfully.", response.data["detail"])
+class AvailabilityResponseTests(APITestCase):
+   def setUp(self):
+      # Create a meeting
+      self.meeting = Meeting.objects.create(name="Team Meeting", description="Discuss project progress")
+    
+      # Create time options for the meeting
+      self.time_option_1 = TimeOption.objects.create(
+          meeting=self.meeting,
+          start_time=timezone.make_aware(datetime.datetime(2023, 8, 1, 9, 0, 0)),
+          end_time=timezone.make_aware(datetime.datetime(2023, 8, 1, 10, 0, 0))
+      )
+      self.time_option_2 = TimeOption.objects.create(
+          meeting=self.meeting,
+          start_time=timezone.make_aware(datetime.datetime(2023, 8, 1, 10, 0, 0)),
+          end_time=timezone.make_aware(datetime.datetime(2023, 8, 1, 11, 0, 0))
+      )
+    
+      # Create availability responses
+      self.response_1 = AvailabilityResponse.objects.create(
+          meeting=self.meeting,
+          participant_name="John Doe",
+          email="john.doe@example.com"  # Added email here
+      )
+      AvailabilityEntry.objects.create(
+          availability_response=self.response_1,
+          time_option=self.time_option_1
+      )
+    
+      self.response_2 = AvailabilityResponse.objects.create(
+          meeting=self.meeting,
+          participant_name="Jane Smith",
+          email="jane.smith@example.com"  # Added email here
+      )
+      AvailabilityEntry.objects.create(
+          availability_response=self.response_2,
+          time_option=self.time_option_2
+      )
 
-    def test_missing_fields(self):
-        payload = {
-            "name": "",
-            "email": "",
-            "available_time_option_ids": []
-        }
-        response = self.client.post(self.url, payload, format='json')
-        self.assertEqual(response.status_code, 400)
 
-    def test_invalid_time_option(self):
-        payload = {
-            "name": "Jane Doe",
-            "email": "jane@example.com",
-            "available_time_option_ids": [9999]  # Invalid ID
-        }
-        response = self.client.post(self.url, payload, format='json')
-        self.assertEqual(response.status_code, 400)
+   def test_get_availability_responses(self):
+      url = f'/api/meetings/{self.meeting.id}/availability-responses/'
+      response = self.client.get(url)
+
+      self.assertEqual(response.status_code, 200)
+    
+      # Ensure email is included in the response
+      response_data = response.json()
+      self.assertEqual(response_data[0]['email'], "john.doe@example.com")
+      self.assertEqual(response_data[1]['email'], "jane.smith@example.com")
+    
+      # Ensure time_option_ids are included in the response (check the first entry)
+      self.assertIn('time_option', response_data[0]['entries'][0])  # Check for time option
+      self.assertEqual(response_data[0]['entries'][0]['time_option']['id'], self.time_option_1.id)
+
+      # Check if the second response contains the correct time option
+      self.assertEqual(response_data[1]['entries'][0]['time_option']['id'], self.time_option_2.id)
