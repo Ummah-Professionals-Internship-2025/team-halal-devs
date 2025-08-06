@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from "react";
-import MeetingDetails from "../MeetingDetails";
+import MeetingDetails from "./MeetingDetails";
 
 type TimeOption = {
   start: string;
