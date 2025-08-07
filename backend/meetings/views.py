@@ -5,7 +5,9 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
-
+from rest_framework.generics import ListAPIView
+from .models import AvailabilityResponse
+from .serializers import AvailabilityResponseSerializer
 
 
 
@@ -187,3 +189,7 @@ class AvailabilitySummaryView(APIView):
     
       # Return the summary response
       return Response(summary_data)
+
+class AllAvailabilityResponsesView(ListAPIView):
+    serializer_class = AvailabilityResponseSerializer
+    queryset = AvailabilityResponse.objects.all()

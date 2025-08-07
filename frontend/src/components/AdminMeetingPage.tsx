@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AvailabilityResponsesTable from "./AvailabilityResponsesTable";
 
 interface TimeOption {
   id: number;
@@ -24,7 +25,6 @@ interface MeetingData {
 }
 
 const AdminMeetingPage: React.FC = () => {
-  // Parse meetingId from URL: /admin/:meetingId
   const pathParts = window.location.pathname.split("/").filter(Boolean);
   const meetingId =
     pathParts.length === 2 && pathParts[0] === "admin" ? pathParts[1] : null;
@@ -69,7 +69,6 @@ const AdminMeetingPage: React.FC = () => {
     fetchMeetingData();
   }, [meetingId]);
 
-  // Handle loading and error states
   if (error) return <div>Error: {error}</div>;
   if (!meetingData) return <div>Loading...</div>;
 
@@ -122,27 +121,12 @@ const AdminMeetingPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <ul>
-          {responses.map((response) => (
-            <li key={response.id} style={{ marginBottom: "1rem" }}>
-              <strong>{response.participant_name}</strong> ({response.email})
-              <ul>
-                {response.entries.map((entry, idx) => (
-                  <li key={idx}>
-                    {new Date(entry.time_option.start_time).toLocaleString()} -{" "}
-                    {new Date(entry.time_option.end_time).toLocaleString()}
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
+        <AvailabilityResponsesTable responses={responses} />
       )}
     </div>
   );
 };
 
-// Inline styles
 const tableHeaderStyle: React.CSSProperties = {
   borderBottom: "2px solid #ccc",
   textAlign: "left",
