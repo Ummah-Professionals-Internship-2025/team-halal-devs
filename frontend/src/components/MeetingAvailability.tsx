@@ -38,13 +38,13 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
         return res.json();
       })
       .then((data) => {
-        console.log("Fetched meeting data:", data); // Log to check the structure
         setMeeting(data);
         setError(null);
-        // Initialize availability state for each time option
+
+        // Initialize availability state
         const initialAvailability = data.time_options.reduce(
           (acc: Record<number, boolean>, option: TimeOption) => {
-            acc[option.id] = false; // Default to unavailable
+            acc[option.id] = false;
             return acc;
           },
           {}
@@ -65,35 +65,65 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if at least one time option is selected as available
     if (Object.values(availability).every((isAvailable) => !isAvailable)) {
       setError("Please select at least one available time option.");
       return;
     }
 
-    // Basic validation for name and email
     if (!name || !email) {
       setError("Name and Email are required fields.");
       return;
     }
 
-    // Mock submission
-    setError(null);
-    alert("Form submitted successfully!");
-    // Optionally, reset the form after submission
-    setName("");
-    setEmail("");
-    setAvailability(
-      Object.fromEntries(Object.keys(availability).map((key) => [key, false]))
-    );
+    const selectedTimeOptionIds = Object.entries(availability)
+      .filter(([_, isAvailable]) => isAvailable)
+      .map(([id]) => parseInt(id));
+
+    const payload = {
+      participant_name: name,
+      email,
+      time_option_ids: selectedTimeOptionIds,
+    };
+
+    try {
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }meetings/${meetingId}/availability-responses/create/`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Server error:", errorData);
+        throw new Error("Failed to submit availability.");
+      }
+
+      alert("Availability submitted successfully!");
+      setName("");
+      setEmail("");
+      setAvailability(
+        Object.fromEntries(Object.keys(availability).map((key) => [key, false]))
+      );
+      setError(null);
+    } catch (err) {
+      console.error("Error submitting availability:", err);
+      setError("Failed to submit availability.");
+    }
   };
 
   if (loading) return <p>Loading meeting details...</p>;
   if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
-  if (!meeting) return <p>No meeting found.</p>; // Provide feedback if no meeting is found
+  if (!meeting) return <p>No meeting found.</p>;
 
   return (
     <div>
