@@ -3,12 +3,12 @@ import CreateMeetingForm from "./components/CreateMeetingForm";
 import MeetingAvailability from "./components/MeetingAvailability";
 import AdminMeetingPage from "./components/AdminMeetingPage";
 import ErrorPage from "./components/ErrorPage";
+import AllResponsesPage from "./components/AllResponsesPage";
 
 function App() {
-  const [view, setView] = useState<"create" | "meeting" | "admin" | "error">(
-    "create"
-  );
-  // Handle the case when no meetingId is found
+  const [view, setView] = useState<
+    "create" | "meeting" | "admin" | "all-responses" | "error"
+  >("create");
   const [meetingId, setMeetingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -17,7 +17,18 @@ function App() {
     if (pathParts.length === 2 && pathParts[0] === "meeting") {
       setView("meeting");
       setMeetingId(pathParts[1]);
-    } else if (pathParts.length === 2 && pathParts[0] === "admin") {
+    } else if (
+      pathParts.length === 2 &&
+      pathParts[0] === "admin" &&
+      pathParts[1] === "all-responses"
+    ) {
+      setView("all-responses");
+      setMeetingId(null);
+    } else if (
+      pathParts.length === 2 &&
+      pathParts[0] === "admin" &&
+      pathParts[1] !== "all-responses"
+    ) {
       setView("admin");
       setMeetingId(pathParts[1]);
     } else if (window.location.pathname === "/") {
@@ -37,6 +48,7 @@ function App() {
           <MeetingAvailability meetingId={meetingId} />
         )}
         {view === "admin" && meetingId && <AdminMeetingPage />}
+        {view === "all-responses" && <AllResponsesPage />}
         {view === "error" && <ErrorPage />}
       </div>
     </div>
