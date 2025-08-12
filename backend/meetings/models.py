@@ -29,15 +29,21 @@ class TimeOption(models.Model):
 
 
 class AvailabilityResponse(models.Model):
+   ROLE_CHOICES = [
+        ('student', 'Student'),
+        ('professional', 'Professional'),
+    ]
+   
    id = models.AutoField(primary_key=True)
    meeting = models.ForeignKey(Meeting, related_name='availability_responses', on_delete=models.CASCADE)
    participant_name = models.CharField(max_length=255)
+   role = models.CharField(max_length=12, choices=ROLE_CHOICES)  # New field
    email = models.EmailField(default='noemail@example.com')
    created_at = models.DateTimeField(default=timezone.now)
 
 
    def __str__(self):
-       return f"{self.participant_name} - {self.meeting.name}"
+        return f"{self.participant_name} ({self.role}) - {self.meeting.name}"
 
 
 
@@ -51,3 +57,4 @@ class AvailabilityEntry(models.Model):
 
    def __str__(self):
        return f"{self.availability_response.participant_name} - {self.time_option.start_time}"
+   

@@ -43,8 +43,7 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
 
 
 class AvailabilityEntrySerializer(serializers.ModelSerializer):
- # This will serialize the time_option field for the AvailabilityEntry model
- time_option = TimeOptionSerializer()  # Serialize TimeOption data
+ time_option = TimeOptionSerializer() 
 
  class Meta:
      model = AvailabilityEntry
@@ -53,12 +52,15 @@ class AvailabilityEntrySerializer(serializers.ModelSerializer):
 
 
 class AvailabilityResponseSerializer(serializers.ModelSerializer):
- # This will serialize all the entries (time options) for the given availability response
- entries = AvailabilityEntrySerializer(many=True)  # A participant can have multiple time options selected
- # Ensure participant_name and email are included
+ entries = AvailabilityEntrySerializer(many=True)
  participant_name = serializers.CharField()
  email = serializers.EmailField()
+ role = serializers.CharField(required=True) 
+
 
  class Meta:
      model = AvailabilityResponse
-     fields = ['participant_name', 'email', 'entries']
+     fields = ['participant_name', 'email', 'role', 'entries']
+     extra_kwargs = {
+            'role': {'required': True},
+        }
