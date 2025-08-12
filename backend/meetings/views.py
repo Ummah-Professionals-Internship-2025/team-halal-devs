@@ -129,18 +129,19 @@ class AvailabilityResponseCreate(APIView):
       # Get the data from the request
       participant_name = request.data.get('participant_name')
       email = request.data.get('email')
+      role = request.data.get('role')  
       time_option_ids = request.data.get('time_option_ids')
 
-
-      # Create AvailabilityResponse object
+      if not role:
+            return JsonResponse({"detail": "Role is required."}, status=400, content_type="application/json")
+      
       availability_response = AvailabilityResponse.objects.create(
-          meeting=meeting,
-          participant_name=participant_name,
-          email=email
+            meeting=meeting,
+            participant_name=participant_name,
+            email=email,
+            role=role
       )
 
-
-      # Now, create AvailabilityEntry objects
       for time_option_id in time_option_ids:
           try:
               time_option = TimeOption.objects.get(id=time_option_id)
@@ -149,10 +150,10 @@ class AvailabilityResponseCreate(APIView):
                   time_option=time_option
               )
           except TimeOption.DoesNotExist:
-              return JsonResponse({"detail": "Time option not found."}, status=status.HTTP_404_NOT_FOUND, content_type="application/json")
+              return JsonResponse({"detail": "Time option not found."}, status=404, content_type="application/json")
 
-
-      return Response(AvailabilityResponseSerializer(availability_response).data, status=status.HTTP_201_CREATED)
+      serializer = AvailabilityResponseSerializer(availability_response)
+      return Response(serializer.data, status=201)
 
 
 

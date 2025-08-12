@@ -22,6 +22,7 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
   const [meeting, setMeeting] = useState<Meeting | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [availability, setAvailability] = useState<Record<number, boolean>>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -78,6 +79,11 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
       return;
     }
 
+    if (!role) {
+      setError("Role is a required field.");
+      return;
+    }
+
     const selectedTimeOptionIds = Object.entries(availability)
       .filter(([_, isAvailable]) => isAvailable)
       .map(([id]) => parseInt(id));
@@ -85,6 +91,7 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
     const payload = {
       participant_name: name,
       email,
+      role,
       time_option_ids: selectedTimeOptionIds,
     };
 
@@ -168,6 +175,23 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Role:<span style={{ color: "red" }}>*</span>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              required
+            >
+              <option value="" disabled>
+                Select your role
+              </option>
+              <option value="student">Student</option>
+              <option value="professional">Professional</option>
+            </select>
           </label>
         </div>
 
