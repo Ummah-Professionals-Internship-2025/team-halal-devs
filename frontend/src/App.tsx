@@ -4,10 +4,11 @@ import MeetingAvailability from "./components/MeetingAvailability";
 import AdminMeetingPage from "./components/AdminMeetingPage";
 import ErrorPage from "./components/ErrorPage";
 import AllResponsesPage from "./components/AllResponsesPage";
+import InfoForm from "./components/InfoForm";
 
 function App() {
   const [view, setView] = useState<
-    "create" | "meeting" | "admin" | "all-responses" | "error"
+    "create" | "meeting" | "admin" | "all-responses" | "error" | "infoform"
   >("create");
   const [meetingId, setMeetingId] = useState<string | null>(null);
 
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <div>
+      <InfoForm></InfoForm>
       <div>
         {view === "create" && <CreateMeetingForm />}
         {view === "meeting" && meetingId && (
@@ -50,6 +52,7 @@ function App() {
         {view === "admin" && meetingId && <AdminMeetingPage />}
         {view === "all-responses" && <AllResponsesPage />}
         {view === "error" && <ErrorPage />}
+        {view === "infoform" && <InfoForm />}
       </div>
     </div>
   );
