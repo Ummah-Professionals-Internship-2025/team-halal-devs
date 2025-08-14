@@ -11,8 +11,8 @@ from .serializers import AvailabilityResponseSerializer
 
 
 
-from .models import Meeting, AvailabilityResponse, TimeOption, AvailabilityEntry
-from .serializers import MeetingSerializer, MeetingDetailSerializer, AvailabilityResponseSerializer
+from .models import Meeting, AvailabilityResponse, TimeOption, AvailabilityEntry, StudentProfessionalPair
+from .serializers import MeetingSerializer, MeetingDetailSerializer, AvailabilityResponseSerializer, StudentProfessionalPairSerializer
 
 
 
@@ -194,3 +194,29 @@ class AvailabilitySummaryView(APIView):
 class AllAvailabilityResponsesView(ListAPIView):
     serializer_class = AvailabilityResponseSerializer
     queryset = AvailabilityResponse.objects.all()
+
+
+class StudentProfessionalPairListView(generics.ListAPIView):
+    serializer_class = StudentProfessionalPairSerializer
+    
+    def get_queryset(self):
+        meeting_id = self.kwargs['meeting_id']
+        return StudentProfessionalPair.objects.filter(meeting_id=meeting_id)
+
+
+class StudentProfessionalPairCreateView(generics.CreateAPIView):
+    serializer_class = StudentProfessionalPairSerializer
+    
+    def perform_create(self, serializer):
+        meeting_id = self.kwargs['meeting_id']
+        meeting = Meeting.objects.get(id=meeting_id)
+        serializer.save(meeting=meeting)
+
+
+class StudentProfessionalPairDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = StudentProfessionalPairSerializer
+    lookup_field = 'id'
+    
+    def get_queryset(self):
+        meeting_id = self.kwargs['meeting_id']
+        return StudentProfessionalPair.objects.filter(meeting_id=meeting_id)

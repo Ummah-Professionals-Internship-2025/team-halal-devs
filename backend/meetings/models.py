@@ -57,4 +57,29 @@ class AvailabilityEntry(models.Model):
 
    def __str__(self):
        return f"{self.availability_response.participant_name} - {self.time_option.start_time}"
+
+
+class StudentProfessionalPair(models.Model):
+   id = models.AutoField(primary_key=True)
+   meeting = models.ForeignKey(Meeting, related_name='pairs', on_delete=models.CASCADE)
+   student = models.ForeignKey(
+       AvailabilityResponse, 
+       related_name='student_pairs', 
+       on_delete=models.CASCADE,
+       limit_choices_to={'role': 'student'}
+   )
+   professional = models.ForeignKey(
+       AvailabilityResponse, 
+       related_name='professional_pairs', 
+       on_delete=models.CASCADE,
+       limit_choices_to={'role': 'professional'}
+   )
+   time_option = models.ForeignKey(TimeOption, related_name='paired_sessions', on_delete=models.CASCADE)
+   created_at = models.DateTimeField(default=timezone.now)
+   
+   class Meta:
+       unique_together = ['student', 'professional', 'time_option']
+   
+   def __str__(self):
+       return f"{self.student.participant_name} paired with {self.professional.participant_name} at {self.time_option.start_time}"
    
