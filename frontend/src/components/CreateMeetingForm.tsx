@@ -94,7 +94,9 @@ const CreateMeetingForm = () => {
               </a>
             </div>
           )}
-          {meetingIdFromLink && <MeetingDetails meetingId={meetingIdFromLink} />}
+          {meetingIdFromLink && (
+            <MeetingDetails meetingId={meetingIdFromLink} />
+          )}
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -123,7 +125,6 @@ const CreateMeetingForm = () => {
           </label>
 
           <br />
-
           <label>
             Description:
             <textarea
