@@ -6,6 +6,12 @@ interface TimeOption {
   id: number;
   start_time: string;
   end_time: string;
+}
+
+interface TimeOptionSummary {
+  id: number;
+  start_time: string;
+  end_time: string;
   available_count: number;
 }
 
@@ -13,9 +19,18 @@ interface AvailabilityResponse {
   id: number;
   participant_name: string;
   email: string;
+  role: string;
   entries: {
     time_option: TimeOption;
   }[];
+}
+
+interface StudentProfessionalPair {
+  id: number;
+  student: AvailabilityResponse;
+  professional: AvailabilityResponse;
+  time_option: TimeOption;
+  created_at: string;
 }
 
 interface MeetingData {
@@ -30,8 +45,9 @@ const AdminMeetingPage: React.FC = () => {
     pathParts.length === 2 && pathParts[0] === "admin" ? pathParts[1] : null;
 
   const [meetingData, setMeetingData] = useState<MeetingData | null>(null);
-  const [timeOptions, setTimeOptions] = useState<TimeOption[]>([]);
+  const [timeOptions, setTimeOptions] = useState<TimeOptionSummary[]>([]);
   const [responses, setResponses] = useState<AvailabilityResponse[]>([]);
+  const [pairs, setPairs] = useState<StudentProfessionalPair[]>([]);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -42,25 +58,30 @@ const AdminMeetingPage: React.FC = () => {
 
     const fetchMeetingData = async () => {
       try {
-        const [meetingRes, timeOptionsRes, responsesRes] = await Promise.all([
-          axios.get<MeetingData>(
-            `${import.meta.env.VITE_API_URL}meetings/${meetingId}/`
-          ),
-          axios.get<TimeOption[]>(
-            `${
-              import.meta.env.VITE_API_URL
-            }meetings/${meetingId}/availability-summary/`
-          ),
-          axios.get<AvailabilityResponse[]>(
-            `${
-              import.meta.env.VITE_API_URL
-            }meetings/${meetingId}/availability-responses/`
-          ),
-        ]);
+        const [meetingRes, timeOptionsRes, responsesRes, pairsRes] =
+          await Promise.all([
+            axios.get<MeetingData>(
+              `${import.meta.env.VITE_API_URL}meetings/${meetingId}/`
+            ),
+            axios.get<TimeOptionSummary[]>(
+              `${
+                import.meta.env.VITE_API_URL
+              }meetings/${meetingId}/availability-summary/`
+            ),
+            axios.get<AvailabilityResponse[]>(
+              `${
+                import.meta.env.VITE_API_URL
+              }meetings/${meetingId}/availability-responses/`
+            ),
+            axios.get<StudentProfessionalPair[]>(
+              `${import.meta.env.VITE_API_URL}meetings/${meetingId}/pairs/`
+            ),
+          ]);
 
         setMeetingData(meetingRes.data);
         setTimeOptions(timeOptionsRes.data);
         setResponses(responsesRes.data);
+        setPairs(pairsRes.data);
       } catch (err) {
         setError("Invalid meeting ID or failed to fetch data.");
       }
@@ -121,7 +142,14 @@ const AdminMeetingPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <AvailabilityResponsesTable responses={responses} />
+        <AvailabilityResponsesTable
+          responses={responses}
+          pairs={pairs}
+          meetingId={meetingId}
+          onPairUpdate={(updatedPairs: StudentProfessionalPair[]) =>
+            setPairs(updatedPairs)
+          }
+        />
       )}
     </div>
   );
