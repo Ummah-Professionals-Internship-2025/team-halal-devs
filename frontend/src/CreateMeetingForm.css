@@ -1,5 +1,5 @@
 /* Center the form on the page */
-.form-container {
+.form-container-meeting-form {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18,14 +18,15 @@
   flex-direction: column;
 }
 
-h3, h4 {
+h3,
+h4 {
   margin-bottom: 1rem;
   text-align: center;
 }
 
 label {
   margin-top: 1rem;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 input,
@@ -53,7 +54,6 @@ button {
   margin-top: 1rem;
   background-color: #007bff;
   color: white;
-
 }
 
 .btn-remove {

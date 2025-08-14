@@ -7,6 +7,7 @@
     "@mui/x-date-pickers": "^8.9.0",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
-    "react-datepicker": "^8.4.0"
+    "react-datepicker": "^8.4.0",
+    "react-phone-number-input": "^3.4.12"
   }
 }

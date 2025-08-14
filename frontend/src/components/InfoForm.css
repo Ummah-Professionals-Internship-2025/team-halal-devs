@@ -1,0 +1,107 @@
+/* === Main Form Wrapper === */
+.info-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 16px;
+  font-weight: normal;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* === Section Headings === */
+.meeting-page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #007ca6; /* Slate-900 */
+  margin-bottom: 1rem;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  text-align: left;
+  font-weight: 600;
+  color: #007ca6; /* Slate-700 */
+  margin-bottom: 1.5rem;
+}
+
+/* === Labels === */
+.label {
+  font-weight: 500;
+  font-size: 14px;
+  color: #007ca6; /* Slate-700 */
+  display: flex;
+  flex-direction: column;
+}
+
+.label span.required {
+  color: #ef4444; /* Red-500 */
+  margin-left: 2px;
+}
+
+/* === Container for two columns === */
+.form-container {
+  display: flex;
+  flex-direction: row;
+  gap: 24px; /* Horizontal space between columns */
+  width: 100%;
+}
+
+/* === Each column === */
+.form-container-child {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Vertical space between inputs */
+  flex: 1;
+}
+
+/* === Inputs & Selects === */
+.form-container-input {
+  height: 48px;
+  width: 100%;
+  border: 1px solid #d1d5db; /* Gray-300 */
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #111827; /* Gray-900 */
+  background-color: white;
+}
+
+.form-container-input:focus {
+  border-color: #007ca6;
+  outline: none;
+}
+
+.form-container-input::placeholder {
+  color: #9ca3af; /* Gray-400 */
+}
+
+/* === Error State === */
+.form-error {
+  border-color: #ef4444;
+}
+
+.error-text {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+/* === Resume Section === */
+.form-container.resume {
+  margin-top: 24px;
+  width: 100%;
+}
+
+.resume-upload {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  color: #6b7280; /* Gray-500 */
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resume-upload:hover {
+  background-color: #f9fafb; /* Gray-50 */
+}

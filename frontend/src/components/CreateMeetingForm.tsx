@@ -1,6 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import MeetingDetails from "./MeetingDetails";
+import "./MeetingAvailability.css";
 
 type TimeOption = {
   start: string;
@@ -81,7 +82,7 @@ const CreateMeetingForm = () => {
   };
 
   return (
-    <div>
+    <div className="meeting-page">
       {status === "Meeting created!" ? (
         <div>
           <h3>Thank you!</h3>
@@ -100,7 +101,7 @@ const CreateMeetingForm = () => {
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <h3>Create Meeting</h3>
+          <h3 className="meeting-page-title">Career Services Applicants</h3>
 
           <label>
             Title:
