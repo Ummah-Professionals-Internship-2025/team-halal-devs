@@ -12,10 +12,48 @@ const InfoForm = () => {
   const [academicYear, setAcademicYear] = useState("");
   const [resume, setResume] = useState<File | null>(null);
 
+  const [currentStep, setCurrentStep] = useState("Info");
+  const steps = ["Info", "Availability", "Wrap-up", "Submit"];
+
   return (
     <div className="info-form">
       <h3 className="meeting-page-title">Career Services Applicants</h3>
-      <h4 className="section-subtitle">Applicants Info</h4>
+      <div className="progress-bar">
+        {steps.map((step) => (
+          <div
+            key={step}
+            className={`progress-step ${currentStep === step ? "active" : ""}`}
+          >
+            {step}
+          </div>
+        ))}
+      </div>
+      {/* <div className="progress-bar">
+        {steps.map((step) => (
+          <div
+            key={step}
+            className={`progress-step ${currentStep === step ? "active" : ""}`}
+            onClick={() => setCurrentStep(step)}
+          >
+            {step}
+          </div>
+        ))}
+      </div> */}
+      {/* <div className="progress-bar-wrapper">
+        <div className="progress-bar">
+          {steps.map((step) => (
+            <div
+              key={step}
+              className={`progress-step ${
+                currentStep === step ? "active" : ""
+              }`}
+              onClick={() => setCurrentStep(step)}
+            >
+              {step}
+            </div>
+          ))}
+        </div>
+      </div> */}
 
       {/* Two Column Layout */}
       <div className="form-container">
