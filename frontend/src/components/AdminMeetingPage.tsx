@@ -144,14 +144,7 @@ const AdminMeetingPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <AvailabilityResponsesTable
-          responses={responses}
-          pairs={pairs}
-          meetingId={meetingId}
-          onPairUpdate={(updatedPairs: StudentProfessionalPair[]) =>
-            setPairs(updatedPairs)
-          }
-        />
+        <AvailabilityResponsesTable responses={responses} meetingId={""} />
       )}
     </div>
   );

@@ -96,7 +96,7 @@ const AllResponsesPage: React.FC = () => {
       ) : (
         <AvailabilityResponsesTable
           responses={responses}
-          //meetingId={meetingId}
+          meetingId={meetingId}
         />
       )}
     </div>

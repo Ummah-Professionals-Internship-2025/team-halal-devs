@@ -7,15 +7,14 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView
-from .models import AvailabilityResponse
-from .serializers import AvailabilityResponseSerializer
 
-
-
-from .models import Meeting, AvailabilityResponse, TimeOption, AvailabilityEntry, StudentProfessionalPair
-from .serializers import MeetingSerializer, MeetingDetailSerializer, AvailabilityResponseSerializer, StudentProfessionalPairSerializer
-
-
+from .models import Meeting, TimeOption, AvailabilityResponse, AvailabilityEntry, StudentSubmission
+from .serializers import (
+    MeetingSerializer, 
+    MeetingDetailSerializer, 
+    AvailabilityResponseSerializer, 
+    StudentSubmissionSerializer
+)
 
 
 # -----------------------
@@ -86,32 +85,68 @@ class AvailabilitySummaryView(APIView):
             })
         return Response(summary_data)
 
-class AllAvailabilityResponsesView(ListAPIView):
-    serializer_class = AvailabilityResponseSerializer
-    queryset = AvailabilityResponse.objects.all()
+
+# -----------------------
+# Student submission endpoints
+# -----------------------
+class StudentSubmissionCreateView(APIView):
+    def post(self, request):
+        serializer = StudentSubmissionSerializer(data=request.data)
+        if serializer.is_valid():
+            submission = serializer.save()
+            return Response(
+                {"message": "Submission received", "student_id": str(submission.id)},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StudentProfessionalPairListView(generics.ListAPIView):
-    serializer_class = StudentProfessionalPairSerializer
-    
-    def get_queryset(self):
-        meeting_id = self.kwargs['meeting_id']
-        return StudentProfessionalPair.objects.filter(meeting_id=meeting_id)
+class AdminStudentListView(ListAPIView):
+    queryset = StudentSubmission.objects.all().order_by('-created_at')
+    serializer_class = StudentSubmissionSerializer
 
 
-class StudentProfessionalPairCreateView(generics.CreateAPIView):
-    serializer_class = StudentProfessionalPairSerializer
-    
-    def perform_create(self, serializer):
-        meeting_id = self.kwargs['meeting_id']
-        meeting = Meeting.objects.get(id=meeting_id)
-        serializer.save(meeting=meeting)
+class AssignProfessionalView(APIView):
+    def post(self, request, student_id):
+        submission = get_object_or_404(StudentSubmission, id=student_id)
+        submission.professional_name = request.data.get("professional_name")
+        submission.professional_email = request.data.get("professional_email")
+        submission.professional_phone = request.data.get("professional_phone")
+        submission.professional_industry = request.data.get("professional_industry")
+        submission.professional_role = request.data.get("professional_role")
+        submission.professional_more_about = request.data.get("professional_more_about")
+        submission.professional_link = uuid.uuid4()
+        submission.professional_assigned = True
+        submission.save()
+        return Response(
+            {"message": "Professional assigned", "professional_link": str(submission.professional_link)},
+            status=status.HTTP_200_OK
+        )
 
 
-class StudentProfessionalPairDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = StudentProfessionalPairSerializer
-    lookup_field = 'id'
-    
-    def get_queryset(self):
-        meeting_id = self.kwargs['meeting_id']
-        return StudentProfessionalPair.objects.filter(meeting_id=meeting_id)
+# -----------------------
+# Professional endpoints
+# -----------------------
+class ProfessionalSubmissionView(APIView):
+    def get(self, request, professional_link):
+        submission = get_object_or_404(StudentSubmission, professional_link=professional_link)
+        serializer = StudentSubmissionSerializer(submission)
+        return Response(serializer.data)
+
+    def post(self, request, professional_link):
+        submission = get_object_or_404(StudentSubmission, professional_link=professional_link)
+        submission.professional_selected_time = request.data.get("professional_selected_time")
+        submission.save()
+        return Response({"message": "Time selection submitted"}, status=status.HTTP_200_OK)
+
+
+# -----------------------
+# Admin confirms final meeting
+# -----------------------
+class ConfirmMeetingView(APIView):
+    def post(self, request, student_id):
+        submission = get_object_or_404(StudentSubmission, id=student_id)
+        if not submission.professional_selected_time:
+            return Response({"error": "Professional has not selected a time yet"}, status=400)
+        submission.save()
+        return Response({"message": "Meeting confirmed"}, status=status.HTTP_200_OK)

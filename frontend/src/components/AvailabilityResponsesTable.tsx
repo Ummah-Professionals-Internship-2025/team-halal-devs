@@ -5,6 +5,16 @@ import type { AvailabilityResponse } from "../types";
 
 interface Props {
   responses: AvailabilityResponse[];
+  meetingId: string;
+}
+interface TimeOption {
+  id: number;
+  start_time: string;
+  end_time: string;
+}
+
+interface Props {
+  responses: AvailabilityResponse[];
   meetingId?: string;
 }
 // interface TimeOption {
@@ -17,13 +27,12 @@ interface Props {
 //   time_option: TimeOption;
 // }
 
-interface AvailabilityResponse {
-  id: number;
-  participant_name: string;
-  email: string;
-  role: string;
-  entries: AvailabilityEntry[];
-}
+// interface AvailabilityResponse {
+//   id: number;
+//   participant_name: string;
+//   email: string;
+//   entries: AvailabilityEntry[];
+// }
 
 interface StudentProfessionalPair {
   id: number;

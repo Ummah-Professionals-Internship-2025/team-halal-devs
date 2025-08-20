@@ -23,7 +23,7 @@ const AppRouter: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/student" element={<CreateMeetingForm />} />
+        <Route path="/" element={<CreateMeetingForm />} />
         <Route path="/admin" element={<AdminMeetingPage />} />
         <Route path="/responses" element={<AllResponsesPage />} />
         <Route path="/meeting/:id" element={<MeetingAvailabilityWrapper />} />
