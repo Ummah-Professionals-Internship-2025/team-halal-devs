@@ -66,27 +66,30 @@ class AvailabilityEntry(models.Model):
        return f"{self.availability_response.participant_name} - {self.time_option.start_time}"
 
 
-class StudentProfessionalPair(models.Model):
-   id = models.AutoField(primary_key=True)
-   meeting = models.ForeignKey(Meeting, related_name='pairs', on_delete=models.CASCADE)
-   student = models.ForeignKey(
-       AvailabilityResponse, 
-       related_name='student_pairs', 
-       on_delete=models.CASCADE,
-       limit_choices_to={'role': 'student'}
-   )
-   professional = models.ForeignKey(
-       AvailabilityResponse, 
-       related_name='professional_pairs', 
-       on_delete=models.CASCADE,
-       limit_choices_to={'role': 'professional'}
-   )
-   time_option = models.ForeignKey(TimeOption, related_name='paired_sessions', on_delete=models.CASCADE)
-   created_at = models.DateTimeField(default=timezone.now)
-   
-   class Meta:
-       unique_together = ['student', 'professional', 'time_option']
-   
-   def __str__(self):
-       return f"{self.student.participant_name} paired with {self.professional.participant_name} at {self.time_option.start_time}"
-   
+
+class StudentSubmission(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    participant_name = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=15, null=True, blank=True)
+    industry = models.CharField(max_length=100, null=True, blank=True)
+    academic_year = models.CharField(max_length=20, null=True, blank=True)
+    seeking_service = models.CharField(max_length=20, null=True, blank=True)
+    resume_upload = models.FileField(upload_to='resumes/', null=True, blank=True)
+    hear_about_service = models.CharField(max_length=100, null=True, blank=True)
+    optional_information = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+
+    # Admin-assigned professional info
+    professional_assigned = models.BooleanField(default=False)
+    professional_link = models.UUIDField(null=True, blank=True)
+    professional_name = models.CharField(max_length=255, null=True, blank=True)
+    professional_email = models.EmailField(null=True, blank=True)
+    professional_phone = models.CharField(max_length=15, null=True, blank=True)
+    professional_industry = models.CharField(max_length=100, null=True, blank=True)
+    professional_role = models.CharField(max_length=255, null=True, blank=True)
+    professional_more_about = models.TextField(null=True, blank=True)
+    professional_selected_time = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.participant_name} ({self.id})"
