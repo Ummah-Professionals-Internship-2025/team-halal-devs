@@ -1,5 +1,11 @@
 import React from "react";
 
+import type { AvailabilityResponse } from "../types";
+
+interface Props {
+  responses: AvailabilityResponse[];
+  meetingId: string;
+}
 interface TimeOption {
   id: number;
   start_time: string;
@@ -10,12 +16,12 @@ interface AvailabilityEntry {
   time_option: TimeOption;
 }
 
-interface AvailabilityResponse {
-  id: number;
-  participant_name: string;
-  email: string;
-  entries: AvailabilityEntry[];
-}
+// interface AvailabilityResponse {
+//   id: number;
+//   participant_name: string;
+//   email: string;
+//   entries: AvailabilityEntry[];
+// }
 
 interface Props {
   responses: AvailabilityResponse[];

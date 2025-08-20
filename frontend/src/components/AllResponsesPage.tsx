@@ -25,7 +25,10 @@ const AllResponsesPage: React.FC = () => {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}availability-responses/all/`)
       .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch responses");
+        if (!res.ok)
+          throw new Error(
+            "This is the error from AllResponsesPage.tsx. Failed to fetch responses"
+          );
         return res.json();
       })
       .then(setResponses)
@@ -44,7 +47,10 @@ const AllResponsesPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <AvailabilityResponsesTable responses={responses} />
+        <AvailabilityResponsesTable
+          responses={responses}
+          meetingId={meetingId}
+        />
       )}
     </div>
   );

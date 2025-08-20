@@ -36,7 +36,9 @@ const AdminMeetingPage: React.FC = () => {
 
   useEffect(() => {
     if (!meetingId) {
-      setError("Invalid meeting ID.");
+      setError(
+        "This is the error from AdminMeetingPage.tsx. Invalid meeting ID."
+      );
       return;
     }
 
@@ -62,7 +64,9 @@ const AdminMeetingPage: React.FC = () => {
         setTimeOptions(timeOptionsRes.data);
         setResponses(responsesRes.data);
       } catch (err) {
-        setError("Invalid meeting ID or failed to fetch data.");
+        setError(
+          "This is an error from AdminMeetingPage.tsx. Invalid meeting ID or failed to fetch data."
+        );
       }
     };
 
@@ -121,7 +125,7 @@ const AdminMeetingPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <AvailabilityResponsesTable responses={responses} />
+        <AvailabilityResponsesTable responses={responses} meetingId={""} />
       )}
     </div>
   );

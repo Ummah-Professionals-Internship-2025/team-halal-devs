@@ -40,7 +40,7 @@ const CreateMeetingForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStatus(null);
+    setStatus(null); //empties form
 
     for (const option of timeOptions) {
       if (option.end <= option.start) {
@@ -49,15 +49,15 @@ const CreateMeetingForm = () => {
       }
     }
 
+    //sending to API
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}meetings/`, {
-        method: "POST",
+        method: "POST", //sending data - taking form values, setting inside database
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({
           name,
           description,
-          meetingDate,
           time_options: timeOptions.map((option) => ({
             start_time: `${meetingDate}T${option.start}:00Z`,
             end_time: `${meetingDate}T${option.end}:00Z`,
@@ -67,7 +67,7 @@ const CreateMeetingForm = () => {
 
       if (res.ok) {
         const data = await res.json();
-        setStatus("Meeting created!");
+        setStatus("Meeting created!"); // API response
         setShareableLink(data.shareable_link);
         setName("");
         setDescription("");
@@ -77,7 +77,7 @@ const CreateMeetingForm = () => {
         setStatus("Error creating meeting.");
       }
     } catch {
-      setStatus("Network error.");
+      setStatus("This is the error from CreateMeetingForm.tsx. Network error.");
     }
   };
 

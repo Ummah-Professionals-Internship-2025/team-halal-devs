@@ -1,196 +1,152 @@
+import uuid
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView
-from .models import AvailabilityResponse
-from .serializers import AvailabilityResponseSerializer
+
+from .models import Meeting, TimeOption, AvailabilityResponse, AvailabilityEntry, StudentSubmission
+from .serializers import (
+    MeetingSerializer, 
+    MeetingDetailSerializer, 
+    AvailabilityResponseSerializer, 
+    StudentSubmissionSerializer
+)
 
 
-
-from .models import Meeting, AvailabilityResponse, TimeOption, AvailabilityEntry
-from .serializers import MeetingSerializer, MeetingDetailSerializer, AvailabilityResponseSerializer
-
-
-
-
+# -----------------------
+# Root / Home
+# -----------------------
 def home(request):
- return HttpResponse("Welcome to the API. Visit /admin/ or /api/")
-
-
+    return HttpResponse("Welcome to the API. Visit /admin/ or /api/")
 
 
 def api_root(request):
- return JsonResponse({"message": "Welcome to the Meetings API!"})
+    return JsonResponse({"message": "Welcome to the Meetings API!"})
 
 
-
-
-
-
+# -----------------------
+# Meeting endpoints
+# -----------------------
 @method_decorator(csrf_exempt, name='dispatch')
 class CreateMeeting(APIView):
- authentication_classes = []
- permission_classes = []
+    authentication_classes = []
+    permission_classes = []
 
-
-
-
- def post(self, request):
-     serializer = MeetingSerializer(data=request.data)
-     if serializer.is_valid():
-         meeting = serializer.save()
-         meeting_id = str(meeting.id)
-         shareable_link = f"http://localhost:5173/meeting/{meeting_id}"
-
-
-         return Response(
-             {
-                 "meeting_id": meeting_id,
-                 "shareable_link": shareable_link
-             },
-             status=status.HTTP_201_CREATED
-         )
-     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
+    def post(self, request):
+        serializer = MeetingSerializer(data=request.data)
+        if serializer.is_valid():
+            meeting = serializer.save()
+            meeting_id = str(meeting.id)
+            shareable_link = f"http://localhost:5173/meeting/{meeting_id}"
+            return Response(
+                {"meeting_id": meeting_id, "shareable_link": shareable_link},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MeetingDetailView(APIView):
- authentication_classes = []
- permission_classes = []
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, meeting_id):
+        meeting = get_object_or_404(Meeting, pk=meeting_id)
+        serializer = MeetingDetailSerializer(meeting)
+        return Response(serializer.data)
 
 
+# -----------------------
+# Availability responses
+# -----------------------
+class AvailabilityResponseListView(ListAPIView):
+    serializer_class = AvailabilityResponseSerializer
 
-
- def get(self, request, meeting_id):
-     try:
-         meeting = Meeting.objects.get(pk=meeting_id)
-     except Meeting.DoesNotExist:
-         return JsonResponse(
-             {"detail": "Meeting not found."},
-             status=status.HTTP_404_NOT_FOUND
-         )
-
-
-     serializer = MeetingDetailSerializer(meeting)
-     return Response(serializer.data)
-
-
-
-
-
-
-class AvailabilityResponseListView(generics.ListAPIView):
-  serializer_class = AvailabilityResponseSerializer
-
-
-
-
-  def get_queryset(self):
-      # This filters AvailabilityResponse based on the meeting_id passed in the URL
-      meeting_id = self.kwargs['meeting_id']
-
-
-       # Log the meeting_id to verify the correct one is being passed
-      print(f"Trying to fetch meeting with ID: {meeting_id}")
-     
-       # Try to fetch the meeting object
-      try:
-           meeting = Meeting.objects.get(id=meeting_id)
-      except Meeting.DoesNotExist:
-           print(f"Meeting with ID {meeting_id} not found!")
-           # If meeting doesn't exist, return a 404 response with a message
-           return JsonResponse(
-               {"detail": "Meeting not found."},
-               status=status.HTTP_404_NOT_FOUND
-           )
-      
-       # If the meeting exists, return all availability responses for that meeting
-      return AvailabilityResponse.objects.filter(meeting_id=meeting_id)
-
-
-
-
-class AvailabilityResponseCreate(APIView):
-  def post(self, request, meeting_id):
-      # Get the meeting object
-      try:
-          meeting = Meeting.objects.get(id=meeting_id)
-      except Meeting.DoesNotExist:
-          return JsonResponse({"detail": "Meeting not found."}, status=status.HTTP_404_NOT_FOUND, content_type="application/json")
-
-
-      # Get the data from the request
-      participant_name = request.data.get('participant_name')
-      email = request.data.get('email')
-      role = request.data.get('role')  
-      time_option_ids = request.data.get('time_option_ids')
-
-      if not role:
-            return JsonResponse({"detail": "Role is required."}, status=400, content_type="application/json")
-      
-      availability_response = AvailabilityResponse.objects.create(
-            meeting=meeting,
-            participant_name=participant_name,
-            email=email,
-            role=role
-      )
-
-      for time_option_id in time_option_ids:
-          try:
-              time_option = TimeOption.objects.get(id=time_option_id)
-              AvailabilityEntry.objects.create(
-                  availability_response=availability_response,
-                  time_option=time_option
-              )
-          except TimeOption.DoesNotExist:
-              return JsonResponse({"detail": "Time option not found."}, status=404, content_type="application/json")
-
-      serializer = AvailabilityResponseSerializer(availability_response)
-      return Response(serializer.data, status=201)
-
-
-
-
+    def get_queryset(self):
+        meeting_id = self.kwargs['meeting_id']
+        return AvailabilityResponse.objects.filter(meeting_id=meeting_id)
 
 
 class AvailabilitySummaryView(APIView):
-  def get(self, request, meeting_id):
-      # Fetch the meeting object
-      try:
-          meeting = Meeting.objects.get(pk=meeting_id)
-      except Meeting.DoesNotExist:
-          return Response({"detail": "Meeting not found."}, status=status.HTTP_404_NOT_FOUND)
-    
-      # Fetch all time options for the meeting
-      time_options = TimeOption.objects.filter(meeting=meeting)
-    
-      # Initialize the response list
-      summary_data = []
-    
-      # For each time option, count how many availability responses are available
-      for time_option in time_options:
-          available_count = AvailabilityResponse.objects.filter(
-              entries__time_option=time_option
-          ).count()
-        
-          # Append the data
-          summary_data.append({
-              "time_option_id": time_option.id,
-              "start_time": time_option.start_time,
-              "end_time": time_option.end_time,
-              "available_count": available_count
-          })
-    
-      # Return the summary response
-      return Response(summary_data)
+    def get(self, request, meeting_id):
+        meeting = get_object_or_404(Meeting, pk=meeting_id)
+        time_options = TimeOption.objects.filter(meeting=meeting)
+        summary_data = []
+        for option in time_options:
+            count = AvailabilityResponse.objects.filter(entries__time_option=option).count()
+            summary_data.append({
+                "time_option_id": option.id,
+                "start_time": option.start_time,
+                "end_time": option.end_time,
+                "available_count": count
+            })
+        return Response(summary_data)
 
-class AllAvailabilityResponsesView(ListAPIView):
-    serializer_class = AvailabilityResponseSerializer
-    queryset = AvailabilityResponse.objects.all()
+
+# -----------------------
+# Student submission endpoints
+# -----------------------
+class StudentSubmissionCreateView(APIView):
+    def post(self, request):
+        serializer = StudentSubmissionSerializer(data=request.data)
+        if serializer.is_valid():
+            submission = serializer.save()
+            return Response(
+                {"message": "Submission received", "student_id": str(submission.id)},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class AdminStudentListView(ListAPIView):
+    queryset = StudentSubmission.objects.all().order_by('-created_at')
+    serializer_class = StudentSubmissionSerializer
+
+
+class AssignProfessionalView(APIView):
+    def post(self, request, student_id):
+        submission = get_object_or_404(StudentSubmission, id=student_id)
+        submission.professional_name = request.data.get("professional_name")
+        submission.professional_email = request.data.get("professional_email")
+        submission.professional_phone = request.data.get("professional_phone")
+        submission.professional_industry = request.data.get("professional_industry")
+        submission.professional_role = request.data.get("professional_role")
+        submission.professional_more_about = request.data.get("professional_more_about")
+        submission.professional_link = uuid.uuid4()
+        submission.professional_assigned = True
+        submission.save()
+        return Response(
+            {"message": "Professional assigned", "professional_link": str(submission.professional_link)},
+            status=status.HTTP_200_OK
+        )
+
+
+# -----------------------
+# Professional endpoints
+# -----------------------
+class ProfessionalSubmissionView(APIView):
+    def get(self, request, professional_link):
+        submission = get_object_or_404(StudentSubmission, professional_link=professional_link)
+        serializer = StudentSubmissionSerializer(submission)
+        return Response(serializer.data)
+
+    def post(self, request, professional_link):
+        submission = get_object_or_404(StudentSubmission, professional_link=professional_link)
+        submission.professional_selected_time = request.data.get("professional_selected_time")
+        submission.save()
+        return Response({"message": "Time selection submitted"}, status=status.HTTP_200_OK)
+
+
+# -----------------------
+# Admin confirms final meeting
+# -----------------------
+class ConfirmMeetingView(APIView):
+    def post(self, request, student_id):
+        submission = get_object_or_404(StudentSubmission, id=student_id)
+        if not submission.professional_selected_time:
+            return Response({"error": "Professional has not selected a time yet"}, status=400)
+        submission.save()
+        return Response({"message": "Meeting confirmed"}, status=status.HTTP_200_OK)
