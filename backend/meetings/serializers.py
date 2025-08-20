@@ -13,7 +13,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ['id', 'name', 'description', 'created_at', 'time_options']
+        fields = ['id', 'name', 'created_at', 'time_options']
 
     def create(self, validated_data):
         time_options_data = validated_data.pop('time_options')
@@ -32,7 +32,7 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ['name', 'description', 'time_options']
+        fields = ['name', 'time_options']
 
 
 class AvailabilityEntrySerializer(serializers.ModelSerializer):

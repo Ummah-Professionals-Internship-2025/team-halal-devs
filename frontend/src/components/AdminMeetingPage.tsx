@@ -21,7 +21,6 @@ interface AvailabilityResponse {
 interface MeetingData {
   id: string;
   name: string;
-  description: string;
 }
 
 const AdminMeetingPage: React.FC = () => {
@@ -79,7 +78,6 @@ const AdminMeetingPage: React.FC = () => {
   return (
     <div style={{ padding: "1rem", fontFamily: "Arial, sans-serif" }}>
       <h1>{meetingData.name}</h1>
-      <p>{meetingData.description}</p>
 
       <h2>Time Options Summary</h2>
       {timeOptions.length === 0 ? (

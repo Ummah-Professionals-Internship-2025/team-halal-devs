@@ -6,7 +6,6 @@ from django.utils import timezone
 class Meeting(models.Model):
    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
    name = models.CharField(max_length=255,default="Default Name" )
-   description = models.TextField()
    created_at = models.DateTimeField(default=timezone.now)
    def __str__(self):
        return self.name
