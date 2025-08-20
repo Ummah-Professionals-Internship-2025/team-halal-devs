@@ -34,7 +34,9 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
     fetch(`${import.meta.env.VITE_API_URL}meetings/${meetingId}/`)
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Meeting not found");
+          throw new Error(
+            "This is the error from MeetingAvailability.tsx. Meeting not found"
+          );
         }
         return res.json();
       })

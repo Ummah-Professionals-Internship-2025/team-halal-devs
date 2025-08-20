@@ -37,8 +37,16 @@ class AvailabilityResponse(models.Model):
    id = models.AutoField(primary_key=True)
    meeting = models.ForeignKey(Meeting, related_name='availability_responses', on_delete=models.CASCADE)
    participant_name = models.CharField(max_length=255)
-   role = models.CharField(max_length=12, choices=ROLE_CHOICES)  # New field
+   role = models.CharField(max_length=12, choices=ROLE_CHOICES) 
    email = models.EmailField(default='noemail@example.com')
+   phone_number = models.CharField(max_length=15, null=True, blank=True)
+   industry = models.CharField(max_length=100, null=True, blank=True)
+   academic_year = models.CharField(max_length=20, null=True, blank=True)
+   seeking_service = models.CharField(max_length=20, null=True, blank=True)
+   resume_upload = models.FileField(upload_to='resumes/', null=True, blank=True)
+   hear_about_service = models.CharField(max_length=100, null=True, blank=True)
+   optional_information = models.TextField(null=True, blank=True)
+   send_to_email = models.BooleanField(default=False)
    created_at = models.DateTimeField(default=timezone.now)
 
 

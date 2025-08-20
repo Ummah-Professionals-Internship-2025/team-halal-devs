@@ -1,6 +1,16 @@
 from django.urls import path
-from . import views
-
+from .views import (
+    CreateMeeting,
+    MeetingDetailView,
+    AvailabilityResponseListView,
+    AvailabilitySummaryView,
+    StudentSubmissionCreateView,
+    AdminStudentListView,
+    AssignProfessionalView,
+    ProfessionalSubmissionView,
+    ConfirmMeetingView,
+    api_root
+)
 
 urlpatterns = [
   path('', views.api_root, name='api-root'),
