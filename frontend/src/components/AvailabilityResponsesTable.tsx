@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import type { AvailabilityResponse } from "../types";
+
+interface Props {
+  responses: AvailabilityResponse[];
+  meetingId: string;
+}
 interface TimeOption {
   id: number;
   start_time: string;
