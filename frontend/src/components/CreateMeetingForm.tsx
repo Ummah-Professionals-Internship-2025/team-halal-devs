@@ -56,7 +56,6 @@ const CreateMeetingForm = () => {
         credentials: "include",
         body: JSON.stringify({
           name,
-          description,
           time_options: timeOptions.map((option) => ({
             start_time: `${meetingDate}T${option.start}:00Z`,
             end_time: `${meetingDate}T${option.end}:00Z`,
@@ -119,16 +118,6 @@ const CreateMeetingForm = () => {
               type="date"
               value={meetingDate}
               onChange={(e) => setMeetingDate(e.target.value)}
-              required
-            />
-          </label>
-
-          <br />
-          <label>
-            Description:
-            <textarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
               required
             />
           </label>
