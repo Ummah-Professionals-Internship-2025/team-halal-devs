@@ -5,7 +5,7 @@ const ApiTester: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Example test meetingId (replace with a real one from DB)
-  const testMeetingId = "123e4567-e89b-12d3-a456-426614174000";
+  const testMeetingId = "d427b9d5-46c3-4008-8642-4ae320f5ed4e";
 
   const callApi = async (url: string, method: string = "GET", body?: any) => {
     try {
@@ -34,7 +34,6 @@ const ApiTester: React.FC = () => {
           onClick={() =>
             callApi("meetings/", "POST", {
               name: "Frontend Test Meeting",
-              description: "Created via ApiTester",
               time_options: [
                 {
                   start_time: "2025-08-21T10:00:00Z",
