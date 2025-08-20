@@ -10,7 +10,6 @@ type TimeOption = {
 
 const CreateMeetingForm = () => {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [shareableLink, setShareableLink] = useState<string | null>(null);
@@ -57,7 +56,6 @@ const CreateMeetingForm = () => {
         credentials: "include",
         body: JSON.stringify({
           name,
-          description,
           time_options: timeOptions.map((option) => ({
             start_time: `${meetingDate}T${option.start}:00Z`,
             end_time: `${meetingDate}T${option.end}:00Z`,
@@ -70,7 +68,6 @@ const CreateMeetingForm = () => {
         setStatus("Meeting created!"); // API response
         setShareableLink(data.shareable_link);
         setName("");
-        setDescription("");
         setMeetingDate("");
         setTimeOptions([{ start: "", end: "" }]);
       } else {

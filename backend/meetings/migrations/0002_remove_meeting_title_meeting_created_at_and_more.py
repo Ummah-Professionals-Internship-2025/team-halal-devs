@@ -24,12 +24,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='meeting',
-            name='description',
-            field=models.TextField(default=''),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='meeting',
             name='name',
             field=models.CharField(default='Default Name', max_length=255),
         ),

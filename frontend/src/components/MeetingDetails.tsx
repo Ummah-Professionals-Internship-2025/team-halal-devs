@@ -8,7 +8,6 @@ type TimeOption = {
 
 type Meeting = {
   name: string;
-  description: string;
   time_options: TimeOption[];
 };
 
@@ -56,10 +55,6 @@ const MeetingDetails: React.FC<MeetingDetailsProps> = ({ meetingId }) => {
       </p>
       <p>
         <strong>Title:</strong> {meeting.name}
-      </p>
-
-      <p>
-        <strong>Meeting Description:</strong> {meeting.description}
       </p>
 
       <p>

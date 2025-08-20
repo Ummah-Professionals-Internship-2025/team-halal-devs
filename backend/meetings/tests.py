@@ -10,7 +10,7 @@ class AvailabilityResponseTests(APITestCase):
   
   def setUp(self):
      # Create a meeting
-     self.meeting = Meeting.objects.create(name="Team Meeting", description="Discuss project progress")
+     self.meeting = Meeting.objects.create(name="Team Meeting")
   
      # Create time options for the meeting
      self.time_option_1 = TimeOption.objects.create(

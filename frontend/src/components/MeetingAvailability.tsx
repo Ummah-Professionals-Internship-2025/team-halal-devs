@@ -8,7 +8,6 @@ type TimeOption = {
 
 type Meeting = {
   name: string;
-  description: string;
   time_options: TimeOption[];
 };
 
@@ -137,7 +136,6 @@ const MeetingAvailability: React.FC<MeetingAvailabilityProps> = ({
   return (
     <div>
       <h3>{meeting.name}</h3>
-      <p>{meeting.description}</p>
 
       <h4>Available Time Options:</h4>
       <form onSubmit={handleSubmit}>
