@@ -17,6 +17,13 @@ import MeetingDetails from "./components/MeetingDetails";
 import MeetingPage from "./components/MeetingPage";
 import ApiTester from "./components/TestComponent";
 
+//REMOVE THESE IMPORTS LATER - THESE COMPONENTS SHOULD GO UNDER 1 STUDENT INFO PAGE
+import Calendar from "./components/Calendar";
+import TimeDropdown from "./components/TimeDropdown";
+import WrapUp from "./components/WrapUp";
+import Submit from "./components/Submit";
+//END REMOVE
+
 import type { AvailabilityResponse } from "./types";
 
 const AppRouter: React.FC = () => {
@@ -36,6 +43,26 @@ const AppRouter: React.FC = () => {
           element={<AvailableTimeOptionsForm />}
         />
         <Route path="/info" element={<InfoForm />} />
+
+        {/* REMOVE THESE ROUTES LATER - THESE COMPONENTS SHOULD GO UNDER 1 STUDENT INFO PAGE */}
+        <Route path="/calendar" element={<Calendar />} />
+        <Route
+          path="/timedropdown"
+          element={
+            <TimeDropdown
+              dates={[]}
+              times={[]}
+              onChange={function (dateId: number, value: string): void {
+                throw new Error("Function not implemented.");
+              }}
+              values={{}}
+            />
+          }
+        />
+        <Route path="/wrapup" element={<WrapUp />} />
+        <Route path="/submit" element={<Submit />} />
+        {/* END REMOVE */}
+
         <Route
           path="/meeting/:id/details"
           element={<MeetingDetailsWrapper />}
