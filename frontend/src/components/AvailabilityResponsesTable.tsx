@@ -1,38 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import type { AvailabilityResponse } from "../types";
-
-interface Props {
-  responses: AvailabilityResponse[];
-  meetingId: string;
-}
+// Remove the import and use consistent local interfaces
 interface TimeOption {
   id: number;
   start_time: string;
   end_time: string;
 }
 
-interface Props {
-  responses: AvailabilityResponse[];
-  meetingId?: string;
+interface AvailabilityEntry {
+  time_option: TimeOption;
 }
-// interface TimeOption {
-//   id: number;
-//   start_time: string;
-//   end_time: string;
-// }
 
-// interface AvailabilityEntry {
-//   time_option: TimeOption;
-// }
-
-// interface AvailabilityResponse {
-//   id: number;
-//   participant_name: string;
-//   email: string;
-//   entries: AvailabilityEntry[];
-// }
+interface AvailabilityResponse {
+  id: number;
+  participant_name: string;
+  email: string;
+  role: string; // Add the missing role property
+  entries: AvailabilityEntry[];
+}
 
 interface StudentProfessionalPair {
   id: number;
@@ -42,21 +28,23 @@ interface StudentProfessionalPair {
   created_at: string;
 }
 
+// Single Props interface - remove the other duplicate definitions
 interface Props {
   responses: AvailabilityResponse[];
-  pairs: StudentProfessionalPair[];
-  meetingId: string | null;
-  onPairUpdate: (updatedPairs: StudentProfessionalPair[]) => void;
+  pairs?: StudentProfessionalPair[]; // Make optional
+  meetingId?: string; // Make optional
+  onPairUpdate?: (updatedPairs: StudentProfessionalPair[]) => void; // Make optional
 }
 
 type SortField = "date" | "name" | "time";
 
 const AvailabilityResponsesTable: React.FC<Props> = ({
   responses,
-  pairs,
+  pairs = [], // Default to empty array
   meetingId,
   onPairUpdate,
 }) => {
+  // ... rest of your component code remains the same
   const [sortField, setSortField] = useState<SortField>("date");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [isCreatingPair, setIsCreatingPair] = useState(false);
@@ -101,10 +89,10 @@ const AvailabilityResponsesTable: React.FC<Props> = ({
       );
 
       // Refresh pairs data
-      const pairsRes = await axios.get(
+      const pairsRes = await axios.get<StudentProfessionalPair[]>(
         `${import.meta.env.VITE_API_URL}meetings/${meetingId}/pairs/`
       );
-      onPairUpdate(pairsRes.data);
+      onPairUpdate?.(pairsRes.data); // now typed
 
       // Reset form
       setSelectedStudent(null);
@@ -127,11 +115,10 @@ const AvailabilityResponsesTable: React.FC<Props> = ({
         `${import.meta.env.VITE_API_URL}meetings/${meetingId}/pairs/${pairId}/`
       );
 
-      // Refresh pairs data
-      const pairsRes = await axios.get(
+      const pairsRes = await axios.get<StudentProfessionalPair[]>(
         `${import.meta.env.VITE_API_URL}meetings/${meetingId}/pairs/`
       );
-      onPairUpdate(pairsRes.data);
+      onPairUpdate?.(pairsRes.data); // now typed
     } catch (error) {
       alert("Failed to delete pair.");
       console.error(error);
