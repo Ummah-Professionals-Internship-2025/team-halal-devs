@@ -8,13 +8,16 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 // Track the current step (state)
 // const [currentStep, setCurrentStep] = React.useState(steps[0]);
 
-export default function BasicDateCalendar() {
+export default function Calendar() {
   //   const steps = ["Select Date", "Enter Info", "Confirm"];
   //   const [currentStep, setCurrentStep] = React.useState(steps[0]);
   return (
     <div>
       <div className="info-form">
-        <h3 className="meeting-page-title">Career Services Applicants</h3>
+        <h3 className="meeting-page-title">
+          Career Services Applicants, page 2 (remove this title from
+          calendar.tsx)
+        </h3>
         {/* <div className="progress-bar">
           {steps.map((step) => (
             <div

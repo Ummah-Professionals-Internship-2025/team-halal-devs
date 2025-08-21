@@ -17,7 +17,9 @@ const InfoForm = () => {
 
   return (
     <div className="info-form">
-      <h3 className="meeting-page-title">Career Services Applicants</h3>
+      <h3 className="meeting-page-title">
+        Career Services Applicants, page 1 (remove this title from infoform.tsx)
+      </h3>
       <div className="progress-bar">
         {steps.map((step) => (
           <div

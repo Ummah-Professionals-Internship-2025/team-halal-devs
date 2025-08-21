@@ -16,6 +16,7 @@ import AvailabilityResponsesTable from "./components/AvailabilityResponsesTable"
 import MeetingDetails from "./components/MeetingDetails";
 import MeetingPage from "./components/MeetingPage";
 import ApiTester from "./components/TestComponent";
+import MainStudentInfoPage from "./pages/StudentFlow/MainStudentInfoPage";
 
 //REMOVE THESE IMPORTS LATER - THESE COMPONENTS SHOULD GO UNDER 1 STUDENT INFO PAGE
 import Calendar from "./components/Calendar";
@@ -42,10 +43,10 @@ const AppRouter: React.FC = () => {
           path="/availability-form"
           element={<AvailableTimeOptionsForm />}
         />
-        <Route path="/info" element={<InfoForm />} />
 
         {/* REMOVE THESE ROUTES LATER - THESE COMPONENTS SHOULD GO UNDER 1 STUDENT INFO PAGE */}
-        <Route path="/calendar" element={<Calendar />} />
+        {/* <Route path="/calendar" element={<Calendar />} />
+        <Route path="/info" element={<InfoForm />} />
         <Route
           path="/timedropdown"
           element={
@@ -60,8 +61,10 @@ const AppRouter: React.FC = () => {
           }
         />
         <Route path="/wrapup" element={<WrapUp />} />
-        <Route path="/submit" element={<Submit />} />
+        <Route path="/submit" element={<Submit />} /> */}
         {/* END REMOVE */}
+
+        <Route path="/mainstudent" element={<MainStudentInfoPage />} />
 
         <Route
           path="/meeting/:id/details"

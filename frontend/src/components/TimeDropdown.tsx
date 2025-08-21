@@ -39,11 +39,6 @@ const TimeDropdown: React.FC<TimeDropdownProps> = ({
           </div>
         ))}
       </div>
-
-      <div className="navigation-buttons">
-        <button className="nav-button previous">← Previous</button>
-        <button className="nav-button next">Next →</button>
-      </div>
     </div>
   );
 };
