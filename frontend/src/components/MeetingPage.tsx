@@ -1,17 +1,14 @@
 import React from "react";
-import StudentForm from "../components/StudentForm";
-import ProfessionalForm from "../components/ProfessionalForm";
+import { useParams } from "react-router-dom";
+import MeetingAvailability from "./MeetingAvailability";
+import ErrorPage from "./ErrorPage";
 
-export default function MeetingPage() {
-  const meetingId = "PUT-YOUR-MEETING-ID-HERE"; // replace with a real meeting id from DB
+const MeetingPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
 
-  return (
-    <div>
-      <h2>Student Form</h2>
-      <StudentForm meetingId={meetingId} />
+  if (!id) return <ErrorPage />;
 
-      <h2>Professional Form</h2>
-      <ProfessionalForm meetingId={meetingId} />
-    </div>
-  );
-}
+  return <MeetingAvailability meetingId={id} />;
+};
+
+export default MeetingPage;

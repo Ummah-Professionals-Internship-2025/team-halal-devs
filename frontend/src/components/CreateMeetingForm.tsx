@@ -1,6 +1,7 @@
 import { useState } from "react";
 import React from "react";
 import MeetingDetails from "./MeetingDetails";
+import "./CreateMeetingForm.css";
 import "./MeetingAvailability.css";
 
 type TimeOption = {

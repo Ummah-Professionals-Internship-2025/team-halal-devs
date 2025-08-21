@@ -15,6 +15,7 @@ interface AvailabilityResponse {
   id: number;
   participant_name: string;
   email: string;
+  role: string;
   entries: AvailabilityEntry[];
 }
 
@@ -94,10 +95,7 @@ const AllResponsesPage: React.FC = () => {
       {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
-        <AvailabilityResponsesTable
-          responses={responses}
-          meetingId={meetingId}
-        />
+        <AvailabilityResponsesTable responses={responses} />
       )}
     </div>
   );
