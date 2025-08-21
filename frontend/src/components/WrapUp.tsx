@@ -2,9 +2,9 @@ import "./WrapUp.css";
 import * as React from "react";
 import { useState } from "react";
 
-const [hearAbout, sethearAbout] = useState("");
-
 export default function WrapUp() {
+  const [hearAbout, sethearAbout] = useState("");
+
   return (
     <div>
       <div className="info-form">
