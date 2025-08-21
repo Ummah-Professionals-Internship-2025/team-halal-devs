@@ -5,17 +5,17 @@ import type { AvailabilityResponse } from "../types";
 
 interface Props {
   responses: AvailabilityResponse[];
-  meetingId: string;
+  meetingId?: string;
 }
-interface TimeOption {
-  id: number;
-  start_time: string;
-  end_time: string;
-}
+// interface TimeOption {
+//   id: number;
+//   start_time: string;
+//   end_time: string;
+// }
 
-interface AvailabilityEntry {
-  time_option: TimeOption;
-}
+// interface AvailabilityEntry {
+//   time_option: TimeOption;
+// }
 
 interface AvailabilityResponse {
   id: number;
