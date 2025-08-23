@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Meeting, TimeOption, AvailabilityResponse, AvailabilityEntry, StudentSubmission
+from .models import Meeting, TimeOption, Student, Professional
 
 
 class TimeOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeOption
-        fields = ['id', 'start_time', 'end_time']
+        fields = ["id", "start_time", "end_time", "created_at"]
 
 
 class MeetingSerializer(serializers.ModelSerializer):
@@ -13,56 +13,34 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ['id', 'name', 'created_at', 'time_options']
+        fields = ["id", "name", "prof_note", "created_at", "time_options"]
 
     def create(self, validated_data):
-        time_options_data = validated_data.pop('time_options')
+        time_options_data = validated_data.pop("time_options")
         meeting = Meeting.objects.create(**validated_data)
         for option in time_options_data:
             TimeOption.objects.create(
                 meeting=meeting,
-                start_time=option['start_time'],
-                end_time=option['end_time']
+                start_time=option["start_time"],
+                end_time=option.get("end_time"),
             )
         return meeting
 
 
 class MeetingDetailSerializer(serializers.ModelSerializer):
-    time_options = TimeOptionSerializer(many=True)
+    time_options = TimeOptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Meeting
-        fields = ['name', 'time_options']
+        fields = ["id", "name", "prof_note", "created_at", "time_options"]
 
 
-class AvailabilityEntrySerializer(serializers.ModelSerializer):
-    time_option = TimeOptionSerializer()
-
+class StudentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = AvailabilityEntry
-        fields = ['time_option']
-
-
-class AvailabilityResponseSerializer(serializers.ModelSerializer):
-    entries = AvailabilityEntrySerializer(many=True)
-    participant_name = serializers.CharField()
-    email = serializers.EmailField()
-    role = serializers.CharField(required=True)
-
-    class Meta:
-        model = AvailabilityResponse
-        fields = ['participant_name', 'email', 'role', 'entries']
-        extra_kwargs = {
-            'role': {'required': True},
-        }
-
-
-
-class StudentSubmissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StudentSubmission
+        model = Student
         fields = [
             "id",
+            "meeting",
             "participant_name",
             "email",
             "phone_number",
@@ -70,18 +48,29 @@ class StudentSubmissionSerializer(serializers.ModelSerializer):
             "academic_year",
             "seeking_service",
             "resume_upload",
-            "hear_about_service",
-            "optional_information",
+            "hear_about",
+            "optional_info",
             "send_to_email",
-            # Professional assignment fields
-            "professional_name",
-            "professional_email",
-            "professional_phone",
-            "professional_industry",
-            "professional_role",
-            "professional_more_about",
-            "professional_link",
-            "professional_selected_time",
-            "professional_assigned",
+            "prof_assigned",
+            "created_at",
+        ]
+
+
+class ProfessionalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Professional
+        fields = [
+            "id",
+            "meeting",
+            "prof_assigned",
+            "prof_link",
+            "prof_name",
+            "prof_email",
+            "prof_phone",
+            "prof_industry",
+            "prof_role",
+            "prof_more_about",
+            "prof_selected_time",
+            "prof_note",
             "created_at",
         ]

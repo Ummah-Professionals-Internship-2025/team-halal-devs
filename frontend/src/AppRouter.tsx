@@ -27,13 +27,17 @@ import Submit from "./components/Submit";
 
 import type { AvailabilityResponse } from "./types";
 import SelectAvailability from "./pages/ProfessionalFlow/SelectAvailability";
+import ViewAdvisors from "./pages/AdminFlow/ViewAdvisors";
+import ViewEvents from "./pages/AdminFlow/ViewEvents";
+import ViewFollowUps from "./pages/AdminFlow/ViewFollowUps";
+import ViewStudentSubmissions from "./pages/AdminFlow/ViewStudentSubmissions";
 
 const AppRouter: React.FC = () => {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<CreateMeetingForm />} />
-        <Route path="/admin" element={<AdminMeetingPage />} />
+        {/* <Route path="/admin" element={<AdminMeetingPage />} /> */}
         <Route path="/responses" element={<AllResponsesPage />} />
         <Route path="/meeting/:id" element={<MeetingAvailabilityWrapper />} />
         <Route
@@ -67,6 +71,15 @@ const AppRouter: React.FC = () => {
 
         <Route path="/mainstudent" element={<MainStudentInfoPage />} />
         <Route path="/professional" element={<SelectAvailability />} />
+        {/* Admin and sub-routes */}
+        <Route path="/adminhome" element={<ViewAdvisors />} />
+        <Route path="/admin/advisors" element={<ViewAdvisors />} />
+        <Route path="/admin/events" element={<ViewEvents />} />
+        <Route path="/admin/follow-ups" element={<ViewFollowUps />} />
+        <Route
+          path="/admin/student-submissions"
+          element={<ViewStudentSubmissions />}
+        />
 
         <Route
           path="/meeting/:id/details"

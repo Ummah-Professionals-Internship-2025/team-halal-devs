@@ -131,6 +131,27 @@ The server will run at: http://127.0.0.1:8000/
    ```
 
 The app will be available at the URL shown in the terminal (usually http://localhost:5173/).
+Some useful routes:
+To access the main student view:
+http://localhost:5173/mainstudent
+
+To access the professional view:
+http://localhost:5173/professional
+
+To access the admin view:
+http://localhost:5173/adminhome
+Admin sub-routes:
+To access the admin's view of advisors
+http://localhost:5173/admin/advisors
+
+To access the admin's view of events
+http://localhost:5173/admin/events
+
+To access the admin's view for follow-ups
+http://localhost:5173/admin/follow-ups
+
+To access the admin's view of student submissions
+http://localhost:5173/admin/student-submissions
 
 ---
 
