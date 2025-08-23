@@ -26,6 +26,7 @@ import Submit from "./components/Submit";
 //END REMOVE
 
 import type { AvailabilityResponse } from "./types";
+import SelectAvailability from "./pages/ProfessionalFlow/SelectAvailability";
 
 const AppRouter: React.FC = () => {
   return (
@@ -65,6 +66,7 @@ const AppRouter: React.FC = () => {
         {/* END REMOVE */}
 
         <Route path="/mainstudent" element={<MainStudentInfoPage />} />
+        <Route path="/professional" element={<SelectAvailability />} />
 
         <Route
           path="/meeting/:id/details"

@@ -57,9 +57,7 @@ const MainStudentInfoPage: React.FC = () => {
   return (
     <div className="student-page-container">
       <h1 className="student-page-title">Career Services Applicants</h1>
-
       <div className="step-component">{renderStep()}</div>
-
       <div className="step-buttons">
         {currentStep > 0 && <button onClick={prevStep}>Previous</button>}
 

@@ -63,7 +63,7 @@ class StudentSubmissionSerializer(serializers.ModelSerializer):
         model = StudentSubmission
         fields = [
             "id",
-            "student_name",
+            "participant_name",
             "email",
             "phone_number",
             "industry",
