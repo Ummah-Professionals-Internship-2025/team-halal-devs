@@ -1,26 +1,32 @@
 from django.urls import path
 from .views import (
-    CreateMeeting,
-    MeetingDetailView,
-    AvailabilityResponseListView,
-    AvailabilitySummaryView,
-    StudentSubmissionCreateView,
-    AdminStudentListView,
-    AssignProfessionalView,
-    ProfessionalSubmissionView,
-    ConfirmMeetingView,
-    api_root
+    api_root,                         # [backend/meetings/views.py](backend/meetings/views.py)
+    CreateMeeting,                    # [backend/meetings/views.py](backend/meetings/views.py)
+    MeetingDetailView,                # [backend/meetings/views.py](backend/meetings/views.py)
+    TimeOptionListView,               # [backend/meetings/views.py](backend/meetings/views.py)
+    StudentCreateView,                # [backend/meetings/views.py](backend/meetings/views.py)
+    StudentListView,                  # [backend/meetings/views.py](backend/meetings/views.py)
+    ProfessionalListView,             # [backend/meetings/views.py](backend/meetings/views.py)
+    AssignProfessionalView,           # [backend/meetings/views.py](backend/meetings/views.py)
+    ProfessionalUpdateView,           # [backend/meetings/views.py](backend/meetings/views.py)
 )
 
+app_name = "meetings"
+
 urlpatterns = [
-    path('', api_root, name='api-root'),
-    path('meetings/', CreateMeeting.as_view(), name='create-meeting'),
-    path('meetings/<uuid:meeting_id>/', MeetingDetailView.as_view(), name='meeting-detail'),
-    path('availability-responses/<uuid:meeting_id>/', AvailabilityResponseListView.as_view(), name='availability-response-list'),
-    path('availability-summary/<uuid:meeting_id>/', AvailabilitySummaryView.as_view(), name='availability-summary'),
-    path('student/', StudentSubmissionCreateView.as_view(), name='student-create'),
-    path('admin/students/', AdminStudentListView.as_view(), name='admin-student-list'),
-    path('assign-professional/<uuid:student_id>/', AssignProfessionalView.as_view(), name='assign-professional'),
-    path('professional/<uuid:professional_link>/', ProfessionalSubmissionView.as_view(), name='professional-submission'),
-    path('confirm-meeting/<uuid:student_id>/', ConfirmMeetingView.as_view(), name='confirm-meeting'),
+    path("", api_root, name="api-root"),
+
+    # Meetings
+    path("meetings/", CreateMeeting.as_view(), name="create-meeting"),  # POST
+    path("meetings/<uuid:meeting_id>/", MeetingDetailView.as_view(), name="meeting-detail"),  # GET
+    path("meetings/<uuid:meeting_id>/time-options/", TimeOptionListView.as_view(), name="time-option-list"),  # GET
+
+    # Students
+    path("student/", StudentCreateView.as_view(), name="student-create"),  # POST
+    path("admin/students/", StudentListView.as_view(), name="admin-student-list"),  # GET
+
+    # Professionals
+    path("admin/professionals/", ProfessionalListView.as_view(), name="admin-professional-list"),  # GET
+    path("assign-professional/<int:student_id>/", AssignProfessionalView.as_view(), name="assign-professional"),  # POST
+    path("professional/<uuid:prof_link>/update/", ProfessionalUpdateView.as_view(), name="professional-update"),  # POST
 ]
