@@ -1,0 +1,66 @@
+.calendar-container {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 2rem 0 1rem 0;
+  text-align: center;
+}
+
+.meeting-page-title {
+  color: #207ca6;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.required {
+  color: #e74c3c;
+  font-size: 1.5rem;      /* Make it larger */
+  font-weight: bold;      /* Make it bold */
+  margin-left: 0.2em;
+  vertical-align: super;
+}
+
+.custom-calendar {
+  margin: 0 auto;
+  background: transparent;
+}
+
+.MuiPickersCalendarHeader-label {
+  font-weight: 600;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.MuiPickersCalendarHeader-daysHeader {
+  background-color: #207ca6 !important;
+  color: #fff !important;
+  border-radius: 6px 6px 0 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.MuiPickersDay-root {
+  font-weight: 500;
+  font-size: 1.1rem;
+  color: #007ca6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 2px;
+}
+
+.Mui-selected {
+  background-color: #207ca6 !important;
+  color: #fff !important;
+}
+
+.MuiPickersDay-dayOutsideMonth {
+  opacity: 0.3;
+}
+
+.MuiPickersCalendarHeader-switchViewButton,
+.MuiPickersCalendarHeader-iconButton {
+  color: #007ca6 !important;
+}
+
