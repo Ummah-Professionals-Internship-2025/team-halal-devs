@@ -1,0 +1,78 @@
+/* Table wrapper */
+.availability-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Header */
+.availability-table__header {
+  background-color: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+/* Cell */
+.availability-table__cell {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  color: #111827;
+}
+
+/* Role tags */
+.availability-table__role--student {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.availability-table__role--professional {
+  background: #ede9fe;
+  color: #6d28d9;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Empty/placeholder text */
+.availability-table__empty {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Buttons */
+.availability-table__button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.availability-table__button--remove {
+  background: #ef4444;
+  color: white;
+}
+
+.availability-table__button--create {
+  background: #22c55e;
+  color: white;
+}
+
+.availability-table__button--cancel {
+  background: #6b7280;
+  color: white;
+}

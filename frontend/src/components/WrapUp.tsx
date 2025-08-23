@@ -10,9 +10,7 @@ export default function WrapUp() {
     <div>
       <div className="info-form"> </div>
       <div>
-        <h3 className="meeting-page-title">
-          Career Services Applicants, page 3
-        </h3>
+        <h3 className="meeting-page-title">Additional Information</h3>
         <br></br>
         <label className="label">
           How did you hear about this service?{" "}
