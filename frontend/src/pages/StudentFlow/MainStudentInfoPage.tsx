@@ -67,30 +67,27 @@ const MainStudentInfoPage: React.FC = () => {
 
       <div className="step-component">{renderStep()}</div>
 
-      {/* Optional: keep only Previous and final Submit */}
-      <div className="step-buttons">
+      <div className="step-buttons-row">
         {currentStep > 0 && (
-          <button onClick={() => setCurrentStep((s) => s - 1)}>Previous</button>
+          <button
+            className="step-button pill right"
+            onClick={() => setCurrentStep((s) => s - 1)}
+          >
+            ← Previous
+          </button>
         )}
         {currentStep < steps.length - 1 && (
-          <button onClick={nextStep}>Next</button>
+          <button className="step-button pill left" onClick={nextStep}>
+            Next →
+          </button>
         )}
         {currentStep === steps.length - 1 && (
-          <button onClick={handleSubmit}>Submit</button>
+          <button className="step-button pill right" onClick={handleSubmit}>
+            Submit
+          </button>
         )}
       </div>
     </div>
-    // <div className="student-page-container">
-    //   <h1 className="student-page-title">Career Services Applicants</h1>
-    //   <div className="step-component">{renderStep()}</div>
-    //   <div className="step-buttons">
-    //     {currentStep > 0 && <button onClick={prevStep}>Previous</button>}
-
-    //     <button onClick={nextStep}>
-    //       {currentStep === steps.length - 1 ? "Submit" : "Next"}
-    //     </button>
-    //   </div>
-    // </div>
   );
 };
 
