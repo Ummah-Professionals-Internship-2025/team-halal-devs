@@ -17,10 +17,8 @@ const InfoForm = () => {
 
   return (
     <div className="info-form">
-      <h3 className="meeting-page-title">
-        Career Services Applicants, page 1 (remove this title from infoform.tsx)
-      </h3>
-      <div className="progress-bar">
+      <h3 className="meeting-page-title">Applicants Info</h3>
+      {/* <div className="progress-bar">
         {steps.map((step) => (
           <div
             key={step}
@@ -29,7 +27,7 @@ const InfoForm = () => {
             {step}
           </div>
         ))}
-      </div>
+      </div> */}
       {/* <div className="progress-bar">
         {steps.map((step) => (
           <div
