@@ -1,0 +1,90 @@
+/* Submit.css */
+
+.submit-step {
+  padding: 10px;
+  max-width: 700px;
+  margin: auto;
+  background-color: #ffffff;
+  text-align: left;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Force Poppins font inside all elements */
+.submit-step * {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.label {
+  font-weight: 600 !important;
+  font-size: 18px !important;
+  color: #003f55 !important;
+  margin-bottom: 16px;
+  display: block;
+  text-align: left;
+}
+
+.confirmation-label .MuiFormControlLabel-label {
+  font-weight: 400 !important;
+  font-size: 18px !important;
+  color: #8b8b8b !important;
+  margin-bottom: 16px;
+  display: flex !important;
+  align-items: flex-start !important;
+  text-align: left;
+  line-height: 1.3;
+  align-self: flex-start;
+  margin-top: 0px;
+}
+
+.MuiRadio-root .MuiSvgIcon-root {
+  font-size: 15.89px !important;
+}
+
+.label-required {
+  color: red;
+  margin-left: 4px;
+  font-size: 18px;
+}
+
+.indented-group .MuiFormControlLabel-root {
+  margin-left: 24px;
+}
+
+/*
+.submit-step {
+  background-color: #f0fafd;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 700px;
+  margin: auto;
+  font-family: "Inter", sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.MuiFormLabel-root {
+  font-weight: 600;
+  font-size: 16px;
+  color: #003b5c;
+  margin-bottom: 12px;
+}
+
+.MuiFormGroup-root {
+  margin-top: 24px;
+}
+
+.MuiFormControlLabel-label {
+  color: #444;
+  font-size: 14px;
+}
+
+.MuiCheckbox-root,
+.MuiRadio-root {
+  color: #007fa3;
+}
+
+.MuiCheckbox-root.Mui-checked,
+.MuiRadio-root.Mui-checked {
+  color: #007fa3;
+}
+
+/**/

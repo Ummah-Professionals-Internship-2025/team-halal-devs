@@ -17,44 +17,6 @@ const InfoForm = () => {
 
   return (
     <div className="info-form">
-      <h3 className="meeting-page-title">Applicants Info</h3>
-      {/* <div className="progress-bar">
-        {steps.map((step) => (
-          <div
-            key={step}
-            className={`progress-step ${currentStep === step ? "active" : ""}`}
-          >
-            {step}
-          </div>
-        ))}
-      </div> */}
-      {/* <div className="progress-bar">
-        {steps.map((step) => (
-          <div
-            key={step}
-            className={`progress-step ${currentStep === step ? "active" : ""}`}
-            onClick={() => setCurrentStep(step)}
-          >
-            {step}
-          </div>
-        ))}
-      </div> */}
-      {/* <div className="progress-bar-wrapper">
-        <div className="progress-bar">
-          {steps.map((step) => (
-            <div
-              key={step}
-              className={`progress-step ${
-                currentStep === step ? "active" : ""
-              }`}
-              onClick={() => setCurrentStep(step)}
-            >
-              {step}
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       {/* Two Column Layout */}
       <div className="form-container">
         {/* Left Column */}
