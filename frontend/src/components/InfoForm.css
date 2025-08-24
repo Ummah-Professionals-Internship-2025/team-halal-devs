@@ -66,6 +66,12 @@
   background-color: white;
 }
 
+select.form-container-input:focus {
+  outline: none;
+  border-color: #007ca6;
+  box-shadow: 0 0 0 1px #007ca6;
+}
+
 .form-container-input:focus {
   border-color: #007ca6;
   outline: none;
@@ -148,10 +154,36 @@
   gap: 24px;
 }
 
+.step-buttons-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 32px 0 0 0;
+  width: 100%;
+}
+
+.step-button.pill {
+  background: #ecf6f9;
+  color: #0f172a;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 32px;
+  font-size: 18px;
+  font-weight: normal;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: background 0.2s, color 0.2s;
+}
+
+.step-button.pill:hover {
+  background: #007ca6;
+  color: #fff;
+}
+
 /* .progress-step {
-  font-weight: 500;
-  color: #333;
-  font-size: 16px;
+ font-weight: 500;
+ color: #333;
+ font-size: 16px;
 } */
 
 .student-page-container .progress-bar {
@@ -168,28 +200,31 @@
 
 /* === Step Progress Bar === */
 /* .progress-bar-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
+ display: flex;
+ justify-content: center;
+ margin-bottom: 2rem;
 }
+
 
 .progress-bar {
-  display: flex;
-  background-color: #f5f7fa;
-  border-radius: 9999px;
-  padding: 4px;
+ display: flex;
+ background-color: #f5f7fa;
+ border-radius: 9999px;
+ padding: 4px;
 }
+
 
 .progress-step {
-  padding: 10px 20px;
-  border-radius: 9999px;
-  font-weight: 500;
-  color: #0f172a;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+ padding: 10px 20px;
+ border-radius: 9999px;
+ font-weight: 500;
+ color: #0f172a;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
 }
 
+
 .progress-step.active {
-  background-color: #7dd3fc;
-  color: #0f172a;
+ background-color: #7dd3fc;
+ color: #0f172a;
 } */
