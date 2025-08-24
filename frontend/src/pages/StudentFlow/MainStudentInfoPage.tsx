@@ -11,18 +11,6 @@ const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 const MainStudentInfoPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
-  // const nextStep = () => {
-  //   if (currentStep === steps.length - 1) {
-  //     handleSubmit();
-  //   } else {
-  //     setCurrentStep((prev) => prev + 1);
-  //   }
-  // };
-
-  // const prevStep = () => {
-  //   setCurrentStep((prev) => Math.max(prev - 1, 0));
-  // };
-
   const handleSubmit = () => {
     // call API to submit data here
     alert("Form submitted!");
@@ -63,7 +51,7 @@ const MainStudentInfoPage: React.FC = () => {
     <div className="student-page-container">
       <h1 className="student-page-title">Career Services Applicants</h1>
       {/* Clickable steps header */}
-      <div className="progress-bar">
+      <div className="progress-pillbox">
         {steps.map((label, idx) => (
           <div
             key={label}

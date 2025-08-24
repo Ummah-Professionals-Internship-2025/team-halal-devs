@@ -133,16 +133,37 @@
   background-color: #8acbdb;
   color: #0f172a;
 }
+
+.progress-pillbox {
+  background: #f0f1f4;
+  border-radius: 999px;
+  padding: 0px 0px;
+  width: fit-content;
+  margin: 0 auto 50px auto;
+  display: flex;
+  align-items: center;
+}
+.progress-bar {
+  display: flex;
+  gap: 24px;
+}
+
+/* .progress-step {
+  font-weight: 500;
+  color: #333;
+  font-size: 16px;
+} */
+
 .student-page-container .progress-bar {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;            /* spacing between chips */
-  flex-wrap: nowrap;   /* keep in one row */
+  gap: 8px; /* spacing between chips */
+  flex-wrap: nowrap; /* keep in one row */
 }
 
 .student-page-container .progress-step {
-  display: inline-flex;  /* render as chips */
+  display: inline-flex; /* render as chips */
 }
 
 /* === Step Progress Bar === */
