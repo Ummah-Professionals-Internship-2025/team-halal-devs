@@ -4,11 +4,11 @@ from .models import Meeting, TimeOption, Student, Professional
 @admin.register(Meeting)
 class MeetingAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_display = ['name', 'created_at']
+    list_display = ['id', 'name', 'prof_note', 'created_at'] # Added id and prof-note
 
 @admin.register(TimeOption)
 class TimeOptionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'meeting', 'start_time', 'end_time']
+    list_display = ['id', 'meeting', 'start_time', 'end_time', 'created_at'] # added created_at
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
