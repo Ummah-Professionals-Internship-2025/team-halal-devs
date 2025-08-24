@@ -4,23 +4,24 @@ import Calendar from "../../components/Calendar";
 import TimeDropdown from "../../components/TimeDropdown";
 import WrapUp from "../../components/WrapUp";
 import Submit from "../../components/Submit";
+import "../../components/InfoForm.css";
 
-const steps = ["Info", "Schedule", "WrapUp", "Submit"];
+const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 
 const MainStudentInfoPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
 
-  const nextStep = () => {
-    if (currentStep === steps.length - 1) {
-      handleSubmit();
-    } else {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
+  // const nextStep = () => {
+  //   if (currentStep === steps.length - 1) {
+  //     handleSubmit();
+  //   } else {
+  //     setCurrentStep((prev) => prev + 1);
+  //   }
+  // };
 
-  const prevStep = () => {
-    setCurrentStep((prev) => Math.max(prev - 1, 0));
-  };
+  // const prevStep = () => {
+  //   setCurrentStep((prev) => Math.max(prev - 1, 0));
+  // };
 
   const handleSubmit = () => {
     // call API to submit data here
@@ -57,15 +58,44 @@ const MainStudentInfoPage: React.FC = () => {
   return (
     <div className="student-page-container">
       <h1 className="student-page-title">Career Services Applicants</h1>
-      <div className="step-component">{renderStep()}</div>
-      <div className="step-buttons">
-        {currentStep > 0 && <button onClick={prevStep}>Previous</button>}
+      {/* Clickable steps header */}
+      <div className="progress-bar">
+        {steps.map((label, idx) => (
+          <div
+            key={label}
+            className={`progress-step ${currentStep === idx ? "active" : ""}`}
+            onClick={() => setCurrentStep(idx)}
+            role="button"
+            aria-label={`Go to ${label}`}
+          >
+            {label}
+          </div>
+        ))}
+      </div>
 
-        <button onClick={nextStep}>
-          {currentStep === steps.length - 1 ? "Submit" : "Next"}
-        </button>
+      <div className="step-component">{renderStep()}</div>
+
+      {/* Optional: keep only Previous and final Submit */}
+      <div className="step-buttons">
+        {currentStep > 0 && (
+          <button onClick={() => setCurrentStep((s) => s - 1)}>Previous</button>
+        )}
+        {currentStep === steps.length - 1 && (
+          <button onClick={handleSubmit}>Submit</button>
+        )}
       </div>
     </div>
+    // <div className="student-page-container">
+    //   <h1 className="student-page-title">Career Services Applicants</h1>
+    //   <div className="step-component">{renderStep()}</div>
+    //   <div className="step-buttons">
+    //     {currentStep > 0 && <button onClick={prevStep}>Previous</button>}
+
+    //     <button onClick={nextStep}>
+    //       {currentStep === steps.length - 1 ? "Submit" : "Next"}
+    //     </button>
+    //   </div>
+    // </div>
   );
 };
 

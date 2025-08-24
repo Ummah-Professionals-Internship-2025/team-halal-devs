@@ -133,6 +133,17 @@
   background-color: #8acbdb;
   color: #0f172a;
 }
+.student-page-container .progress-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;            /* spacing between chips */
+  flex-wrap: nowrap;   /* keep in one row */
+}
+
+.student-page-container .progress-step {
+  display: inline-flex;  /* render as chips */
+}
 
 /* === Step Progress Bar === */
 /* .progress-bar-wrapper {
