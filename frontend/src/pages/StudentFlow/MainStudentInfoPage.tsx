@@ -29,6 +29,9 @@ const MainStudentInfoPage: React.FC = () => {
     // reset form
     setCurrentStep(0);
   };
+  const nextStep = () => {
+    setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  };
 
   const renderStep = () => {
     switch (currentStep) {
@@ -79,6 +82,9 @@ const MainStudentInfoPage: React.FC = () => {
       <div className="step-buttons">
         {currentStep > 0 && (
           <button onClick={() => setCurrentStep((s) => s - 1)}>Previous</button>
+        )}
+        {currentStep < steps.length - 1 && (
+          <button onClick={nextStep}>Next</button>
         )}
         {currentStep === steps.length - 1 && (
           <button onClick={handleSubmit}>Submit</button>
