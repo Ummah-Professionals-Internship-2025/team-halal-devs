@@ -13,28 +13,42 @@ const AdminSidebar: React.FC = () => {
   return (
     <div
       style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
         width: 250,
         padding: "1rem",
         backgroundColor: "#00212C",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between", // makes bottom icons stick at the bottom
+        justifyContent: "space-between",
         fontFamily: "Poppins, sans-serif",
+        zIndex: 1000, // Ensure it stays above other content
       }}
     >
-      {/* Top Section */}
-      <div>
-        <div style={{ textAlign: "center" }}>
-          <img src={logo} alt="Company Logo" width={120} height={40} />
-        </div>
+      {/* Top Section - Logo */}
+      <div style={{ textAlign: "center" }}>
+        <img src={logo} alt="Company Logo" width={180} height={60} />
+      </div>
+
+      {/* Center Section - Navigation */}
+      <div
+        style={{
+          flex: 0.6,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <ul
           style={{
             listStyle: "none",
             padding: 0,
             display: "flex",
             flexDirection: "column",
-            gap: "1.5rem", // spacing between links
+            gap: "3.5rem", // Increased spacing between links
+            width: "100%",
           }}
         >
           <li>
@@ -47,6 +61,7 @@ const AdminSidebar: React.FC = () => {
                 textDecoration: "none",
                 color: "#E7E8EE",
                 fontWeight: 500,
+                paddingLeft: "2rem",
               }}
             >
               <FaUsers /> Dashboard
@@ -62,6 +77,7 @@ const AdminSidebar: React.FC = () => {
                 textDecoration: "none",
                 color: "#E7E8EE",
                 fontWeight: 500,
+                paddingLeft: "2rem",
               }}
             >
               <FaCalendarAlt /> Events
@@ -78,6 +94,7 @@ const AdminSidebar: React.FC = () => {
                 textDecoration: "none",
                 color: "#E7E8EE",
                 fontWeight: 500,
+                paddingLeft: "2rem",
               }}
             >
               <FaUserTie /> Advisors
@@ -93,6 +110,7 @@ const AdminSidebar: React.FC = () => {
                 textDecoration: "none",
                 color: "#E7E8EE",
                 fontWeight: 500,
+                paddingLeft: "2rem",
               }}
             >
               <FaClipboardCheck /> Follow-ups
@@ -105,8 +123,10 @@ const AdminSidebar: React.FC = () => {
       <div
         style={{
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "center",
+          gap: "2rem",
           marginTop: "auto",
+          paddingBottom: "2rem",
         }}
       >
         <a
@@ -114,21 +134,21 @@ const AdminSidebar: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FaInstagram size={22} color="#FFFFFF" />
+          <FaInstagram size={15} color="#FFFFFF" />
         </a>
         <a
           href="https://www.ummahprofessionals.com/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FaGlobe size={22} color="#FFFFFF" />
+          <FaGlobe size={15} color="#FFFFFF" />
         </a>
         <a
           href="https://www.linkedin.com/company/ummahprofessionals/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <FaLinkedin size={22} color="#FFFFFF" />
+          <FaLinkedin size={15} color="#FFFFFF" />
         </a>
       </div>
     </div>
