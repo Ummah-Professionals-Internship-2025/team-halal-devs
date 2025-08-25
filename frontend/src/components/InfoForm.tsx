@@ -122,14 +122,7 @@ const InfoForm = () => {
           className="resume-upload"
           onClick={() => document.getElementById("resumeInput")?.click()}
         >
-          <div className="resume-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 3l6 6h-4v6h-4V9H6l6-6zm-6 14h12v2H6v-2z"/>
-            </svg>
-          </div>
-          <p>
-            <span className="resume-link">Browse</span> or drag and drop here
-          </p>
+          <p>📎 Browse or drag and drop here</p>
           <input
             id="resumeInput"
             type="file"
