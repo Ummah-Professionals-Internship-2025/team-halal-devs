@@ -1,10 +1,11 @@
 import React from "react";
+import AdminLayout from "../../components/AdminLayout";
 
 const ViewAdvisors: React.FC = () => {
   return (
-    <div className="professional-page-container">
+    <AdminLayout>
       <h1 className="student-page-title">Advisors Availability</h1>
-    </div>
+    </AdminLayout>
   );
 };
 
