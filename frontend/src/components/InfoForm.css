@@ -197,6 +197,54 @@ select.form-container-input:focus {
 .student-page-container .progress-step {
   display: inline-flex; /* render as chips */
 }
+.student-page-container .step-buttons-row {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* spacing between buttons */
+}
+
+/* Always push the last button (Next/Submit) to the right */
+.student-page-container .step-buttons-row .step-button:last-child {
+  margin-left: auto;
+}
+
+.mainstudent-outer {
+  position: fixed;     /* cover the entire viewport on this page */
+  inset: 0;            /* top:0 right:0 bottom:0 left:0 */
+  background: #C5E5ED; /* light blue */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;       /* space around the white card */
+  overflow: auto;      /* allow scroll if content grows */
+}
+
+/* Make the white card consistent across all tabs */
+.mainstudent-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  width: 100%;
+  max-width: 960px;
+  padding: 32px;
+}
+
+/* Layout the inner content as: title | steps | content (fills) | buttons */
+.student-page-container {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  min-height: clamp(600px, 80vh, 920px); /* consistent height */
+}
+
+/* The content area expands; scroll if needed */
+.step-component {
+  overflow: auto;
+  min-height: 0; /* allow grid child to shrink/scroll properly */
+}
+
+/* Keep the steps and buttons from stretching */
+.progress-pillbox { flex-shrink: 0; }
+.step-buttons-row { flex-shrink: 0; }
 
 /* === Step Progress Bar === */
 /* .progress-bar-wrapper {

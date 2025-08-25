@@ -31,12 +31,10 @@ export default function WrapUp() {
       </div>
       <label className="label">
         Anything else you would like to share with us?
-        <input
-          type="text"
-          value={otherInfo}
-          onChange={(e) => setotherInfo(e.target.value)}
-          placeholder="Please write here"
-          className="form-container-input"
+        <textarea
+          className="form-container-input wrapup-textarea"
+          placeholder="Please write here.."
+          rows={8}
         />
       </label>
     </div>
