@@ -1,0 +1,145 @@
+/* Override FullCalendar default fonts */
+.fc {
+  font-family: "Poppins", sans-serif !important;
+}
+
+.fc-toolbar-title {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 600 !important;
+  color: #00212C !important; /* Add this line */
+  text-decoration: none !important; /* Add this line */
+}
+
+.fc-button {
+  font-family: "Poppins", sans-serif !important;
+  color: #00212C !important; /* Add this line */
+  text-decoration: none !important; /* Add this line */
+}
+
+.fc-col-header-cell-cushion,
+.fc-daygrid-day-number,
+.fc-event-title,
+.fc-event-time {
+  font-family: "Poppins", sans-serif !important;
+  color: #00212C !important; /* Add this line */
+  text-decoration: none !important; /* Add this line */
+}
+
+/* Additional selectors for comprehensive coverage */
+.fc-daygrid-day-top,
+.fc-col-header-cell,
+.fc-scrollgrid-section-body,
+.fc-daygrid-day-frame {
+  color: #00212C !important;
+  text-decoration: none !important;
+}
+
+/* Remove underlines from any links */
+.fc a {
+  text-decoration: none !important;
+  color: #00212C !important;
+}
+
+/* Style the today button and navigation buttons */
+.fc-button {
+  font-family: "Poppins", sans-serif !important;
+  color: white !important; /* Change from #00212C to white */
+  text-decoration: none !important;
+  background-color: #00212C !important; /* Add background color */
+  border: 1px solid #00212C !important; /* Add border */
+}
+
+/* Hover state for buttons */
+.fc-button:hover {
+  background-color: #003547 !important; /* Slightly lighter on hover */
+  color: white !important;
+}
+
+/* Active/pressed state for buttons */
+.fc-button:active,
+.fc-button.fc-button-active {
+  background-color: #001a21 !important; /* Darker when active */
+  color: white !important;
+}
+
+/* Disabled button state */
+.fc-button:disabled {
+  background-color: #cccccc !important;
+  color: #666666 !important;
+}
+/* ...existing code... */
+
+/* Style the events to be fully clickable */
+.fc-event {
+  background-color: #00212C !important;
+  border-color: #00212C !important;
+  color: white !important;
+  cursor: pointer !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+}
+
+.fc-event:hover {
+  background-color: #003547 !important;
+  border-color: #003547 !important;
+  opacity: 0.9 !important;
+}
+
+.fc-event-title {
+  color: white !important;
+}
+
+/* Change today's date highlight from yellow to light gray */
+.fc-day-today {
+  background-color: #f5f5f5 !important; /* Light gray instead of yellow */
+}
+
+/* Ensure the day number on today is visible */
+.fc-day-today .fc-daygrid-day-number {
+  color: #00212C !important;
+  font-weight: 6
+  00 !important;
+}
+
+/* ...existing code... */
+
+/* Make the entire day cell dark when it has an event */
+.fc-daygrid-day.has-event {
+  background-color: #00212C !important;
+}
+
+.fc-daygrid-day.has-event .fc-daygrid-day-number {
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+/* Style the events to fill the entire cell */
+.fc-event {
+  background-color: transparent !important;
+  border: none !important;
+  color: white !important;
+  cursor: pointer !important;
+  padding: 8px !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+}
+
+.fc-event:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.fc-event-title {
+  color: white !important;
+  font-size: 12px !important;
+  text-align: center !important;
+}
+
+/* Make day cells with events take full background */
+.fc-daygrid-day-frame:has(.fc-event) {
+  background-color: #00212C !important;
+}
+

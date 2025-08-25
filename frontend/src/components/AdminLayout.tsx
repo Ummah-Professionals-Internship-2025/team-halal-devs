@@ -9,7 +9,16 @@ const AdminLayout: React.FC<Props> = ({ children }) => {
   return (
     <div style={{ display: "flex" }}>
       <AdminSidebar />
-      <div style={{ flex: 1, padding: "1rem" }}>{children}</div>
+      <div
+        style={{
+          flex: 1,
+          marginLeft: 250, // Match the sidebar width
+          padding: "1rem",
+          minHeight: "100vh",
+        }}
+      >
+        {children}
+      </div>
     </div>
   );
 };
