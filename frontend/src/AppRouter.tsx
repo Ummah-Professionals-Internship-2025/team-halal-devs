@@ -29,7 +29,7 @@ import type { AvailabilityResponse } from "./types";
 import SelectAvailability from "./pages/ProfessionalFlow/SelectAvailability";
 import ViewAdvisors from "./pages/AdminFlow/ViewAdvisors";
 import ViewEvents from "./pages/AdminFlow/ViewEvents";
-import ViewFollowUps from "./pages/AdminFlow/ViewFollowUps";
+import { ViewFollowUps } from "./pages/AdminFlow/ViewFollowUps";
 import ViewStudentSubmissions from "./pages/AdminFlow/ViewStudentSubmissions";
 
 const AppRouter: React.FC = () => {
