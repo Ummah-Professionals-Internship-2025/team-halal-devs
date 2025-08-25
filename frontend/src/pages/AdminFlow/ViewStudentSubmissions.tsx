@@ -1,10 +1,13 @@
 import React from "react";
+import StudentTable from "../../components/StudentTable";
+import AdminLayout from "../../components/AdminLayout";
 
 const ViewStudentSubmissions: React.FC = () => {
   return (
-    <div className="professional-page-container">
-      <h1 className="student-page-title">Student Submissions</h1>
-    </div>
+    <AdminLayout>
+      <h1>Student Submissions</h1>
+      <StudentTable />
+    </AdminLayout>
   );
 };
 
