@@ -73,14 +73,10 @@ const AppRouter: React.FC = () => {
         <Route path="/professional" element={<SelectAvailability />} />
         {/* Admin and sub-routes */}
         <Route path="/adminhome" element={<ViewAdvisors />} />
-        <Route path="/admin/advisors" element={<ViewAdvisors />} />
+        <Route path="/admin/dashboard" element={<ViewStudentSubmissions />} />
         <Route path="/admin/events" element={<ViewEvents />} />
+        <Route path="/admin/advisors" element={<ViewAdvisors />} />
         <Route path="/admin/follow-ups" element={<ViewFollowUps />} />
-        <Route
-          path="/admin/student-submissions"
-          element={<ViewStudentSubmissions />}
-        />
-
         <Route
           path="/meeting/:id/details"
           element={<MeetingDetailsWrapper />}
