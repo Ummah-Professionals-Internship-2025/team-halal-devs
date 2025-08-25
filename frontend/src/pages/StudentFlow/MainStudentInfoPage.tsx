@@ -47,45 +47,52 @@ const MainStudentInfoPage: React.FC = () => {
     }
   };
 
+  // ...existing code...
   return (
-    <div className="student-page-container">
-      <h1 className="student-page-title">Career Services Applicants</h1>
-      {/* Clickable steps header */}
-      <div className="progress-pillbox">
-        {steps.map((label, idx) => (
-          <div
-            key={label}
-            className={`progress-step ${currentStep === idx ? "active" : ""}`}
-            onClick={() => setCurrentStep(idx)}
-            role="button"
-            aria-label={`Go to ${label}`}
-          >
-            {label}
+    <div className="mainstudent-outer">
+      <div className="mainstudent-card">
+        <div className="student-page-container">
+          <h1 className="student-page-title">Career Services Applicants</h1>
+
+          <div className="progress-pillbox">
+            {steps.map((label, idx) => (
+              <div
+                key={label}
+                className={`progress-step ${
+                  currentStep === idx ? "active" : ""
+                }`}
+                onClick={() => setCurrentStep(idx)}
+                role="button"
+                aria-label={`Go to ${label}`}
+              >
+                {label}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className="step-component">{renderStep()}</div>
+          <div className="step-component">{renderStep()}</div>
 
-      <div className="step-buttons-row">
-        {currentStep > 0 && (
-          <button
-            className="step-button pill right"
-            onClick={() => setCurrentStep((s) => s - 1)}
-          >
-            ← Previous
-          </button>
-        )}
-        {currentStep < steps.length - 1 && (
-          <button className="step-button pill left" onClick={nextStep}>
-            Next →
-          </button>
-        )}
-        {currentStep === steps.length - 1 && (
-          <button className="step-button pill right" onClick={handleSubmit}>
-            Submit
-          </button>
-        )}
+          <div className="step-buttons-row">
+            {currentStep > 0 && (
+              <button
+                className="step-button pill right"
+                onClick={() => setCurrentStep((s) => s - 1)}
+              >
+                ← Previous
+              </button>
+            )}
+            {currentStep < steps.length - 1 && (
+              <button className="step-button pill left" onClick={nextStep}>
+                Next →
+              </button>
+            )}
+            {currentStep === steps.length - 1 && (
+              <button className="step-button pill right" onClick={handleSubmit}>
+                Submit
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
