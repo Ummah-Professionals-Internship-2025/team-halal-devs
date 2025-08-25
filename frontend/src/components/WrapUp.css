@@ -1,0 +1,4 @@
+.wrapup-textarea {
+  min-height: 220px;
+  resize: vertical; /* allow user to expand further */
+}
