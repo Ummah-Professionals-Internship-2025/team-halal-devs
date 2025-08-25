@@ -1,22 +1,26 @@
 .calendar-container {
-  max-width: 420px;
+  max-width: 600px;
   margin: 0 auto;
   padding: 2rem 0 1rem 0;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .meeting-page-title {
   color: #207ca6;
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 0.7rem;
   letter-spacing: 0.01em;
+  text-align: center;
 }
 
 .required {
   color: #e74c3c;
-  font-size: 1.5rem;      /* Make it larger */
-  font-weight: bold;      /* Make it bold */
+  font-size: 1.5rem;
+  font-weight: bold;
   margin-left: 0.2em;
   vertical-align: super;
 }
@@ -24,35 +28,58 @@
 .custom-calendar {
   margin: 0 auto;
   background: transparent;
+  width: 100%;
 }
 
 .MuiPickersCalendarHeader-label {
-  font-weight: 600;
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
+  text-align: center !important;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  margin: 0 auto !important;
+  display: block;
+}
+.MuiPickersCalendarHeader-labelContainer {
+  flex: 0 1 auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100%;
+  margin: 0 auto !important;
 }
 
 .MuiPickersCalendarHeader-daysHeader {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100%;
   background-color: #207ca6 !important;
   color: #fff !important;
   border-radius: 6px 6px 0 0;
   font-weight: 600;
   font-size: 1rem;
+  text-align: center !important;
+}
+.MuiPickersCalendarHeader-dayLabel {
+  flex: 1 1 0;
+  text-align: center !important;
 }
 
 .MuiPickersDay-root {
   font-weight: 500;
   font-size: 1.1rem;
-  color: #007ca6;
+  color: #207ca6;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   margin: 2px;
 }
 
 .Mui-selected {
   background-color: #207ca6 !important;
   color: #fff !important;
+  border: 2px solid #207ca6 !important;
 }
 
 .MuiPickersDay-dayOutsideMonth {
@@ -61,6 +88,26 @@
 
 .MuiPickersCalendarHeader-switchViewButton,
 .MuiPickersCalendarHeader-iconButton {
-  color: #007ca6 !important;
+  color: #207ca6 !important;
+  position: absolute !important;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
+.MuiPickersCalendarHeader-root {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative;
+  width: 100%;
+  min-height: 48px;
+}
+.MuiPickersCalendarHeader-switchViewButton:first-of-type,
+.MuiPickersCalendarHeader-iconButton:first-of-type {
+  left: 0;
+}
+
+.MuiPickersCalendarHeader-switchViewButton:last-of-type,
+.MuiPickersCalendarHeader-iconButton:last-of-type {
+  right: 0;
+}
