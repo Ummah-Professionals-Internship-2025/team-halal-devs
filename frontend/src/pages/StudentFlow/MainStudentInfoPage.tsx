@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InfoPage from "../../components/InfoForm";
 import Calendar from "../../components/Calendar";
-import TimeDropdown from "../../components/TimeDropdown";
+import TimeSelection from "../../components/TimeSelection";
 import WrapUp from "../../components/WrapUp";
 import Submit from "../../components/Submit";
 import "../../components/InfoForm.css";
@@ -11,7 +11,8 @@ const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 const MainStudentInfoPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [isInfoStepValid, setIsInfoStepValid] = useState(false);
-
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [timeValues, setTimeValues] = useState<{ [date: string]: string }>({});
   const handleSubmit = () => {
     alert("Form submitted!");
     setCurrentStep(0);
@@ -23,7 +24,44 @@ const MainStudentInfoPage: React.FC = () => {
       alert("Please fill out all required fields before proceeding.");
       return;
     }
+
+    // Prevent progression from Availability step if no dates/times selected
+    if (currentStep === 1) {
+      if (selectedDates.length === 0) {
+        alert("Please select at least one date.");
+        return;
+      }
+
+      // Check if all selected dates have time selected
+      const missingTimes = selectedDates.some((date) => !timeValues[date]);
+
+      if (missingTimes) {
+        alert("Please select times for all selected dates.");
+        return;
+      }
+    }
+
     setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  };
+
+  const handleDateChange = (dates: string[]) => {
+    setSelectedDates(dates);
+
+    // Remove time values for unselected dates
+    const newTimeValues = { ...timeValues };
+    Object.keys(newTimeValues).forEach((date) => {
+      if (!dates.includes(date)) {
+        delete newTimeValues[date];
+      }
+    });
+    setTimeValues(newTimeValues);
+  };
+
+  const handleTimeChange = (date: string, value: string) => {
+    setTimeValues((prev) => ({
+      ...prev,
+      [date]: value,
+    }));
   };
 
   const renderStep = () => {
@@ -33,12 +71,14 @@ const MainStudentInfoPage: React.FC = () => {
       case 1:
         return (
           <div className="schedule-step">
-            <Calendar />
-            <TimeDropdown
-              dates={[]}
-              times={[]}
-              values={{}}
-              onChange={() => {}}
+            <Calendar
+              selectedDates={selectedDates}
+              onDateChange={handleDateChange}
+            />
+            <TimeSelection
+              selectedDates={selectedDates}
+              timeValues={timeValues}
+              onTimeChange={handleTimeChange}
             />
           </div>
         );
