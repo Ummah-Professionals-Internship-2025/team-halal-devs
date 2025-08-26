@@ -2,8 +2,13 @@ import "./infoform.css";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import { useState } from "react";
+import React from "react";
 
-const InfoForm = () => {
+interface InfoFormProps {
+  onValidationChange?: (isValid: boolean) => void;
+}
+
+const InfoForm = ({ onValidationChange }: InfoFormProps) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -12,8 +17,28 @@ const InfoForm = () => {
   const [academicYear, setAcademicYear] = useState("");
   const [resume, setResume] = useState<File | null>(null);
 
-  const [currentStep, setCurrentStep] = useState("Info");
-  const steps = ["Info", "Availability", "Wrap-up", "Submit"];
+  // Validation functions
+  const isNameValid = name.trim().length > 0;
+  const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isPhoneValid = typeof phone === "string" && phone.length >= 10; // Basic phone validation
+  const isIndustryValid = industry !== "";
+  const isSeekingValid = seeking !== "";
+  const isAcademicYearValid = academicYear !== "";
+
+  const isFormValid =
+    isNameValid &&
+    isEmailValid &&
+    isPhoneValid &&
+    isIndustryValid &&
+    isSeekingValid &&
+    isAcademicYearValid;
+
+  // Call validation callback whenever form validity changes
+  React.useEffect(() => {
+    if (onValidationChange) {
+      onValidationChange(isFormValid);
+    }
+  }, [isFormValid, onValidationChange]);
 
   return (
     <div className="info-form">
@@ -22,31 +47,40 @@ const InfoForm = () => {
         {/* Left Column */}
         <div className="form-container-child">
           <label className="label">
-            Name <span className="required">*</span>
+            Name {!isNameValid && <span className="required">*</span>}
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               required
-              className="form-container-input"
+              className={`form-container-input ${
+                !isNameValid && name !== "" ? "form-error" : ""
+              }`}
             />
           </label>
 
           <label className="label">
-            Email <span className="required">*</span>
+            Email {!isEmailValid && <span className="required">*</span>}
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Please enter your Email"
               required
-              className="form-container-input"
+              className={`form-container-input ${
+                !isEmailValid && email !== "" ? "form-error" : ""
+              }`}
             />
+            {!isEmailValid && email !== "" && (
+              <span className="error-text">
+                Please enter a valid email address
+              </span>
+            )}
           </label>
 
           <label className="label">
-            Industry <span className="required">*</span>
+            Industry {!isIndustryValid && <span className="required">*</span>}
             <select
               className="form-container-input"
               value={industry}
@@ -70,18 +104,25 @@ const InfoForm = () => {
         {/* Right Column */}
         <div className="form-container-child">
           <label className="label">
-            Phone <span className="required">*</span>
+            Phone {!isPhoneValid && <span className="required">*</span>}
             <PhoneInput
               placeholder="(xxx) xxx - xxxx"
               value={phone}
               onChange={(value) => setPhone(value || "")}
               defaultCountry="US"
-              className="form-container-input"
+              className={`form-container-input ${
+                !isPhoneValid && phone !== "" ? "form-error" : ""
+              }`}
             />
+            {!isPhoneValid && phone !== "" && (
+              <span className="error-text">
+                Please enter a valid phone number
+              </span>
+            )}
           </label>
 
           <label className="label">
-            Seeking <span className="required">*</span>
+            Seeking {!isSeekingValid && <span className="required">*</span>}
             <select
               className="form-container-input"
               value={seeking}
@@ -96,7 +137,8 @@ const InfoForm = () => {
           </label>
 
           <label className="label">
-            Academic Year <span className="required">*</span>
+            Academic Year{" "}
+            {!isAcademicYearValid && <span className="required">*</span>}
             <select
               className="form-container-input"
               value={academicYear}
