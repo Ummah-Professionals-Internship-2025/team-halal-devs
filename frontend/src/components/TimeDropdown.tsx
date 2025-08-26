@@ -21,8 +21,7 @@ const TimeDropdown: React.FC<TimeDropdownProps> = ({
   return (
     <div className="time-dropdown-wrapper">
       <h3 className="question-title">
-        What times would you like to meet between?{" "}
-        <span className="required">*</span>
+        What times would you like to meet? <span className="required">*</span>
       </h3>
 
       {dates.length === 0 ? (
