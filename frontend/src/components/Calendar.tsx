@@ -17,43 +17,11 @@ export default function Calendar() {
           views={["day"]}
           sx={{
             width: "100%",
-            "& .MuiPickersCalendarHeader-label": {
-              fontWeight: 600,
-              fontSize: "1.3rem",
-              marginBottom: "0.5rem",
-            },
-            "& .MuiPickersCalendarHeader-root": {
-              justifyContent: "center",
-            },
-            "& .MuiPickersDay-root": {
-              fontWeight: 500,
-              fontSize: "1.1rem",
-              color: "#007ca6",
-              borderRadius: "50%",
-              width: "40px",
-              height: "40px",
-              margin: "2px",
-            },
-            "& .Mui-selected": {
-              backgroundColor: "#207ca6 !important",
-              color: "#fff !important",
-            },
-            "& .MuiPickersDay-dayOutsideMonth": {
-              opacity: 0.3,
-            },
-            "& .MuiPickersCalendarHeader-switchViewButton": {
-              color: "#007ca6",
-            },
-            "& .MuiPickersCalendarHeader-iconButton": {
-              color: "#007ca6",
-            },
-            "& .MuiPickersCalendarHeader-daysHeader": {
-              backgroundColor: "#207ca6",
-              color: "#fff",
-              borderRadius: "6px 6px 0 0",
-              fontWeight: 600,
-              fontSize: "1rem",
-            },
+            maxWidth: "650px",
+            margin: "0 auto",
+            height: "auto", // Let CSS control the height
+            minHeight: "350px", // Ensure enough space for all rows
+            // Remove inline styles that conflict with CSS
           }}
         />
       </LocalizationProvider>

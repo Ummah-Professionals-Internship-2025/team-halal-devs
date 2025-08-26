@@ -246,6 +246,25 @@ select.form-container-input:focus {
 .progress-pillbox { flex-shrink: 0; }
 .step-buttons-row { flex-shrink: 0; }
 
+/* Disabled button style */
+.step-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #e5e5e5 !important;
+  color: #999 !important;
+}
+
+.step-button.disabled:hover {
+  background: #e5e5e5 !important;
+  color: #999 !important;
+}
+
+/* Error input styling */
+.form-container-input.form-error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 1px #ef4444 !important;
+}
+
 /* === Step Progress Bar === */
 /* .progress-bar-wrapper {
  display: flex;

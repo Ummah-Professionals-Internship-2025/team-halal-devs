@@ -1,15 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 .calendar-container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 650px;
   margin: 0 auto;
   padding: 2rem 0 1rem 0;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-family: 'Poppins', sans-serif; /* Add Poppins font */
 }
 
+.custom-calendar {
+  width: 100% !important;
+  max-width: 650px !important;
+  margin: 0 auto !important;
+  min-height: 400px !important;
+  font-family: 'Poppins', sans-serif !important; /* Add Poppins font */
+}
+
+
+/* Force calendar width with reduced size */
+.calendar-container .custom-calendar .MuiPickersLayout-contentWrapper {
+  min-width: 650px !important;
+  width: 100% !important;
+  min-height: 400px !important; /* Ensure content wrapper is tall enough */
+}
+/* Center the Month/Year header */
+.calendar-container .MuiPickersCalendarHeader-root {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 48px !important; /* Add padding to account for nav buttons */
+}
+
+.calendar-container .MuiPickersCalendarHeader-labelContainer {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: auto !important;
+  margin: 0 !important;
+}
+.calendar-container .MuiPickersCalendarHeader-label {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  text-align: center !important;
+  color: #333 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Position navigation buttons on the sides */
+.calendar-container .MuiPickersCalendarHeader-switchViewButton {
+  position: absolute !important;
+  left: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+}
+
+.calendar-container .MuiPickersArrowSwitcher-root {
+  position: absolute !important;
+  right: 8px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 1 !important;
+}
+
+/* Days of the week - force #4DA3C1 background with white text */
+.calendar-container .MuiDayCalendar-weekDayLabel {
+  background-color: #4DA3C1 !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-family: 'Poppins', sans-serif !important; /* Add Poppins font */
+  padding: 8px 4px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Header container for days of the week */
+.calendar-container .MuiDayCalendar-header {
+  background-color: #4DA3C1 !important;
+  border-radius: 8px 8px 0 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+}
+
+/* Make sure calendar body has enough height */
+.calendar-container .MuiDayCalendar-monthContainer {
+  min-height: 280px !important; /* Ensure all 6 rows can fit */
+}
+
+/* Make date cells taller and maintain spacing */
+.calendar-container .MuiDayCalendar-weekContainer {
+  margin: 2px 0 !important;
+  justify-content: space-between !important;
+  min-height: 45px !important; /* Taller rows */
+}
+
+.calendar-container .MuiPickersDay-root {
+  color: #000000 !important; /* Changed from #4DA3C1 to black */
+  font-size: 1rem !important;
+  font-family: 'Poppins', sans-serif !important; /* Add Poppins font */
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  margin: 2px !important;
+  border-radius: 50% !important;
+  flex: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.calendar-container .MuiPickersDay-root.Mui-selected {
+  background-color: #4DA3C1 !important;
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important; /* Add Poppins font */
+  border-radius: 50% !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  aspect-ratio: 1 / 1 !important;
+  border: 2px solid #4DA3C1 !important;
+}
+
+/* Title styling */
 .meeting-page-title {
-  color: #207ca6;
+  color: #000000 !important; /* Changed from #4DA3C1 to black */
+  font-size: 1.2rem !important; /* Reduced from 1.7rem */
+  font-weight: 500 !important; /* Slightly bold (reduced from 700) */
+  font-family: 'Poppins', sans-serif !important;
+  margin-bottom: 1rem;
+  letter-spacing: 0.01em;
+  text-align: left !important; /* Changed from center to left */
+  width: 100%;
+  max-width: 650px;
+}
+
+/* Month/Year header styling */
+.calendar-container .MuiPickersCalendarHeader-label {
+  font-size: 1.2rem !important;
+  font-weight: 400 !important;
+  font-family: 'Poppins', sans-serif !important; /* Add Poppins font */
+  text-align: center !important;
+  color: #333 !important;
+}
+
+/* Selected date styling - perfectly circular with #4DA3C1 */
+.calendar-container .MuiPickersDay-root.Mui-selected {
+  background-color: #4DA3C1 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  aspect-ratio: 1 / 1 !important;
+  border: 2px solid #4DA3C1 !important; /* Add border to ensure visibility */
+}
+
+/* Hover state for dates */
+.calendar-container .MuiPickersDay-root:hover {
+  background-color: rgba(77, 163, 193, 0.1) !important;
+}
+
+/* Navigation buttons */
+.calendar-container .MuiPickersCalendarHeader-iconButton {
+  color: #4DA3C1 !important;
+}
+
+/* Today's date styling (optional) */
+.calendar-container .MuiPickersDay-root.MuiPickersDay-today {
+  border: 2px solid #4DA3C1 !important;
+}
+
+/* Title styling */
+.meeting-page-title {
+  color: #4DA3C1;
   font-size: 1.7rem;
   font-weight: 700;
   margin-bottom: 0.7rem;
@@ -19,95 +199,8 @@
 
 .required {
   color: #e74c3c;
-  font-size: 1.5rem;
+  font-size: 1.2rem; /* Adjusted to match smaller title */
   font-weight: bold;
   margin-left: 0.2em;
   vertical-align: super;
-}
-
-.custom-calendar {
-  margin: 0 auto;
-  background: transparent;
-  width: 100%;
-}
-
-.MuiPickersCalendarHeader-label {
-  text-align: center !important;
-  font-weight: 700;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  width: 100%;
-  margin: 0 auto !important;
-  display: block;
-}
-.MuiPickersCalendarHeader-labelContainer {
-  flex: 0 1 auto !important;
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100%;
-  margin: 0 auto !important;
-}
-
-.MuiPickersCalendarHeader-daysHeader {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100%;
-  background-color: #207ca6 !important;
-  color: #fff !important;
-  border-radius: 6px 6px 0 0;
-  font-weight: 600;
-  font-size: 1rem;
-  text-align: center !important;
-}
-.MuiPickersCalendarHeader-dayLabel {
-  flex: 1 1 0;
-  text-align: center !important;
-}
-
-.MuiPickersDay-root {
-  font-weight: 500;
-  font-size: 1.1rem;
-  color: #207ca6;
-  border-radius: 50%;
-  width: 44px;
-  height: 44px;
-  margin: 2px;
-}
-
-.Mui-selected {
-  background-color: #207ca6 !important;
-  color: #fff !important;
-  border: 2px solid #207ca6 !important;
-}
-
-.MuiPickersDay-dayOutsideMonth {
-  opacity: 0.3;
-}
-
-.MuiPickersCalendarHeader-switchViewButton,
-.MuiPickersCalendarHeader-iconButton {
-  color: #207ca6 !important;
-  position: absolute !important;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.MuiPickersCalendarHeader-root {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative;
-  width: 100%;
-  min-height: 48px;
-}
-.MuiPickersCalendarHeader-switchViewButton:first-of-type,
-.MuiPickersCalendarHeader-iconButton:first-of-type {
-  left: 0;
-}
-
-.MuiPickersCalendarHeader-switchViewButton:last-of-type,
-.MuiPickersCalendarHeader-iconButton:last-of-type {
-  right: 0;
 }
