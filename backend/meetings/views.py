@@ -134,3 +134,61 @@ class ProfessionalUpdateView(APIView):
         professional.prof_selected_time = request.data.get("prof_selected_time")
         professional.save()
         return Response({"message": "Professional time selection submitted"}, status=status.HTTP_200_OK)
+
+
+
+
+class StudentWithMeetingCreate(APIView):
+    def post(self, request):
+        # student fields
+        participant_name = request.data.get("participant_name")
+        email = request.data.get("email")
+        phone_number = request.data.get("phone_number")
+        industry = request.data.get("industry")
+        academic_year = request.data.get("academic_year")
+        seeking_service = request.data.get("seeking_service")
+        resume_upload = request.data.get("resume_upload")
+        hear_about = request.data.get("hear_about")
+        optional_info = request.data.get("optional_info")
+        send_to_email = request.data.get("send_to_email")
+
+        # meeting fields
+        meeting_date = request.data.get("meetingDate")
+        time_options = request.data.get("time_options", [])
+
+        # create meeting
+        meeting = Meeting.objects.create(
+            name=f"Meeting for {participant_name}",
+        )
+
+        # create time options if provided
+        for option in time_options:
+            start_time = option.get("start_time")
+            end_time = option.get("end_time")
+            if start_time and end_time:
+                TimeOption.objects.create(
+                    meeting=meeting,
+                    start_time=start_time,
+                    end_time=end_time,
+                )
+
+        # create student linked to this meeting
+        student = Student.objects.create(
+            meeting=meeting,
+            participant_name=participant_name,
+            email=email,
+            phone_number=phone_number,
+            industry=industry,
+            academic_year=academic_year,
+            seeking_service=seeking_service,
+            resume_upload=resume_upload,
+            hear_about=hear_about,
+            optional_info=optional_info,
+            send_to_email=send_to_email,
+        )
+
+        return Response({
+            "student_id": student.id,
+            "meeting_id": str(meeting.id),
+            "participant_name": student.participant_name,
+        }, status=status.HTTP_201_CREATED)

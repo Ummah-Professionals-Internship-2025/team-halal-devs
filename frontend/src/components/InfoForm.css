@@ -1,3 +1,5 @@
+/* view height of screen 90vh = 90% of screen */
+
 /* === Main Form Wrapper === */
 .info-form {
   background-color: white;
@@ -209,21 +211,21 @@ select.form-container-input:focus {
 }
 
 .mainstudent-outer {
-  position: fixed;     /* cover the entire viewport on this page */
-  inset: 0;            /* top:0 right:0 bottom:0 left:0 */
-  background: #C5E5ED; /* light blue */
+  position: fixed; /* cover the entire viewport on this page */
+  inset: 0; /* top:0 right:0 bottom:0 left:0 */
+  background: #c5e5ed; /* light blue */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 24px;       /* space around the white card */
-  overflow: auto;      /* allow scroll if content grows */
+  padding: 24px; /* space around the white card */
+  overflow: auto; /* allow scroll if content grows */
 }
 
 /* Make the white card consistent across all tabs */
 .mainstudent-card {
   background: #ffffff;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   width: 100%;
   max-width: 960px;
   padding: 32px;
@@ -243,8 +245,12 @@ select.form-container-input:focus {
 }
 
 /* Keep the steps and buttons from stretching */
-.progress-pillbox { flex-shrink: 0; }
-.step-buttons-row { flex-shrink: 0; }
+.progress-pillbox {
+  flex-shrink: 0;
+}
+.step-buttons-row {
+  flex-shrink: 0;
+}
 
 /* === Step Progress Bar === */
 /* .progress-bar-wrapper {

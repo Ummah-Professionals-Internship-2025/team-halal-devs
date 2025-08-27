@@ -3,8 +3,19 @@ import * as React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import dayjs, { Dayjs } from "dayjs";
 
-export default function Calendar() {
+interface CalendarProps {
+  selectedDate: string; // in YYYY-MM-DD format
+  onDateChange: (date: string) => void;
+}
+
+export default function Calendar({
+  selectedDate,
+  onDateChange,
+}: CalendarProps) {
+  const selectedDay: Dayjs | null = selectedDate ? dayjs(selectedDate) : null;
+
   return (
     <div className="calendar-container">
       <h3 className="meeting-page-title">
@@ -12,6 +23,10 @@ export default function Calendar() {
       </h3>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DateCalendar
+          value={selectedDay}
+          onChange={(date) =>
+            onDateChange(date ? date.format("YYYY-MM-DD") : "")
+          }
           dayOfWeekFormatter={(day) => day.format("ddd").toUpperCase()}
           className="custom-calendar"
           views={["day"]}
@@ -22,9 +37,7 @@ export default function Calendar() {
               fontSize: "1.3rem",
               marginBottom: "0.5rem",
             },
-            "& .MuiPickersCalendarHeader-root": {
-              justifyContent: "center",
-            },
+            "& .MuiPickersCalendarHeader-root": { justifyContent: "center" },
             "& .MuiPickersDay-root": {
               fontWeight: 500,
               fontSize: "1.1rem",
@@ -38,15 +51,11 @@ export default function Calendar() {
               backgroundColor: "#207ca6 !important",
               color: "#fff !important",
             },
-            "& .MuiPickersDay-dayOutsideMonth": {
-              opacity: 0.3,
-            },
+            "& .MuiPickersDay-dayOutsideMonth": { opacity: 0.3 },
             "& .MuiPickersCalendarHeader-switchViewButton": {
               color: "#007ca6",
             },
-            "& .MuiPickersCalendarHeader-iconButton": {
-              color: "#007ca6",
-            },
+            "& .MuiPickersCalendarHeader-iconButton": { color: "#007ca6" },
             "& .MuiPickersCalendarHeader-daysHeader": {
               backgroundColor: "#207ca6",
               color: "#fff",

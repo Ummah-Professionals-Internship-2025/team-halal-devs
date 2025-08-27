@@ -9,21 +9,23 @@ import { useParams } from "react-router-dom";
 
 const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 
-const { meetingId } = useParams<{ meetingId: string }>();
-
 const MainStudentInfoPage: React.FC = () => {
+  const { meetingId } = useParams<{ meetingId: string }>();
+
   const [formData, setFormData] = useState({
-    meeting: "", // UUID of meeting (must be set)
+    meeting: "", // will be auto-set
     participant_name: "",
     email: "",
     phone_number: "",
     industry: "",
     academic_year: "",
     seeking_service: "",
-    resume_upload: null, // if you add file upload later
+    resume_upload: null as File | null,
     hear_about: "",
     optional_info: "",
     send_to_email: false,
+    meetingDate: "", // selected in Calendar
+    timeOptions: [] as { start: string; end: string }[], // array of chosen times
   });
 
   useEffect(() => {
@@ -34,22 +36,58 @@ const MainStudentInfoPage: React.FC = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // insert fetch call here
+    //2nd fetch
+
+    // if (!formData.meetingDate || formData.timeOptions.length === 0) {
+    //   alert("Please select a date and at least one time slot.");
+    //   return;
+    // }
+
+    const payload = {
+      participant_name: formData.participant_name,
+      email: formData.email,
+      phone_number: formData.phone_number,
+      industry: formData.industry,
+      academic_year: formData.academic_year,
+      seeking_service: formData.seeking_service,
+      resume_upload: formData.resume_upload, // TODO: handle file upload separately (needs FormData if file upload works)
+      hear_about: formData.hear_about,
+      optional_info: formData.optional_info,
+      send_to_email: formData.send_to_email,
+      meetingDate: formData.meetingDate,
+      time_options: formData.timeOptions.map((opt) => ({
+        start_time: opt.start ? `${formData.meetingDate}T${opt.start}` : null,
+        end_time: opt.end ? `${formData.meetingDate}T${opt.end}` : null,
+        // time_options: formData.timeOptions.map((opt) => ({
+        //   start_time: `${formData.meetingDate}T${opt.start}`,
+        //   end_time: `${formData.meetingDate}T${opt.end}`,
+      })),
+    };
+
+    //
     try {
-      const res = await fetch("http://localhost:8000/student/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/student-with-meeting/`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        }
+      );
 
       if (res.ok) {
         const data = await res.json();
-        alert(`Student submitted! ID: ${data.student_id}`);
-        setCurrentStep(0);
+        console.log("Created student + meeting:", data);
+        alert(`Form submitted! Your meeting ID: ${data.meeting_id}`);
       } else {
-        const errorData = await res.json();
-        console.error("Error submitting student:", errorData);
-        alert("Error submitting student info");
+        const error = await res.json();
+        console.error("Error submitting form:", error);
+        alert("Error submitting form.");
       }
     } catch (err) {
       console.error("Network error:", err);
@@ -92,6 +130,17 @@ const MainStudentInfoPage: React.FC = () => {
 
   //sending to API
 
+  // called when user selects a date from Calendar
+  const handleDateChange = (date: string) => {
+    setFormData((prev) => ({ ...prev, meetingDate: date }));
+  };
+
+  // called when user adds/edits a time option from TimeDropdown
+  const handleTimeOptionsChange = (
+    options: { start: string; end: string }[]
+  ) => {
+    setFormData((prev) => ({ ...prev, timeOptions: options }));
+  };
   // Add a helper to go to the next tab
   const nextStep = () => {
     setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
@@ -104,15 +153,50 @@ const MainStudentInfoPage: React.FC = () => {
       case 1:
         return (
           <div className="schedule-step">
-            <Calendar />
-            <TimeDropdown
-              dates={[]} // Replace with actual dates
-              times={[]} // Replace with actual times
-              values={{}} // Replace with actual values
-              onChange={() => {}} // Replace with actual handler
+            <Calendar
+              selectedDate={formData.meetingDate}
+              onDateChange={(date) =>
+                setFormData((prev) => ({ ...prev, meetingDate: date }))
+              }
             />
+            {/* TimeDropdown will go here once implemented */}
+            <p className="placeholder-message">
+              Time slot selection coming soon.
+            </p>
           </div>
         );
+      // BEST case 1:
+      //   return (
+      //     <div className="schedule-step">
+      //       <Calendar
+      //         selectedDate={formData.meetingDate}
+      //         onDateChange={(date) =>
+      //           setFormData((prev) => ({ ...prev, meetingDate: date }))
+      //         }
+      //       />
+      //       <TimeDropdown
+      //         timeOptions={formData.timeOptions}
+      //         onTimeChange={(updatedOptions) =>
+      //           setFormData((prev) => ({
+      //             ...prev,
+      //             timeOptions: updatedOptions,
+      //           }))
+      //         }
+      //       />
+      //     </div>
+      //   );
+      // case 1:
+      //   return (
+      //     <div className="schedule-step">
+      //       <Calendar />
+      //       <TimeDropdown
+      //         dates={[]} // Replace with actual dates
+      //         times={[]} // Replace with actual times
+      //         values={{}} // Replace with actual values
+      //         onChange={() => {}} // Replace with actual handler
+      //       />
+      //     </div>
+      //   );
       case 2:
         return <WrapUp />;
       case 3:
@@ -122,7 +206,6 @@ const MainStudentInfoPage: React.FC = () => {
     }
   };
 
-  // ...existing code...
   return (
     <div className="mainstudent-outer">
       <div className="mainstudent-card">
