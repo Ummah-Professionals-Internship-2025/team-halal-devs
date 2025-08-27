@@ -113,7 +113,7 @@ const AdminSidebar: React.FC = () => {
                 paddingLeft: "2rem",
               }}
             >
-              <FaClipboardCheck /> Follow-ups
+              <FaClipboardCheck /> Follow-Ups
             </Link>
           </li>
         </ul>

@@ -22,9 +22,12 @@ export default function WrapUp() {
             required
           >
             <option value="">Please select your answer</option>
+            <option value="Word">Word of Mouth</option>
+            <option value="Instagram">Instagram</option>
             <option value="LinkedIn">LinkedIn</option>
-            <option value="Friend">Friend</option>
-            <option value="I just knew">I just knew 😎</option>
+            <option value="MSA">My MSA</option>
+            <option value="YM">My YM</option>
+            <option value="Other">Other</option>
           </select>
         </label>
         <br></br>
