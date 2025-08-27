@@ -64,7 +64,7 @@ const WrapUp: React.FC<WrapUpProps> = ({ formData, setFormData }) => {
         <br></br>
         <label className="label">
           How did you hear about this service?{" "}
-          <span className="required">*</span>
+          {!hearAbout && <span className="required">*</span>}
           <select
             className="form-container-input"
             value={hearAbout}
@@ -77,6 +77,7 @@ const WrapUp: React.FC<WrapUpProps> = ({ formData, setFormData }) => {
             <option value="I just knew">I just knew 😎</option>
           </select>
         </label>
+
         <br></br>
       </div>
       <label className="label">

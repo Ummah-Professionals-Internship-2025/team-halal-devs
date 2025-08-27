@@ -10,17 +10,21 @@ import { useParams } from "react-router-dom";
 const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 
 const MainStudentInfoPage: React.FC = () => {
-  // Fix: useParams should be inside the component
   const { meetingId } = useParams<{ meetingId: string }>();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isInfoStepValid, setIsInfoStepValid] = useState(false);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [timeValues, setTimeValues] = useState<{ [date: string]: string }>({});
+  // Change timeValues to support arrays of times per date
+  const [timeValues, setTimeValues] = useState<{ [date: string]: string[] }>(
+    {}
+  );
+  const [totalTimeSlots, setTotalTimeSlots] = useState(0);
+  const [timeSelectionError, setTimeSelectionError] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  // Fix: Simplified formData structure - you'll populate this from your InfoPage component
   const [formData, setFormData] = useState({
-    meeting: meetingId || "", // Optional since backend can auto-create
+    meeting: meetingId || "",
     participant_name: "",
     email: "",
     phone_number: "",
@@ -33,20 +37,16 @@ const MainStudentInfoPage: React.FC = () => {
     send_to_email: false,
   });
 
-  // Update meeting ID when it changes
   useEffect(() => {
     if (meetingId) {
       setFormData((prev) => ({ ...prev, meeting: meetingId }));
     }
   }, [meetingId]);
 
-  // Fix: Proper async handleSubmit with FormData for file uploads
   const handleSubmit = async () => {
     try {
-      // Create FormData for file uploads (matches your Django serializer)
       const submitData = new FormData();
 
-      // Only append meeting if it exists (backend can auto-create if missing)
       if (formData.meeting) {
         submitData.append("meeting", formData.meeting);
       }
@@ -71,10 +71,9 @@ const MainStudentInfoPage: React.FC = () => {
         formData.send_to_email ? "true" : "false"
       );
 
-      // Fix: Use environment variable and correct endpoint
       const res = await fetch(`${import.meta.env.VITE_API_URL}student/`, {
         method: "POST",
-        body: submitData, // Don't set Content-Type header with FormData
+        body: submitData,
       });
 
       if (res.ok) {
@@ -98,6 +97,7 @@ const MainStudentInfoPage: React.FC = () => {
         });
         setSelectedDates([]);
         setTimeValues({});
+        setTotalTimeSlots(0);
         setIsInfoStepValid(false);
       } else {
         const errorData = await res.json();
@@ -111,20 +111,42 @@ const MainStudentInfoPage: React.FC = () => {
   };
 
   const nextStep = () => {
+    setTimeSelectionError("");
+
     if (currentStep === 0 && !isInfoStepValid) {
-      alert("Please fill out all required fields before proceeding.");
+      setErrorMessage("Please fill out all required fields before proceeding.");
+      // alert("Please fill out all required fields before proceeding.");
       return;
     }
 
     if (currentStep === 1) {
       if (selectedDates.length === 0) {
-        alert("Please select at least one date.");
+        setErrorMessage("Please select at least one date.");
+        // alert("Please select at least one date.");
         return;
       }
 
-      const missingTimes = selectedDates.some((date) => !timeValues[date]);
+      // Check if each selected date has at least one time slot
+      const missingTimes = selectedDates.some(
+        (date) => !timeValues[date] || timeValues[date].length === 0
+      );
       if (missingTimes) {
-        alert("Please select times for all selected dates.");
+        // alert("Please select at least one time for each selected date.");
+        setErrorMessage(
+          "Please select at least one time for each selected date"
+        );
+        return;
+      }
+
+      if (totalTimeSlots < 1) {
+        // alert("Please select at least one time slot.");
+        setErrorMessage("Please select at least one time slot.");
+        return;
+      }
+
+      if (totalTimeSlots > 6) {
+        // alert("Please select no more than 6 time slots total.");
+        setErrorMessage("Please select no more than 6 time slots total.");
         return;
       }
     }
@@ -133,21 +155,51 @@ const MainStudentInfoPage: React.FC = () => {
   };
 
   const handleDateChange = (dates: string[]) => {
+    // Clear time selection errors when dates change
+    setTimeSelectionError("");
+    setErrorMessage("");
+
     setSelectedDates(dates);
     const newTimeValues = { ...timeValues };
+
+    // Remove time values for unselected dates
     Object.keys(newTimeValues).forEach((date) => {
       if (!dates.includes(date)) {
         delete newTimeValues[date];
       }
     });
+
     setTimeValues(newTimeValues);
+
+    // Update total count after removing dates
+    const newTotal = Object.values(newTimeValues).flat().filter(Boolean).length;
+    setTotalTimeSlots(newTotal);
   };
 
-  const handleTimeChange = (date: string, value: string) => {
-    setTimeValues((prev) => ({
-      ...prev,
-      [date]: value,
-    }));
+  const handleTimeChange = (date: string, times: string[]) => {
+    // Clear errors when user makes time selections
+    setTimeSelectionError("");
+    setErrorMessage("");
+    // Calculate current total selected slots (excluding the date being modified)
+    const otherDatesSlots = Object.entries(timeValues)
+      .filter(([d]) => d !== date)
+      .reduce((count, [, times]) => count + times.length, 0);
+
+    // Check if adding these times would exceed the limit
+    if (otherDatesSlots + times.length > 6) {
+      alert("You can only select up to 6 time slots total across all dates.");
+      return;
+    }
+
+    setTimeValues((prev) => {
+      const newValues = { ...prev, [date]: times };
+
+      // Update total count
+      const newTotal = Object.values(newValues).flat().filter(Boolean).length;
+      setTotalTimeSlots(newTotal);
+
+      return newValues;
+    });
   };
 
   const renderStep = () => {
@@ -156,7 +208,6 @@ const MainStudentInfoPage: React.FC = () => {
         return (
           <InfoPage
             onValidationChange={setIsInfoStepValid}
-            // You'll need to pass formData and setFormData to InfoPage to collect the data
             formData={formData}
             setFormData={setFormData}
           />
@@ -172,6 +223,8 @@ const MainStudentInfoPage: React.FC = () => {
               selectedDates={selectedDates}
               timeValues={timeValues}
               onTimeChange={handleTimeChange}
+              totalTimeSlots={totalTimeSlots}
+              error={timeSelectionError}
             />
           </div>
         );
@@ -228,6 +281,10 @@ const MainStudentInfoPage: React.FC = () => {
           </div>
 
           <div className="step-component">{renderStep()}</div>
+
+          {errorMessage && (
+            <div className="global-error-message">{errorMessage}</div>
+          )}
 
           <div className="step-buttons-row">
             {currentStep > 0 && (

@@ -81,7 +81,7 @@ const Submit: React.FC<SubmitProps> = ({ formData, setFormData }) => {
         </FormLabel>
         <FormGroup className="indented-group">
           <FormControlLabel
-            required
+            // required  <-- remove this
             control={
               <Checkbox
                 checked={confirmed}
@@ -93,7 +93,7 @@ const Submit: React.FC<SubmitProps> = ({ formData, setFormData }) => {
               <>
                 By submitting, I confirm that I will be punctual and respectful
                 of the scheduled meeting time.
-                <span className="label-required">*</span>
+                {!confirmed && <span className="label-required">*</span>}
               </>
             }
           />
