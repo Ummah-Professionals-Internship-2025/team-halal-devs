@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import InfoPage from "../../components/InfoForm";
 import Calendar from "../../components/Calendar";
-import TimeDropdown from "../../components/TimeDropdown";
+import TimeSelection from "../../components/TimeSelection";
 import WrapUp from "../../components/WrapUp";
 import Submit from "../../components/Submit";
 import "../../components/InfoForm.css";
@@ -35,6 +35,7 @@ const MainStudentInfoPage: React.FC = () => {
   }, [meetingId]);
 
   const [currentStep, setCurrentStep] = useState(0);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,24 +141,69 @@ const MainStudentInfoPage: React.FC = () => {
     options: { start: string; end: string }[]
   ) => {
     setFormData((prev) => ({ ...prev, timeOptions: options }));
+
   };
-  // Add a helper to go to the next tab
+
   const nextStep = () => {
+    // Prevent progression from Info step if validation fails
+    if (currentStep === 0 && !isInfoStepValid) {
+      alert("Please fill out all required fields before proceeding.");
+      return;
+    }
+
+    // Prevent progression from Availability step if no dates/times selected
+    if (currentStep === 1) {
+      if (selectedDates.length === 0) {
+        alert("Please select at least one date.");
+        return;
+      }
+
+      // Check if all selected dates have time selected
+      const missingTimes = selectedDates.some((date) => !timeValues[date]);
+
+      if (missingTimes) {
+        alert("Please select times for all selected dates.");
+        return;
+      }
+    }
+
     setCurrentStep((s) => Math.min(s + 1, steps.length - 1));
+  };
+
+  const handleDateChange = (dates: string[]) => {
+    setSelectedDates(dates);
+
+    // Remove time values for unselected dates
+    const newTimeValues = { ...timeValues };
+    Object.keys(newTimeValues).forEach((date) => {
+      if (!dates.includes(date)) {
+        delete newTimeValues[date];
+      }
+    });
+    setTimeValues(newTimeValues);
+  };
+
+  const handleTimeChange = (date: string, value: string) => {
+    setTimeValues((prev) => ({
+      ...prev,
+      [date]: value,
+    }));
   };
 
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <InfoPage />;
+        return <InfoPage onValidationChange={setIsInfoStepValid} />;
       case 1:
         return (
           <div className="schedule-step">
             <Calendar
+
               selectedDate={formData.meetingDate}
               onDateChange={(date) =>
                 setFormData((prev) => ({ ...prev, meetingDate: date }))
               }
+
             />
             {/* TimeDropdown will go here once implemented */}
             <p className="placeholder-message">
@@ -219,9 +265,31 @@ const MainStudentInfoPage: React.FC = () => {
                 className={`progress-step ${
                   currentStep === idx ? "active" : ""
                 }`}
-                onClick={() => setCurrentStep(idx)}
+                onClick={() => {
+                  // Only allow clicking to next steps if current step is valid
+                  if (
+                    idx <= currentStep ||
+                    (currentStep === 0 && isInfoStepValid)
+                  ) {
+                    setCurrentStep(idx);
+                  } else if (currentStep === 0 && !isInfoStepValid) {
+                    alert(
+                      "Please fill out all required fields before proceeding."
+                    );
+                  }
+                }}
                 role="button"
                 aria-label={`Go to ${label}`}
+                style={{
+                  cursor:
+                    idx <= currentStep || (currentStep === 0 && isInfoStepValid)
+                      ? "pointer"
+                      : "not-allowed",
+                  opacity:
+                    idx <= currentStep || (currentStep === 0 && isInfoStepValid)
+                      ? 1
+                      : 0.6,
+                }}
               >
                 {label}
               </div>
@@ -240,7 +308,13 @@ const MainStudentInfoPage: React.FC = () => {
               </button>
             )}
             {currentStep < steps.length - 1 && (
-              <button className="step-button pill left" onClick={nextStep}>
+              <button
+                className={`step-button pill left ${
+                  currentStep === 0 && !isInfoStepValid ? "disabled" : ""
+                }`}
+                onClick={nextStep}
+                disabled={currentStep === 0 && !isInfoStepValid}
+              >
                 Next →
               </button>
             )}
