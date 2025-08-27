@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AvailabilityResponsesTable from "./AvailabilityResponsesTable";
+// import AvailabilityResponsesTable from "./AvailabilityResponsesTable";
 
 interface TimeOption {
   id: number;
@@ -141,7 +141,7 @@ const AdminMeetingPage: React.FC = () => {
       )}
 
       <h2>Availability Responses</h2>
-      {responses.length === 0 ? (
+      {/* {responses.length === 0 ? (
         <p>No responses yet.</p>
       ) : (
         <AvailabilityResponsesTable
@@ -150,7 +150,7 @@ const AdminMeetingPage: React.FC = () => {
           pairs={pairs}
           onPairUpdate={setPairs}
         />
-      )}
+      )} */}
     </div>
   );
 };

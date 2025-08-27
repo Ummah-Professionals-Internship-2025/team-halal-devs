@@ -8,7 +8,49 @@ import FormLabel from "@mui/material/FormLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Checkbox from "@mui/material/Checkbox";
 
-const Submit: React.FC = () => {
+interface SubmitProps {
+  formData?: {
+    meeting: string;
+    participant_name: string;
+    email: string;
+    phone_number: string;
+    industry: string;
+    academic_year: string;
+    seeking_service: string;
+    resume_upload: File | null;
+    hear_about: string;
+    optional_info: string;
+    send_to_email: boolean;
+  };
+  setFormData?: React.Dispatch<
+    React.SetStateAction<{
+      meeting: string;
+      participant_name: string;
+      email: string;
+      phone_number: string;
+      industry: string;
+      academic_year: string;
+      seeking_service: string;
+      resume_upload: File | null;
+      hear_about: string;
+      optional_info: string;
+      send_to_email: boolean;
+    }>
+  >;
+}
+
+const Submit: React.FC<SubmitProps> = ({ formData, setFormData }) => {
+  const [confirmed, setConfirmed] = React.useState(false);
+
+  const handleEmailCopyChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = event.target.value === "yes";
+    if (setFormData) {
+      setFormData((prev) => ({ ...prev, send_to_email: value }));
+    }
+  };
+
   return (
     <div className="submit-step">
       <FormControl>
@@ -20,6 +62,8 @@ const Submit: React.FC = () => {
             row
             aria-labelledby="email-copy-label"
             name="row-radio-buttons-group"
+            value={formData?.send_to_email ? "yes" : "no"}
+            onChange={handleEmailCopyChange}
           >
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
@@ -38,7 +82,12 @@ const Submit: React.FC = () => {
         <FormGroup className="indented-group">
           <FormControlLabel
             required
-            control={<Checkbox />}
+            control={
+              <Checkbox
+                checked={confirmed}
+                onChange={(e) => setConfirmed(e.target.checked)}
+              />
+            }
             className="confirmation-label"
             label={
               <>

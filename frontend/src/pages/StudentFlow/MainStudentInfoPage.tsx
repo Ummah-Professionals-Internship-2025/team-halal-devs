@@ -1,40 +1,128 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import InfoPage from "../../components/InfoForm";
 import Calendar from "../../components/Calendar";
 import TimeSelection from "../../components/TimeSelection";
 import WrapUp from "../../components/WrapUp";
 import Submit from "../../components/Submit";
 import "../../components/InfoForm.css";
+import { useParams } from "react-router-dom";
 
 const steps = ["Info", "Availability", "Wrap-up", "Submit"];
 
 const MainStudentInfoPage: React.FC = () => {
+  // Fix: useParams should be inside the component
+  const { meetingId } = useParams<{ meetingId: string }>();
+
   const [currentStep, setCurrentStep] = useState(0);
   const [isInfoStepValid, setIsInfoStepValid] = useState(false);
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [timeValues, setTimeValues] = useState<{ [date: string]: string }>({});
-  const handleSubmit = () => {
-    alert("Form submitted!");
-    setCurrentStep(0);
+
+  // Fix: Simplified formData structure - you'll populate this from your InfoPage component
+  const [formData, setFormData] = useState({
+    meeting: meetingId || "", // Optional since backend can auto-create
+    participant_name: "",
+    email: "",
+    phone_number: "",
+    industry: "",
+    academic_year: "",
+    seeking_service: "",
+    resume_upload: null as File | null,
+    hear_about: "",
+    optional_info: "",
+    send_to_email: false,
+  });
+
+  // Update meeting ID when it changes
+  useEffect(() => {
+    if (meetingId) {
+      setFormData((prev) => ({ ...prev, meeting: meetingId }));
+    }
+  }, [meetingId]);
+
+  // Fix: Proper async handleSubmit with FormData for file uploads
+  const handleSubmit = async () => {
+    try {
+      // Create FormData for file uploads (matches your Django serializer)
+      const submitData = new FormData();
+
+      // Only append meeting if it exists (backend can auto-create if missing)
+      if (formData.meeting) {
+        submitData.append("meeting", formData.meeting);
+      }
+
+      submitData.append("participant_name", formData.participant_name);
+      submitData.append("email", formData.email);
+      if (formData.phone_number)
+        submitData.append("phone_number", formData.phone_number);
+      if (formData.industry) submitData.append("industry", formData.industry);
+      if (formData.academic_year)
+        submitData.append("academic_year", formData.academic_year);
+      if (formData.seeking_service)
+        submitData.append("seeking_service", formData.seeking_service);
+      if (formData.resume_upload)
+        submitData.append("resume_upload", formData.resume_upload);
+      if (formData.hear_about)
+        submitData.append("hear_about", formData.hear_about);
+      if (formData.optional_info)
+        submitData.append("optional_info", formData.optional_info);
+      submitData.append(
+        "send_to_email",
+        formData.send_to_email ? "true" : "false"
+      );
+
+      // Fix: Use environment variable and correct endpoint
+      const res = await fetch(`${import.meta.env.VITE_API_URL}student/`, {
+        method: "POST",
+        body: submitData, // Don't set Content-Type header with FormData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        alert(`Student submitted successfully! ${data.message || ""}`);
+
+        // Reset form
+        setCurrentStep(0);
+        setFormData({
+          meeting: meetingId || "",
+          participant_name: "",
+          email: "",
+          phone_number: "",
+          industry: "",
+          academic_year: "",
+          seeking_service: "",
+          resume_upload: null,
+          hear_about: "",
+          optional_info: "",
+          send_to_email: false,
+        });
+        setSelectedDates([]);
+        setTimeValues({});
+        setIsInfoStepValid(false);
+      } else {
+        const errorData = await res.json();
+        console.error("Error submitting student:", errorData);
+        alert("Error submitting student info. Please check your entries.");
+      }
+    } catch (err) {
+      console.error("Network error:", err);
+      alert("Could not connect to backend. Please try again.");
+    }
   };
 
   const nextStep = () => {
-    // Prevent progression from Info step if validation fails
     if (currentStep === 0 && !isInfoStepValid) {
       alert("Please fill out all required fields before proceeding.");
       return;
     }
 
-    // Prevent progression from Availability step if no dates/times selected
     if (currentStep === 1) {
       if (selectedDates.length === 0) {
         alert("Please select at least one date.");
         return;
       }
 
-      // Check if all selected dates have time selected
       const missingTimes = selectedDates.some((date) => !timeValues[date]);
-
       if (missingTimes) {
         alert("Please select times for all selected dates.");
         return;
@@ -46,8 +134,6 @@ const MainStudentInfoPage: React.FC = () => {
 
   const handleDateChange = (dates: string[]) => {
     setSelectedDates(dates);
-
-    // Remove time values for unselected dates
     const newTimeValues = { ...timeValues };
     Object.keys(newTimeValues).forEach((date) => {
       if (!dates.includes(date)) {
@@ -67,7 +153,14 @@ const MainStudentInfoPage: React.FC = () => {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <InfoPage onValidationChange={setIsInfoStepValid} />;
+        return (
+          <InfoPage
+            onValidationChange={setIsInfoStepValid}
+            // You'll need to pass formData and setFormData to InfoPage to collect the data
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
       case 1:
         return (
           <div className="schedule-step">
@@ -83,9 +176,9 @@ const MainStudentInfoPage: React.FC = () => {
           </div>
         );
       case 2:
-        return <WrapUp />;
+        return <WrapUp formData={formData} setFormData={setFormData} />;
       case 3:
-        return <Submit />;
+        return <Submit formData={formData} setFormData={setFormData} />;
       default:
         return null;
     }
@@ -105,7 +198,6 @@ const MainStudentInfoPage: React.FC = () => {
                   currentStep === idx ? "active" : ""
                 }`}
                 onClick={() => {
-                  // Only allow clicking to next steps if current step is valid
                   if (
                     idx <= currentStep ||
                     (currentStep === 0 && isInfoStepValid)
