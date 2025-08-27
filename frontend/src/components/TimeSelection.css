@@ -22,13 +22,13 @@
 .time-selection-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .time-selection-item {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .date-label {
@@ -40,11 +40,18 @@
   align-self: flex-start;
 }
 
-.time-inputs {
+/* Container for all time slots for a date */
+.time-slots-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* Individual time slot */
+.time-slot {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .time-select {
@@ -56,12 +63,65 @@
   font-family: 'Poppins', sans-serif;
   color: #111827;
   background: white;
-  min-width: 150px; /* Slightly wider for single dropdown */
+  min-width: 150px;
 }
 
 .time-select:focus {
   border-color: #4DA3C1;
   outline: none;
+}
+
+.time-select:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.remove-time-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+}
+
+.remove-time-btn:hover {
+  background: #c0392b;
+}
+
+.add-time-btn {
+  background: #4DA3C1;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  align-self: flex-start;
+}
+
+.add-time-btn:hover {
+  background: #3a8ca3;
+}
+
+.add-time-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.add-time-btn.primary {
+  background: #4DA3C1;
+  padding: 10px 16px;
 }
 
 .timezone-label {
@@ -71,8 +131,90 @@
   font-weight: 500;
 }
 
+.no-times-message {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border: 2px dashed #ddd;
+  text-align: center;
+}
+
+.max-slots-warning {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+  fontSize: "14px";
+  color: #856404;
+}
+
 @media (max-width: 768px) {
-  .time-inputs {
+  .time-slot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .time-select {
+    min-width: 100%;
+  }
+  
+  .timezone-label {
+    text-align: center;
+  }
+}
+/* Add this after the existing styles */
+
+.time-selection-error {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-selection-error::before {
+  content: "⚠️";
+  font-size: 16px;
+}
+
+/* Update max-slots-warning to be consistent */
+.max-slots-warning {
+  margin-top: 1rem;
+  padding: 12px 16px;
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #856404;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.max-slots-warning::before {
+  content: "ℹ️";
+  font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .time-selection-error,
+  .max-slots-warning {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .time-slot {
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
