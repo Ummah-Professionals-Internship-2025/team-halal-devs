@@ -6,13 +6,13 @@ export interface TimeOption {
   end_time: string;
 }
 
-export interface AvailabilityEntry {
-  time_option: TimeOption;
-}
+// export interface AvailabilityEntry {
+//   time_option: TimeOption;
+// }
 
-export interface AvailabilityResponse {
-  id: number;
-  participant_name: string;
-  email: string;
-  entries: AvailabilityEntry[];
-}
+// export interface AvailabilityResponse {
+//   id: number;
+//   participant_name: string;
+//   email: string;
+//   entries: AvailabilityEntry[];
+// }

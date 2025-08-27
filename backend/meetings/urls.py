@@ -1,14 +1,15 @@
 from django.urls import path
 from .views import (
-    api_root,                         # [backend/meetings/views.py](backend/meetings/views.py)
-    CreateMeeting,                    # [backend/meetings/views.py](backend/meetings/views.py)
-    MeetingDetailView,                # [backend/meetings/views.py](backend/meetings/views.py)
-    TimeOptionListView,               # [backend/meetings/views.py](backend/meetings/views.py)
-    StudentCreateView,                # [backend/meetings/views.py](backend/meetings/views.py)
-    StudentListView,                  # [backend/meetings/views.py](backend/meetings/views.py)
-    ProfessionalListView,             # [backend/meetings/views.py](backend/meetings/views.py)
-    AssignProfessionalView,           # [backend/meetings/views.py](backend/meetings/views.py)
-    ProfessionalUpdateView,           # [backend/meetings/views.py](backend/meetings/views.py)
+    api_root,                         
+    CreateMeeting,                    
+    MeetingDetailView,                
+    TimeOptionListView,               
+    StudentCreateView,                
+    StudentListView,                  
+    ProfessionalListView,             
+    AssignProfessionalView,           
+    ProfessionalUpdateView,  
+    StudentWithMeetingCreate         
 )
 
 app_name = "meetings"
@@ -22,8 +23,10 @@ urlpatterns = [
     path("meetings/<uuid:meeting_id>/time-options/", TimeOptionListView.as_view(), name="time-option-list"),  # GET
 
     # Students
-    path("student/", StudentCreateView.as_view(), name="student-create"),  # POST
-    path("admin/students/", StudentListView.as_view(), name="admin-student-list"),  # GET
+    path("student/", StudentCreateView.as_view(), name="student-create"),  # POST. Not working
+    path("admin/students/", StudentListView.as_view(), name="admin-student-list"),  # GET. Working!
+    path("student-with-meeting/", StudentWithMeetingCreate.as_view(), name="student-with-meeting"),
+
 
     # Professionals
     path("admin/professionals/", ProfessionalListView.as_view(), name="admin-professional-list"),  # GET

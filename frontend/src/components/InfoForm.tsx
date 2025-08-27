@@ -1,26 +1,100 @@
 import "./infoform.css";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
 
 interface InfoFormProps {
   onValidationChange?: (isValid: boolean) => void;
+  formData?: {
+    meeting: string;
+    participant_name: string;
+    email: string;
+    phone_number: string;
+    industry: string;
+    academic_year: string;
+    seeking_service: string;
+    resume_upload: File | null;
+    hear_about: string;
+    optional_info: string;
+    send_to_email: boolean;
+  };
+  setFormData?: React.Dispatch<
+    React.SetStateAction<{
+      meeting: string;
+      participant_name: string;
+      email: string;
+      phone_number: string;
+      industry: string;
+      academic_year: string;
+      seeking_service: string;
+      resume_upload: File | null;
+      hear_about: string;
+      optional_info: string;
+      send_to_email: boolean;
+    }>
+  >;
 }
 
-const InfoForm = ({ onValidationChange }: InfoFormProps) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [seeking, setSeeking] = useState("");
-  const [academicYear, setAcademicYear] = useState("");
-  const [resume, setResume] = useState<File | null>(null);
+const InfoForm = ({
+  onValidationChange,
+  formData,
+  setFormData,
+}: InfoFormProps) => {
+  // Use local state as fallback if formData/setFormData not provided
+  const [localName, setLocalName] = useState("");
+  const [localEmail, setLocalEmail] = useState("");
+  const [localPhone, setLocalPhone] = useState("");
+  const [localIndustry, setLocalIndustry] = useState("");
+  const [localSeeking, setLocalSeeking] = useState("");
+  const [localAcademicYear, setLocalAcademicYear] = useState("");
+  const [localResume, setLocalResume] = useState<File | null>(null);
+
+  // Use formData if available, otherwise use local state
+  const name = formData?.participant_name ?? localName;
+  const email = formData?.email ?? localEmail;
+  const phone = formData?.phone_number ?? localPhone;
+  const industry = formData?.industry ?? localIndustry;
+  const seeking = formData?.seeking_service ?? localSeeking;
+  const academicYear = formData?.academic_year ?? localAcademicYear;
+  const resume = formData?.resume_upload ?? localResume;
+
+  // Helper function to update form data
+  const updateFormField = (field: string, value: any) => {
+    if (setFormData) {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    } else {
+      // Fallback to local state
+      switch (field) {
+        case "participant_name":
+          setLocalName(value);
+          break;
+        case "email":
+          setLocalEmail(value);
+          break;
+        case "phone_number":
+          setLocalPhone(value);
+          break;
+        case "industry":
+          setLocalIndustry(value);
+          break;
+        case "seeking_service":
+          setLocalSeeking(value);
+          break;
+        case "academic_year":
+          setLocalAcademicYear(value);
+          break;
+        case "resume_upload":
+          setLocalResume(value);
+          break;
+      }
+    }
+  };
 
   // Validation functions
   const isNameValid = name.trim().length > 0;
   const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  const isPhoneValid = typeof phone === "string" && phone.length >= 10; // Basic phone validation
+  const isPhoneValid = typeof phone === "string" && phone.length >= 10;
   const isIndustryValid = industry !== "";
   const isSeekingValid = seeking !== "";
   const isAcademicYearValid = academicYear !== "";
@@ -34,7 +108,7 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
     isAcademicYearValid;
 
   // Call validation callback whenever form validity changes
-  React.useEffect(() => {
+  useEffect(() => {
     if (onValidationChange) {
       onValidationChange(isFormValid);
     }
@@ -51,7 +125,9 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <input
               type="text"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                updateFormField("participant_name", e.target.value)
+              }
               placeholder="Enter your name"
               required
               className={`form-container-input ${
@@ -65,7 +141,7 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => updateFormField("email", e.target.value)}
               placeholder="Please enter your Email"
               required
               className={`form-container-input ${
@@ -84,7 +160,7 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <select
               className="form-container-input"
               value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
+              onChange={(e) => updateFormField("industry", e.target.value)}
               required
             >
               <option value="">Please select your industry</option>
@@ -108,7 +184,7 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <PhoneInput
               placeholder="(xxx) xxx - xxxx"
               value={phone}
-              onChange={(value) => setPhone(value || "")}
+              onChange={(value) => updateFormField("phone_number", value || "")}
               defaultCountry="US"
               className={`form-container-input ${
                 !isPhoneValid && phone !== "" ? "form-error" : ""
@@ -126,7 +202,9 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <select
               className="form-container-input"
               value={seeking}
-              onChange={(e) => setSeeking(e.target.value)}
+              onChange={(e) =>
+                updateFormField("seeking_service", e.target.value)
+              }
               required
             >
               <option value="">Please select what you're looking for</option>
@@ -142,7 +220,7 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
             <select
               className="form-container-input"
               value={academicYear}
-              onChange={(e) => setAcademicYear(e.target.value)}
+              onChange={(e) => updateFormField("academic_year", e.target.value)}
               required
             >
               <option value="">Please select your current Academic year</option>
@@ -165,11 +243,15 @@ const InfoForm = ({ onValidationChange }: InfoFormProps) => {
           onClick={() => document.getElementById("resumeInput")?.click()}
         >
           <p>📎 Browse or drag and drop here</p>
+          {resume && <p className="file-selected">Selected: {resume.name}</p>}
           <input
             id="resumeInput"
             type="file"
             style={{ display: "none" }}
-            onChange={(e) => setResume(e.target.files?.[0] || null)}
+            accept=".pdf,.doc,.docx"
+            onChange={(e) =>
+              updateFormField("resume_upload", e.target.files?.[0] || null)
+            }
           />
         </div>
       </div>
