@@ -10,7 +10,9 @@ from .views import (
     AssignProfessionalView,           
     ProfessionalUpdateView,  
     StudentWithMeetingCreate,
-    professionals_list,         
+    professionals_list,  
+    pair_student,
+    unpair_student,      
 )
 
 app_name = "meetings"
@@ -27,7 +29,8 @@ urlpatterns = [
     path("student/", StudentCreateView.as_view(), name="student-create"),  # POST. Not working
     path("admin/students/", StudentListView.as_view(), name="admin-student-list"),  # GET. Working!
     path("student-with-meeting/", StudentWithMeetingCreate.as_view(), name="student-with-meeting"),
-
+    path('admin/students/<int:student_id>/pair/', pair_student, name='pair-student'), # PATCH
+    path('admin/students/<int:student_id>/unpair/', unpair_student, name='unpair-student'), # PATCH
 
     # Professionals
     path("admin/professionals/", ProfessionalListView.as_view(), name="admin-professional-list"),  # GET

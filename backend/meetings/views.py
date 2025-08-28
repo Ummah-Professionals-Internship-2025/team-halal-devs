@@ -212,3 +212,35 @@ def professionals_list(request):
     professionals = Professional.objects.all()
     serializer = ProfessionalSerializer(professionals, many=True)
     return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def pair_student(request, student_id):
+    try:
+        student = Student.objects.get(id=student_id)
+        prof_id = request.data.get("professional_id")
+        if prof_id:
+            professional = Professional.objects.get(id=prof_id)
+            # May want to set a foreign key or many-to-many relationship here
+            student.prof_assigned = True
+            # student.professional = professional  # If there's a FK field
+            student.save()
+            return Response({'status': 'paired'})
+        else:
+            return Response({'error': 'No professional_id provided'}, status=status.HTTP_400_BAD_REQUEST)
+    except Student.DoesNotExist:
+        return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Professional.DoesNotExist:
+        return Response({'error': 'Professional not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+
+@api_view(['PATCH'])
+def unpair_student(request, student_id):
+    try:
+        student = Student.objects.get(id=student_id)
+        student.prof_assigned = False
+        student.save()
+        return Response({'status': 'unpaired'})
+    except Student.DoesNotExist:
+        return Response({'error': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
