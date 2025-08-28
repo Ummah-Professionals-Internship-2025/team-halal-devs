@@ -6,7 +6,9 @@ from django.http import HttpResponse, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from rest_framework.generics import ListAPIView
+from rest_framework.decorators import api_view
 
 from .models import Meeting, TimeOption, Student, Professional
 from .serializers import (
@@ -192,3 +194,13 @@ class StudentWithMeetingCreate(APIView):
             "meeting_id": str(meeting.id),
             "participant_name": student.participant_name,
         }, status=status.HTTP_201_CREATED)
+    
+@api_view(['PATCH'])
+def mark_meeting_completed(request, pk):
+    try:
+        submission = Meeting.objects.get(pk=pk)
+        submission.meeting_completed_at = timezone.now()
+        submission.save()
+        return Response({'status': 'completed'})
+    except Meeting.DoesNotExist:
+        return Response({'error': 'Not found'}, status=404)

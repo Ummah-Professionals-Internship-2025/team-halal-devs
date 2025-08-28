@@ -22,7 +22,7 @@ import SelectAvailability from "./pages/ProfessionalFlow/SelectAvailability";
 import ViewAdvisors from "./pages/AdminFlow/ViewAdvisors";
 import ViewEvents from "./pages/AdminFlow/ViewEvents";
 import { ViewFollowUps } from "./pages/AdminFlow/ViewFollowUps";
-import ViewStudentSubmissions from "./pages/AdminFlow/ViewStudentSubmissions";
+import ViewDashboard from "./pages/AdminFlow/ViewDashboard";
 
 const AppRouter: React.FC = () => {
   return (
@@ -54,7 +54,7 @@ const AppRouter: React.FC = () => {
 
         {/* Admin page and sub-routes */}
         <Route path="/adminhome" element={<ViewAdvisors />} />
-        <Route path="/admin/dashboard" element={<ViewStudentSubmissions />} />
+        <Route path="/admin/dashboard" element={<ViewDashboard />} />
         <Route path="/admin/events" element={<ViewEvents />} />
         <Route path="/admin/advisors" element={<ViewAdvisors />} />
         <Route path="/admin/follow-ups" element={<ViewFollowUps />} />
