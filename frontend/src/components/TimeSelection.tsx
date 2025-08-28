@@ -137,6 +137,19 @@ const TimeSelection: React.FC<TimeSelectionProps> = ({
               <div className="time-slots-container">
                 {dateTimes.map((time, index) => (
                   <div key={index} className="time-slot">
+                    <button
+                      type="button"
+                      className="remove-time-btn"
+                      onClick={() => {
+                        const newTimes = dateTimes.filter(
+                          (_, i) => i !== index
+                        );
+                        onTimeChange(date, newTimes);
+                      }}
+                      title="Remove this time slot"
+                    >
+                      ×
+                    </button>
                     <select
                       className="time-select"
                       value={time}
@@ -173,20 +186,6 @@ const TimeSelection: React.FC<TimeSelectionProps> = ({
                         </option>
                       ))}
                     </select>
-
-                    <button
-                      type="button"
-                      className="remove-time-btn"
-                      onClick={() => {
-                        const newTimes = dateTimes.filter(
-                          (_, i) => i !== index
-                        );
-                        onTimeChange(date, newTimes);
-                      }}
-                      title="Remove this time slot"
-                    >
-                      ×
-                    </button>
 
                     <span className="timezone-label">EST</span>
                   </div>
