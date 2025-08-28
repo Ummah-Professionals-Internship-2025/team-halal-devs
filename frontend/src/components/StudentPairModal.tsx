@@ -1,4 +1,3 @@
-// StudentPairModal.tsx
 import React, { useState } from "react";
 import { Modal, Button, Card } from "react-bootstrap";
 import "./StudentPairModal.css";
@@ -31,6 +30,7 @@ interface StudentPairModalProps {
   student: Student;
   profs: Professional[];
   onAssign: (studentId: number, profId: number) => void;
+  onUnassign: (studentId: number) => void;
 }
 
 const StudentPairModal: React.FC<StudentPairModalProps> = ({
@@ -39,6 +39,7 @@ const StudentPairModal: React.FC<StudentPairModalProps> = ({
   student,
   profs,
   onAssign,
+  onUnassign,
 }) => {
   const [selectedProfessional, setSelectedProfessional] = useState<
     number | null
@@ -120,12 +121,21 @@ const StudentPairModal: React.FC<StudentPairModalProps> = ({
         <Button variant="outline-secondary" onClick={onClose}>
           Cancel
         </Button>
+        {student.status === "PAIRED" && (
+          <Button
+            variant="danger"
+            onClick={() => onUnassign(student.id)}
+            style={{ marginRight: "auto" }}
+          >
+            Unassign
+          </Button>
+        )}
         <Button
           variant="success"
           disabled={!selectedProfessional}
           onClick={handleConfirm}
         >
-          Confirm Pairing
+          Assign
         </Button>
       </Modal.Footer>
     </Modal>

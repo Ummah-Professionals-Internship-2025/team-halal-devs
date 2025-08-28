@@ -131,6 +131,44 @@ const StudentTable: React.FC = () => {
       prev.map((s) => (s.id === studentId ? { ...s, status: "PAIRED" } : s))
     );
     setShowPairModal(false);
+
+    // PATCH/POST to backend to update status and assign professional
+    fetch(`http://localhost:8000/api/admin/students/${studentId}/pair/`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prof_assigned: true, professional_id: profId }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Optionally handle response or re-fetch students for consistency
+      })
+      .catch((err) => {
+        // Optionally handle error
+        console.error("Error pairing student:", err);
+      });
+  };
+
+  const handleUnassign = (studentId: number) => {
+    setStudents((prev) =>
+      prev.map((s) => (s.id === studentId ? { ...s, status: "PENDING" } : s))
+    );
+    setShowPairModal(false);
+
+    // PATCH/POST to backend to update status
+    fetch(`http://localhost:8000/api/admin/students/${studentId}/unpair/`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prof_assigned: false }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Optionally handle response
+        // Optionally re-fetch students here for consistency
+      })
+      .catch((err) => {
+        // Optionally handle error
+        console.error("Error unpairing student:", err);
+      });
   };
 
   // Sorting function
@@ -209,6 +247,7 @@ const StudentTable: React.FC = () => {
           student={selectedStudent}
           profs={profs}
           onAssign={handleAssign}
+          onUnassign={handleUnassign}
         />
       )}
     </div>
