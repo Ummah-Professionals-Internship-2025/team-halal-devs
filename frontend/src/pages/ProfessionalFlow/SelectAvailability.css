@@ -1,0 +1,165 @@
+.availability-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 2rem;
+  font-family: "Inter", sans-serif;
+}
+
+.student-info-section {
+  flex: 1;
+}
+
+.student-info-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.highlight {
+  color: #007ca6;
+}
+
+.student-info-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.student-name {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.student-icon {
+  font-size: 20px;
+}
+
+.student-field {
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.student-field label {
+  font-weight: 600;
+  margin-right: 0.3rem;
+}
+
+.link {
+  color: #007ca6;
+  cursor: pointer;
+}
+
+.resume-link {
+  color: #007ca6;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.note-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.note-section label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.note-section textarea {
+  resize: none;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  min-height: 100px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.meeting-time-section {
+  flex: 1;
+}
+
+.meeting-time-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.meeting-time-section p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.slot-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.slot-card strong {
+  font-size: 14px;
+  margin-bottom: 0.3rem;
+}
+
+.slot-card span {
+  font-size: 13px;
+  color: #444;
+}
+
+.slot-card:hover {
+  border-color: #007ca6;
+}
+
+.slot-card.selected {
+  background: #007ca6;
+  color: #fff;
+  border-color: #007ca6;
+}
+
+.actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cant-make-it {
+  background: #e74c3c;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.propose-meeting {
+  background: #0f2b46;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
