@@ -80,79 +80,89 @@ const SelectAvailability: React.FC = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="availability-container">
-      {/* Left Section - Student Info */}
-      <div className="student-info-section">
-        <h2>
-          Hi, Let’s help <span className="highlight">Lily Student</span>{" "}
-          schedule a meeting!
-        </h2>
+    <>
+      {/* Top-left UP logo */}
+      <div className="up-header">
+        <span className="up-logo" aria-label="UP logo" />
+      </div>
+      <div className="availability-container">
+        {/* Left Section - Student Info */}
+        <div className="student-info-section">
+          <h2>
+            Hi, Let’s help <span className="highlight">Lily Student</span>{" "}
+            schedule a meeting!
+          </h2>
 
-        <div className="student-info-card">
-          <div className="student-name">
-            <span className="student-icon">👤</span> Lily Student
+          <div className="student-info-card">
+            {/* Student Info title */}
+            <h3 className="student-info-title">Student Info</h3>
+
+            <div className="student-name">
+              <span className="student-icon">👤</span> Lily Student
+            </div>
+
+            <div className="student-field">
+              <label>Industry:</label>{" "}
+              <span className="link">Information Technology</span>
+            </div>
+            <div className="student-field">
+              <label>Academic Year:</label> Freshman
+            </div>
+            <div className="student-field">
+              <label>Needs:</label> <span className="link">Career Advice</span>
+            </div>
+            <div className="student-field">
+              <label>Resume:</label>{" "}
+              <a href="#" className="resume-link">
+                Lily_s_resume.pdf
+              </a>
+            </div>
           </div>
-          <div className="student-field">
-            <label>Industry:</label>{" "}
-            <span className="link">Information Technology</span>
-          </div>
-          <div className="student-field">
-            <label>Academic Year:</label> Freshman
-          </div>
-          <div className="student-field">
-            <label>Needs:</label> <span className="link">Career Advice</span>
-          </div>
-          <div className="student-field">
-            <label>Resume:</label>{" "}
-            <a href="#" className="resume-link">
-              Lily_s_resume.pdf
-            </a>
+
+          <div className="note-section">
+            <label>Note (Optional)</label>
+            <textarea placeholder="Please write here.." />
           </div>
         </div>
 
-        <div className="note-section">
-          <label>Note (Optional)</label>
-          <textarea placeholder="Please write here.." />
+        {/* Right Section - Propose Meeting */}
+        <div className="meeting-time-section">
+          <h2>Propose Meeting Time</h2>
+          <p>Please select what time works for you</p>
+          {/* New: show up to 6 cards of the meeting’s time options (as selected slots context) */}
+          <div style={{ marginBottom: "1rem" }}>
+            <h3 style={{ marginBottom: "0.5rem" }}>
+              Student Selected Time Options
+            </h3>
+            <div className="slots-grid">
+              {meetingSlots.slice(0, 6).map((slot, index) => {
+                const isSelected = selectedSlot === `${slot.date} ${slot.time}`;
+                return (
+                  <button
+                    key={`sel-${index}`}
+                    className={`slot-card ${isSelected ? "selected" : ""}`}
+                    onClick={() => setSelectedSlot(`${slot.date} ${slot.time}`)}
+                  >
+                    <strong>{slot.date}</strong>
+                    <span>{slot.time}</span>
+                  </button>
+                );
+              })}
+              {meetingSlots.length === 0 && (
+                <div style={{ color: "#666", fontSize: "14px" }}>
+                  No time options available for this meeting.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="actions">
+            <button className="cant-make-it">Can’t make it</button>
+            <button className="propose-meeting">Propose Meeting</button>
+          </div>
         </div>
       </div>
-
-      {/* Right Section - Propose Meeting */}
-      <div className="meeting-time-section">
-        <h2>Propose Meeting Time</h2>
-        <p>Please select what time works for you</p>
-        {/* New: show up to 6 cards of the meeting’s time options (as selected slots context) */}
-        <div style={{ marginBottom: "1rem" }}>
-          <h3 style={{ marginBottom: "0.5rem" }}>
-            Student Selected Time Options
-          </h3>
-          <div className="slots-grid">
-            {meetingSlots.slice(0, 6).map((slot, index) => {
-              const isSelected = selectedSlot === `${slot.date} ${slot.time}`;
-              return (
-                <button
-                  key={`sel-${index}`}
-                  className={`slot-card ${isSelected ? "selected" : ""}`}
-                  onClick={() => setSelectedSlot(`${slot.date} ${slot.time}`)}
-                >
-                  <strong>{slot.date}</strong>
-                  <span>{slot.time}</span>
-                </button>
-              );
-            })}
-            {meetingSlots.length === 0 && (
-              <div style={{ color: "#666", fontSize: "14px" }}>
-                No time options available for this meeting.
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="actions">
-          <button className="cant-make-it">Can’t make it</button>
-          <button className="propose-meeting">Propose Meeting</button>
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
