@@ -1,4 +1,5 @@
 import uuid
+import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,6 +10,8 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework.generics import ListAPIView
 from rest_framework.decorators import api_view
+from datetime import datetime
+
 
 from .models import Meeting, TimeOption, Student, Professional
 from .serializers import (
@@ -76,14 +79,50 @@ class StudentCreateView(APIView):
     permission_classes = []
 
     def post(self, request):
-        serializer = StudentSerializer(data=request.data)
+        data = request.data.copy()
+        # 1. Create a new meeting
+        meeting = Meeting.objects.create()
+        data['meeting'] = meeting.id
+        # 2. Save student
+        serializer = StudentSerializer(data=data)
         if serializer.is_valid():
             student = serializer.save()
-            return Response(
-                {"message": "Student submission received", "student_id": student.id},
-                status=status.HTTP_201_CREATED
-            )
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # 3. Save up to 6 availabilities
+            selected_dates = request.data.get("selected_dates")
+            time_values = request.data.get("time_values")
+            if selected_dates and time_values:
+                selected_dates = json.loads(selected_dates)
+                time_values = json.loads(time_values)
+                count = 0
+                for date in selected_dates:
+                    times = time_values.get(date, [])
+                    for time in times:
+                        if count >= 6:
+                            break
+                        dt_str = f"{date} {time}"
+                        try:
+                            # Try parsing with AM/PM
+                            try:
+                                dt = datetime.strptime(dt_str, "%Y-%m-%d %I:%M %p")
+                            except ValueError:
+                                # Try parsing 24-hour format
+                                dt = datetime.strptime(dt_str, "%Y-%m-%d %H:%M")
+                            TimeOption.objects.create(
+                                meeting=meeting,
+                                start_time=dt,
+                            )
+                            count += 1
+                        except Exception as e:
+                            print(f"Skipping invalid date/time: {dt_str} ({e})")
+                    if count >= 6:
+                        break
+            return Response({
+                "message": "Student submission received",
+                "meeting_id": meeting.id,
+                "student_id": student.id,
+                "shareable_link": f"http://yourdomain.com/professional/{meeting.id}"
+            }, status=201)
+        return Response(serializer.errors, status=400)
 
 class StudentListView(ListAPIView):
     queryset = Student.objects.all().order_by('-created_at')
@@ -103,28 +142,28 @@ class AssignProfessionalView(APIView):
 
     def post(self, request, student_id):
         student = get_object_or_404(Student, id=student_id)
+        prof_id = request.data.get("professional_id")
+        if not prof_id:
+            return Response({"error": "professional_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            professional = Professional.objects.get(id=prof_id)
+        except Professional.DoesNotExist:
+            return Response({"error": "Professional not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if this professional already has 3 students
+        if professional.students.count() >= 3:
+            return Response({"error": "Professional already has 3 students"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Assign the professional to the student
+        student.professional = professional
         student.prof_assigned = True
         student.save()
 
-        prof_data = request.data
-        prof_serializer = ProfessionalSerializer(data={
-            "meeting": student.meeting.id,
-            "prof_name": prof_data.get("prof_name"),
-            "prof_email": prof_data.get("prof_email"),
-            "prof_phone": prof_data.get("prof_phone"),
-            "prof_industry": prof_data.get("prof_industry"),
-            "prof_role": prof_data.get("prof_role"),
-            "prof_more_about": prof_data.get("prof_more_about"),
-            "prof_link": uuid.uuid4(),
-        })
-
-        if prof_serializer.is_valid():
-            professional = prof_serializer.save()
-            return Response({
-                "message": "Professional assigned",
-                "professional_link": str(professional.prof_link)
-            }, status=status.HTTP_200_OK)
-        return Response(prof_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            "message": "Professional assigned",
+            "professional_id": professional.id,
+            "professional_name": professional.prof_name,
+        }, status=status.HTTP_200_OK)
 
 @method_decorator(csrf_exempt, name='dispatch')
 class ProfessionalUpdateView(APIView):
@@ -218,16 +257,16 @@ def professionals_list(request):
 def pair_student(request, student_id):
     try:
         student = Student.objects.get(id=student_id)
+        if student.professional:
+            return Response({'error': 'Student already paired'}, status=status.HTTP_400_BAD_REQUEST)
         prof_id = request.data.get("professional_id")
-        if prof_id:
-            professional = Professional.objects.get(id=prof_id)
-            # May want to set a foreign key or many-to-many relationship here
-            student.prof_assigned = True
-            # student.professional = professional  # If there's a FK field
-            student.save()
-            return Response({'status': 'paired'})
-        else:
-            return Response({'error': 'No professional_id provided'}, status=status.HTTP_400_BAD_REQUEST)
+        professional = Professional.objects.get(id=prof_id)
+        if professional.students.count() >= 3:
+            return Response({'error': 'Professional already has 3 students'}, status=status.HTTP_400_BAD_REQUEST)
+        student.professional = professional
+        student.prof_assigned = True
+        student.save()
+        return Response({'status': 'paired'})
     except Student.DoesNotExist:
         return Response({'error': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
     except Professional.DoesNotExist:

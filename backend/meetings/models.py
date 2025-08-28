@@ -43,6 +43,7 @@ class Student(models.Model):
     hear_about = models.CharField(max_length=100, null=True, blank=True)
     optional_info = models.TextField(null=True, blank=True)
     send_to_email = models.BooleanField(default=False)
+    professional = models.ForeignKey('Professional', null=True, blank=True, on_delete=models.SET_NULL, related_name='students')
     prof_assigned = models.BooleanField(default=False, null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
 
@@ -54,7 +55,7 @@ class Student(models.Model):
 
 class Professional(models.Model):
     id = models.AutoField(primary_key=True)
-    meeting = models.ForeignKey(Meeting, related_name="professionals", on_delete=models.SET_NULL, null=True, blank=True)
+    # meeting = models.ForeignKey(Meeting, related_name="professionals", on_delete=models.SET_NULL, null=True, blank=True)
     prof_assigned = models.BooleanField(default=False)
     prof_link = models.UUIDField(null=True, blank=True)
     prof_name = models.CharField(max_length=255, null=True, blank=True)

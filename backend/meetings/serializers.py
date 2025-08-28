@@ -38,6 +38,10 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     meeting_date = serializers.DateTimeField(source='meeting.meeting_date', read_only=True)
     meeting_completed_at = serializers.DateTimeField(source='meeting.meeting_completed_at', read_only=True)
+    professional = serializers.PrimaryKeyRelatedField(
+        queryset=Professional.objects.all(), required=False, allow_null=True
+    )
+    professional_name = serializers.CharField(source='professional.prof_name', read_only=True)
 
     class Meta:
         model = Student
@@ -55,6 +59,8 @@ class StudentSerializer(serializers.ModelSerializer):
             "optional_info",
             "send_to_email",
             "prof_assigned",
+            "professional",       
+            "professional_name",
             "meeting_date",
             "meeting_completed_at",
             "created_at",
@@ -66,7 +72,7 @@ class ProfessionalSerializer(serializers.ModelSerializer):
         model = Professional
         fields = [
             "id",
-            "meeting",
+            # "meeting",
             "prof_assigned",
             "prof_link",
             "prof_name",
