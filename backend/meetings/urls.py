@@ -9,7 +9,8 @@ from .views import (
     ProfessionalListView,             
     AssignProfessionalView,           
     ProfessionalUpdateView,  
-    StudentWithMeetingCreate         
+    StudentWithMeetingCreate,
+    professionals_list,         
 )
 
 app_name = "meetings"
@@ -32,4 +33,6 @@ urlpatterns = [
     path("admin/professionals/", ProfessionalListView.as_view(), name="admin-professional-list"),  # GET
     path("assign-professional/<int:student_id>/", AssignProfessionalView.as_view(), name="assign-professional"),  # POST
     path("professional/<uuid:prof_link>/update/", ProfessionalUpdateView.as_view(), name="professional-update"),  # POST
+    path('professionals-list/', professionals_list, name='professsionals-list'), #GET
+
 ]
