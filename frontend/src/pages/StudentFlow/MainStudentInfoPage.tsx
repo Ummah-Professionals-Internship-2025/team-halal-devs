@@ -47,9 +47,12 @@ const MainStudentInfoPage: React.FC = () => {
     try {
       const submitData = new FormData();
 
-      if (formData.meeting) {
-        submitData.append("meeting", formData.meeting);
-      }
+      // Add all fields from InfoForm
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          submitData.append(key, value as any);
+        }
+      });
 
       submitData.append("participant_name", formData.participant_name);
       submitData.append("email", formData.email);
@@ -62,15 +65,28 @@ const MainStudentInfoPage: React.FC = () => {
         submitData.append("seeking_service", formData.seeking_service);
       if (formData.resume_upload)
         submitData.append("resume_upload", formData.resume_upload);
+      // Add selected dates (from Calendar)
+      submitData.append("selected_dates", JSON.stringify(selectedDates));
+
+      // Add time selections (from TimeSelection)
+      submitData.append("time_values", JSON.stringify(timeValues));
+
+      // Add any wrap-up fields if you have them
       if (formData.hear_about)
         submitData.append("hear_about", formData.hear_about);
       if (formData.optional_info)
         submitData.append("optional_info", formData.optional_info);
+
+      // submitData.append("wrapup_field", formData.wrapup_field);
       submitData.append(
         "send_to_email",
         formData.send_to_email ? "true" : "false"
       );
+      if (formData.meeting) {
+        submitData.append("meeting", formData.meeting);
+      }
 
+      // POST to backend
       const res = await fetch(`${import.meta.env.VITE_API_URL}student/`, {
         method: "POST",
         body: submitData,
@@ -78,7 +94,7 @@ const MainStudentInfoPage: React.FC = () => {
 
       if (res.ok) {
         const data = await res.json();
-        alert(`Student submitted successfully! ${data.message || ""}`);
+        alert(`Form submitted successfully! ${data.message || ""}`);
 
         // Reset form
         setCurrentStep(0);

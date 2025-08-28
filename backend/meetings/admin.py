@@ -18,6 +18,6 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(Professional)
 class ProfessionalAdmin(admin.ModelAdmin):
-    list_display = ['id', 'prof_name', 'prof_email', 'meeting', 'prof_assigned', 'created_at']
+    list_display = ['id', 'prof_name', 'prof_email', 'prof_assigned', 'created_at']
     search_fields = ['prof_name', 'prof_email']
-    list_filter = ['prof_assigned', 'meeting', 'prof_industry']
+    list_filter = ['prof_assigned', 'prof_industry']
