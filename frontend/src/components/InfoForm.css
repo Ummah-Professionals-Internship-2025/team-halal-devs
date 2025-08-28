@@ -1,3 +1,4 @@
+
 /* === Main Form Wrapper === */
 .info-form {
   background-color: white;
@@ -254,6 +255,7 @@ select.form-container-input:focus {
   justify-content: center;
   padding: 24px;       /* space around the white card */
   overflow: auto;      /* allow scroll if content grows */
+  zoom: 0.67; 
 }
 
 /* Make the white card consistent across all tabs */
