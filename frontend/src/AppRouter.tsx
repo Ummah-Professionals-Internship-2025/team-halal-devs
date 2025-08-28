@@ -51,6 +51,10 @@ const AppRouter: React.FC = () => {
         <Route path="/mainstudent" element={<CreateMeetingForm />} />
 
         <Route path="/professional" element={<SelectAvailability />} />
+        <Route
+          path="/professional/:meetingId/select-availability"
+          element={<SelectAvailability />}
+        />
 
         {/* Admin page and sub-routes */}
         <Route path="/adminhome" element={<ViewAdvisors />} />

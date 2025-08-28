@@ -1,44 +1,96 @@
 import React, { useState, useEffect } from "react";
 import "./SelectAvailability.css";
+import { useParams } from "react-router-dom";
 
 interface MeetingSlot {
   date: string;
   time: string;
 }
+interface TimeOption {
+  id: number;
+  start_time: string;
+  end_time: string;
+}
+interface Meeting {
+  id: string;
+  name: string;
+  time_options: TimeOption[];
+}
 
 const SelectAvailability: React.FC = () => {
+  const { meetingId: meetingIdFromPath } = useParams<{ meetingId?: string }>();
+  const meetingIdFromQuery = new URLSearchParams(window.location.search).get(
+    "meetingId"
+  );
+  const meetingId = meetingIdFromPath || meetingIdFromQuery || "";
+
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [meetingSlots, setMeetingSlots] = useState<MeetingSlot[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    // Replace this URL with your backend endpoint
-    fetch("https://your-backend.com/api/meeting-slots")
-      .then((res) => res.json())
-      .then((data) => {
-        setMeetingSlots(data); // assuming backend returns an array of { date, time }
-        setLoading(false);
+    if (!meetingId) {
+      setError(
+        "No meetingId provided in the URL. Add it to the route or as ?meetingId=..."
+      );
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    // Use meeting details endpoint; it includes time_options
+    fetch(`${import.meta.env.VITE_API_URL}meetings/${meetingId}/`)
+      .then(async (res) => {
+        if (!res.ok) {
+          const msg = await res.text();
+          throw new Error(msg || "Failed to load meeting");
+        }
+        return res.json() as Promise<Meeting>;
+      })
+      .then((meeting) => {
+        // Map backend time_options to displayable cards
+        const slots: MeetingSlot[] = (meeting.time_options || []).map((opt) => {
+          const start = new Date(opt.start_time);
+          const end = new Date(opt.end_time);
+          const date = start.toLocaleDateString([], {
+            year: "numeric",
+            month: "short",
+            day: "2-digit",
+          });
+          const time = `${start.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })} – ${end.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}`;
+          return { date, time };
+        });
+        setMeetingSlots(slots);
       })
       .catch((err) => {
-        console.error("Error fetching meeting slots:", err);
-        setLoading(false);
-      });
-  }, []);
+        console.error("Error fetching meeting:", err);
+        setError("Unable to load meeting time options.");
+      })
+      .finally(() => setLoading(false));
+  }, [meetingId]);
 
   if (loading) return <p>Loading available slots...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
     <div className="availability-container">
       {/* Left Section - Student Info */}
       <div className="student-info-section">
         <h2>
-          Hi, Let’s help <span className="highlight">Ameerah Gadatia</span>{" "}
+          Hi, Let’s help <span className="highlight">Lily Student</span>{" "}
           schedule a meeting!
         </h2>
 
         <div className="student-info-card">
           <div className="student-name">
-            <span className="student-icon">👤</span> Ameerah Gadatia
+            <span className="student-icon">👤</span> Lily Student
           </div>
           <div className="student-field">
             <label>Industry:</label>{" "}
@@ -53,7 +105,7 @@ const SelectAvailability: React.FC = () => {
           <div className="student-field">
             <label>Resume:</label>{" "}
             <a href="#" className="resume-link">
-              Khawlah_resume.pdf
+              Lily_s_resume.pdf
             </a>
           </div>
         </div>
@@ -68,21 +120,31 @@ const SelectAvailability: React.FC = () => {
       <div className="meeting-time-section">
         <h2>Propose Meeting Time</h2>
         <p>Please select what time works for you</p>
-
-        <div className="slots-grid">
-          {meetingSlots.map((slot, index) => {
-            const isSelected = selectedSlot === `${slot.date} ${slot.time}`;
-            return (
-              <button
-                key={index}
-                className={`slot-card ${isSelected ? "selected" : ""}`}
-                onClick={() => setSelectedSlot(`${slot.date} ${slot.time}`)}
-              >
-                <strong>{slot.date}</strong>
-                <span>{slot.time}</span>
-              </button>
-            );
-          })}
+        {/* New: show up to 6 cards of the meeting’s time options (as selected slots context) */}
+        <div style={{ marginBottom: "1rem" }}>
+          <h3 style={{ marginBottom: "0.5rem" }}>
+            Student Selected Time Options
+          </h3>
+          <div className="slots-grid">
+            {meetingSlots.slice(0, 6).map((slot, index) => {
+              const isSelected = selectedSlot === `${slot.date} ${slot.time}`;
+              return (
+                <button
+                  key={`sel-${index}`}
+                  className={`slot-card ${isSelected ? "selected" : ""}`}
+                  onClick={() => setSelectedSlot(`${slot.date} ${slot.time}`)}
+                >
+                  <strong>{slot.date}</strong>
+                  <span>{slot.time}</span>
+                </button>
+              );
+            })}
+            {meetingSlots.length === 0 && (
+              <div style={{ color: "#666", fontSize: "14px" }}>
+                No time options available for this meeting.
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="actions">
