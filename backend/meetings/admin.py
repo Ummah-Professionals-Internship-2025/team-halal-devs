@@ -4,7 +4,7 @@ from .models import Meeting, TimeOption, Student, Professional
 @admin.register(Meeting)
 class MeetingAdmin(admin.ModelAdmin):
     search_fields = ['name']
-    list_display = ['id', 'name', 'prof_note', 'created_at'] # Added id and prof-note
+    list_display = ['id', 'name', 'prof_note', 'meeting_date', 'meeting_completed_at', 'created_at'] # Added id and prof-note
 
 @admin.register(TimeOption)
 class TimeOptionAdmin(admin.ModelAdmin):

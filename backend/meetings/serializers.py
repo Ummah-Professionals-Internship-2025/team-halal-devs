@@ -13,7 +13,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ["id", "name", "prof_note", "created_at", "time_options"]
+        fields = ["id", "name", "prof_note", "meeting_date", "meeting_completed_at", "created_at", "time_options"]
 
     def create(self, validated_data):
         time_options_data = validated_data.pop("time_options")
@@ -32,10 +32,13 @@ class MeetingDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ["id", "name", "prof_note", "created_at", "time_options"]
+        fields = ["id", "name", "prof_note", "meeting_date", "meeting_completed_at", "created_at", "time_options"]
 
 
 class StudentSerializer(serializers.ModelSerializer):
+    meeting_date = serializers.DateTimeField(source='meeting.meeting_date', read_only=True)
+    meeting_completed_at = serializers.DateTimeField(source='meeting.meeting_completed_at', read_only=True)
+
     class Meta:
         model = Student
         fields = [
@@ -52,6 +55,8 @@ class StudentSerializer(serializers.ModelSerializer):
             "optional_info",
             "send_to_email",
             "prof_assigned",
+            "meeting_date",
+            "meeting_completed_at",
             "created_at",
         ]
 

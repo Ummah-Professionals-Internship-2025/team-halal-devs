@@ -5,8 +5,8 @@ interface Student {
   id: number;
   name: string;
   industry: string;
-  // signUpDate: string;
-  // status: "PENDING" | "PAIRED" | "COMPLETED" | "FOLLOW-UP";
+  signUpDate: string;
+  status: "PENDING" | "PAIRED" | "COMPLETED" | "FOLLOW-UP";
 }
 
 // functions for status, calculations - check which one. loops, switch cases, deps
@@ -14,50 +14,97 @@ interface Student {
 
 const StudentTable: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Student;
+    direction: "asc" | "desc";
+  } | null>(null);
+
   // Use useeffect hook to make fetch req real data from backend when available.
   // pass in the url with the backend url defined for getting any data. useeffect used for 3rd party data coming from backend.
   // also use fetchmethod (native js api). makes netweork req autom on page, can populate with react
+
   useEffect(() => {
-    fetch("http://localhost:8000/api/admin/students/") // Replace with your backend URL
+    fetch("http://localhost:8000/api/admin/students/")
       .then((response) => response.json())
       .then((data) => {
-        console.log("API response:", data);
-        // Assuming the backend returns an array of students
         const studentsArray = Array.isArray(data)
           ? data
           : data.students || data.results || [];
         setStudents(
-          data.map((s: any) => ({
-            id: s.id,
-            meeting: s.meeting,
-            name: s.participant_name || s.full_name,
-            email: s.email,
-            phone_number: s.phone_number,
-            industry: s.industry,
-            // signUpDate: s.signUpDate || s.sign_up_date,
-            // status: s.status,
-            academic_year: s.academic_year,
-            seeking_service: s.seeking_service,
-            resume_upload: s.resume_upload,
-            hear_about: s.hear_about,
-            optional_info: s.optional_info,
-            send_to_email: s.send_to_email,
-            prof_assigned: s.prof_assigned,
-            created_at: s.created_at,
-          }))
-        );
+          studentsArray.map((s: any) => {
+            // Calculate status
+            let status: Student["status"] = "PENDING";
+            const now = new Date();
+            console.log(
+              "prof_assigned:",
+              s.prof_assigned,
+              "meeting_completed_at:",
+              s.meeting_completed_at,
+              "parsed:",
+              s.meeting_completed_at ? new Date(s.meeting_completed_at) : null
+            );
 
-        console.log(students);
+            if (s.prof_assigned) {
+              if (s.meeting_completed_at) {
+                const completedDate = new Date(s.meeting_completed_at);
+                const now = new Date();
+                const diffDays =
+                  (now.getTime() - completedDate.getTime()) /
+                  (1000 * 60 * 60 * 24);
+
+                if (diffDays >= 14) {
+                  status = "FOLLOW-UP";
+                } else {
+                  status = "COMPLETED";
+                }
+              } else {
+                status = "PAIRED";
+              }
+            } else {
+              status = "PENDING";
+            }
+            return {
+              // id: s.id,
+              name: s.participant_name || s.full_name,
+              industry: s.industry,
+              signUpDate: s.created_at,
+              status,
+            };
+          })
+        );
       })
       .catch((error) => {
         console.error("Error fetching student data:", error);
       });
   }, []);
 
+  // Sorting function
+  const sortedStudents = React.useMemo(() => {
+    if (!sortConfig) return students;
+    const sorted = [...students].sort((a, b) => {
+      if (a[sortConfig.key] < b[sortConfig.key])
+        return sortConfig.direction === "asc" ? -1 : 1;
+      if (a[sortConfig.key] > b[sortConfig.key])
+        return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }, [students, sortConfig]);
+
+  // Header click handler
+  const handleSort = (key: keyof Student) => {
+    setSortConfig((prev) => {
+      if (prev && prev.key === key) {
+        return { key, direction: prev.direction === "asc" ? "desc" : "asc" };
+      }
+      return { key, direction: "asc" };
+    });
+  };
+
   return (
     <div
       style={{
-        background: "#F7F8FA",
+        background: "#FFFFFF",
         borderRadius: "16px",
         padding: "1.5rem",
         marginBottom: "1.5rem",
@@ -65,23 +112,33 @@ const StudentTable: React.FC = () => {
     >
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
-          <tr style={{ background: "#E7E8EE" }}>
-            <th style={thStyle}>ID</th>
+          <tr style={{ background: "#F1F3F4" }}>
+            {/* <th style={thStyle}>ID</th> */}
             <th style={thStyle}>Name</th>
             <th style={thStyle}>Industry</th>
-            {/* <th style={thStyle}>Sign Up Date</th> */}
-            {/* <th style={thStyle}>Status</th> */}
+            <th style={thStyle}>Sign Up Date</th>
+            <th style={thStyle}>Status</th>
           </tr>
         </thead>
         <tbody>
           {/* mapping thru what backend is sending to frontend */}
           {students.map((s) => (
             <tr key={s.id}>
-              <td style={tdStyle}>{s.id}</td>
+              {/* <td style={tdStyle}>{s.id}</td> */}
               <td style={tdStyle}>{s.name}</td>
               <td style={tdStyle}>{s.industry}</td>
+              <td style={tdStyle}>
+                {new Date(s.signUpDate).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "2-digit",
+                })}
+              </td>
+              {/* <td style={tdStyle}>
+                {new Date(s.signUpDate).toLocaleDateString()}
+              </td>{" "} */}
               {/* <td style={tdStyle}>{s.signUpDate}</td> */}
-              {/* <td style={tdStyle}>{renderStatusBadge(s.status)}</td> */}
+              <td style={tdStyle}>{renderStatusBadge(s.status)}</td>
             </tr>
           ))}
         </tbody>
@@ -106,43 +163,43 @@ const tdStyle: React.CSSProperties = {
   borderBottom: "1px solid #E7E8EE",
 };
 
-// const renderStatusBadge = (status: Student["status"]) => {
-//   let bg = "#E7E8EE";
-//   let color = "#00212C";
+const renderStatusBadge = (status: Student["status"]) => {
+  let bg = "#E7E8EE";
+  let color = "#00212C";
 
-//   switch (status) {
-//     case "PENDING":
-//       bg = "#FFF4E5";
-//       color = "#E67E22";
-//       break;
-//     case "PAIRED":
-//       bg = "#E6F0FA";
-//       color = "#207ca6";
-//       break;
-//     case "COMPLETED":
-//       bg = "#E9F7EF";
-//       color = "#27AE60";
-//       break;
-//     case "FOLLOW-UP":
-//       bg = "#FDECEF";
-//       color = "#E74C3C";
-//       break;
-//   }
+  switch (status) {
+    case "PENDING":
+      bg = "#FDBB37";
+      color = "#353535";
+      break;
+    case "PAIRED":
+      bg = "#007CA6";
+      color = "#FFFFFF";
+      break;
+    case "COMPLETED":
+      bg = "#02DE83";
+      color = "#FFFFFF";
+      break;
+    case "FOLLOW-UP":
+      bg = "#D83D57";
+      color = "#FFFFFF";
+      break;
+  }
 
-// return (
-//   <span
-//     style={{
-//       background: bg,
-//       color,
-//       padding: "0.3rem 0.8rem",
-//       borderRadius: "8px",
-//       fontWeight: 600,
-//       fontSize: "0.9rem",
-//     }}
-//   >
-//     {status}
-//   //   </span>
-//   );
-// };
+  return (
+    <span
+      style={{
+        background: bg,
+        color,
+        padding: "0.3rem 0.8rem",
+        borderRadius: "8px",
+        fontWeight: 600,
+        fontSize: "0.9rem",
+      }}
+    >
+      {status}
+    </span>
+  );
+};
 
 export default StudentTable;

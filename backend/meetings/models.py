@@ -7,6 +7,8 @@ class Meeting(models.Model):
    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
    name = models.CharField(max_length=255,default="Default Name")
    prof_note = models.TextField(null=True, blank=True)
+   meeting_date = models.DateTimeField(null=True, blank=True)
+   meeting_completed_at = models.DateTimeField(null=True, blank=True)
    created_at = models.DateTimeField(default=timezone.now)
    
    def __str__(self):

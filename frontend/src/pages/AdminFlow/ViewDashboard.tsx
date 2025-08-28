@@ -2,7 +2,7 @@ import React from "react";
 import StudentTable from "../../components/StudentTable";
 import AdminLayout from "../../components/AdminLayout";
 
-const ViewStudentSubmissions: React.FC = () => {
+const ViewDashboard: React.FC = () => {
   return (
     <AdminLayout>
       <h1>Student Submissions</h1>
@@ -11,4 +11,4 @@ const ViewStudentSubmissions: React.FC = () => {
   );
 };
 
-export default ViewStudentSubmissions;
+export default ViewDashboard;
