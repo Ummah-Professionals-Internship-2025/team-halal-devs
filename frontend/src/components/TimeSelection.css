@@ -50,8 +50,9 @@
 /* Individual time slot */
 .time-slot {
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 0.5rem;
+  flex-direction: row;
 }
 
 .time-select {
