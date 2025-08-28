@@ -44,26 +44,26 @@
   color: #007ca6;
 }
 
-/* Advisor Cards */
-.advisor-list {
+/* Prof Cards */
+.prof-list {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.advisor-card {
+.prof-card {
   cursor: pointer;
   border: 1px solid #dee2e6;
   border-radius: 10px;
   transition: all 0.2s ease-in-out;
 }
 
-.advisor-card:hover {
+.prof-card:hover {
   border-color: #007ca6;
   box-shadow: 0 2px 8px rgba(0, 124, 166, 0.15);
 }
 
-.advisor-card.selected {
+.prof-card.selected {
   border: 2px solid #007ca6;
   background-color: #e9f7fb;
 }

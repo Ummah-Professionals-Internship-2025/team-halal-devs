@@ -17,7 +17,7 @@ interface Student {
   availability: string[];
 }
 
-interface Advisor {
+interface Professional {
   id: number;
   name: string;
   designation: string;
@@ -29,22 +29,24 @@ interface StudentPairModalProps {
   show: boolean;
   onClose: () => void;
   student: Student;
-  advisors: Advisor[];
-  onAssign: (studentId: number, advisorId: number) => void;
+  profs: Professional[];
+  onAssign: (studentId: number, profId: number) => void;
 }
 
 const StudentPairModal: React.FC<StudentPairModalProps> = ({
   show,
   onClose,
   student,
-  advisors,
+  profs,
   onAssign,
 }) => {
-  const [selectedAdvisor, setSelectedAdvisor] = useState<number | null>(null);
+  const [selectedProfessional, setSelectedProfessional] = useState<
+    number | null
+  >(null);
 
   const handleConfirm = () => {
-    if (selectedAdvisor) {
-      onAssign(student.id, selectedAdvisor);
+    if (selectedProfessional) {
+      onAssign(student.id, selectedProfessional);
     }
   };
 
@@ -86,27 +88,27 @@ const StudentPairModal: React.FC<StudentPairModalProps> = ({
             </a>
           </div>
 
-          {/* Advisor List */}
-          <div className="advisor-list">
-            <h5 className="section-title">Available Advisors</h5>
-            {advisors.map((advisor) => (
+          {/* Professionals List */}
+          <div className="Professionals-list">
+            <h5 className="section-title">Available Professionals</h5>
+            {profs.map((prof) => (
               <Card
-                key={advisor.id}
-                className={`advisor-card ${
-                  selectedAdvisor === advisor.id ? "selected" : ""
+                key={prof.id}
+                className={`prof-card ${
+                  selectedProfessional === prof.id ? "selected" : ""
                 }`}
-                onClick={() => setSelectedAdvisor(advisor.id)}
+                onClick={() => setSelectedProfessional(prof.id)}
               >
                 <Card.Body>
-                  <Card.Title>{advisor.name}</Card.Title>
+                  <Card.Title>{prof.name}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">
-                    {advisor.designation}
+                    {prof.designation}
                   </Card.Subtitle>
                   <p className="mb-1">
-                    <strong>Industry:</strong> {advisor.industry}
+                    <strong>Industry:</strong> {prof.industry}
                   </p>
                   <p className="mb-0">
-                    <strong>Email:</strong> {advisor.email}
+                    <strong>Email:</strong> {prof.email}
                   </p>
                 </Card.Body>
               </Card>
@@ -120,7 +122,7 @@ const StudentPairModal: React.FC<StudentPairModalProps> = ({
         </Button>
         <Button
           variant="success"
-          disabled={!selectedAdvisor}
+          disabled={!selectedProfessional}
           onClick={handleConfirm}
         >
           Confirm Pairing

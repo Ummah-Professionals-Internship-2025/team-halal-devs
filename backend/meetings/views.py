@@ -204,3 +204,11 @@ def mark_meeting_completed(request, pk):
         return Response({'status': 'completed'})
     except Meeting.DoesNotExist:
         return Response({'error': 'Not found'}, status=404)
+    
+
+
+@api_view(['GET'])
+def professionals_list(request):
+    professionals = Professional.objects.all()
+    serializer = ProfessionalSerializer(professionals, many=True)
+    return Response(serializer.data)

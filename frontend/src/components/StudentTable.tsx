@@ -1,5 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
+import StudentPairModal from "./StudentPairModal";
+import "./StudentPairModal.css";
 
 interface Student {
   id: number;
@@ -7,6 +9,20 @@ interface Student {
   industry: string;
   signUpDate: string;
   status: "PENDING" | "PAIRED" | "COMPLETED" | "FOLLOW-UP";
+  email: string;
+  phone: string;
+  academicYear: string;
+  seeking: string;
+  resumeUrl: string;
+  availability: string[];
+}
+
+interface Professor {
+  id: number;
+  name: string;
+  designation: string;
+  industry: string;
+  email: string;
 }
 
 // functions for status, calculations - check which one. loops, switch cases, deps
@@ -14,6 +30,9 @@ interface Student {
 
 const StudentTable: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
+  const [profs, setProfs] = useState<Professor[]>([]);
+  const [showPairModal, setShowPairModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Student;
     direction: "asc" | "desc";
@@ -64,11 +83,17 @@ const StudentTable: React.FC = () => {
               status = "PENDING";
             }
             return {
-              // id: s.id,
+              id: s.id,
               name: s.participant_name || s.full_name,
               industry: s.industry,
               signUpDate: s.created_at,
               status,
+              email: s.email || "",
+              phone: s.phone_number || "",
+              academicYear: s.academic_year || "",
+              seeking: s.seeking_service || "",
+              resumeUrl: s.resume_upload || "",
+              availability: s.availability || [],
             };
           })
         );
@@ -77,6 +102,36 @@ const StudentTable: React.FC = () => {
         console.error("Error fetching student data:", error);
       });
   }, []);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/api/professionals-list/")
+      .then((response) => response.json())
+      .then((data) =>
+        setProfs(
+          data.map((p: any) => ({
+            id: p.id,
+            name: p.prof_name,
+            designation: p.prof_role || "", // or whatever field you have
+            industry: p.prof_industry || "",
+            email: p.prof_email || "",
+          }))
+        )
+      )
+      .catch((error) => console.error("Error fetching professors:", error));
+  }, []);
+
+  const handleRowClick = (student: Student) => {
+    setSelectedStudent(student);
+    setShowPairModal(true);
+  };
+
+  const handleAssign = (studentId: number, profId: number) => {
+    // Update status in state (simulate backend update)
+    setStudents((prev) =>
+      prev.map((s) => (s.id === studentId ? { ...s, status: "PAIRED" } : s))
+    );
+    setShowPairModal(false);
+  };
 
   // Sorting function
   const sortedStudents = React.useMemo(() => {
@@ -122,8 +177,12 @@ const StudentTable: React.FC = () => {
         </thead>
         <tbody>
           {/* mapping thru what backend is sending to frontend */}
-          {students.map((s) => (
-            <tr key={s.id}>
+          {sortedStudents.map((s) => (
+            <tr
+              key={s.id}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleRowClick(s)}
+            >
               {/* <td style={tdStyle}>{s.id}</td> */}
               <td style={tdStyle}>{s.name}</td>
               <td style={tdStyle}>{s.industry}</td>
@@ -143,6 +202,15 @@ const StudentTable: React.FC = () => {
           ))}
         </tbody>
       </table>
+      {selectedStudent && (
+        <StudentPairModal
+          show={showPairModal}
+          onClose={() => setShowPairModal(false)}
+          student={selectedStudent}
+          profs={profs}
+          onAssign={handleAssign}
+        />
+      )}
     </div>
   );
 };
