@@ -100,9 +100,32 @@
   justify-content: space-between !important;
 }
 
-/* Make sure calendar body has enough height */
 .calendar-container .MuiDayCalendar-monthContainer {
-  min-height: 280px !important; /* Ensure all 6 rows can fit */
+  min-height: 300px !important; /* Increased from 280px */
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Force 6 weeks to always show */
+.calendar-container .MuiDayCalendar-slideTransition {
+  min-height: 300px !important; /* Match monthContainer height */
+}
+
+/* Ensure each week row takes equal space */
+.calendar-container .MuiDayCalendar-weekContainer {
+  margin: 2px 0 !important;
+  justify-content: space-between !important;
+  min-height: 45px !important;
+  flex: 1 !important; /* This will make rows distribute evenly */
+}
+
+/* Increase overall calendar container height */
+.custom-calendar {
+  width: 100% !important;
+  max-width: 650px !important;
+  margin: 0 auto !important;
+  min-height: 450px !important; /* Increased from 400px */
+  font-family: 'Poppins', sans-serif !important;
 }
 
 /* Make date cells taller and maintain spacing */
